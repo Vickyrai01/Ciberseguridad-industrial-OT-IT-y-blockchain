@@ -28,6 +28,8 @@ Comandos disponibles:
 npm run build      # typecheck + build de producción
 npm run test       # pruebas del motor de simulación
 npm run lint       # ESLint
+npm run format     # Formatear el proyecto con Prettier
+npm run format:check # Verificar formato sin modificar archivos
 npm run preview    # servir dist localmente
 ```
 

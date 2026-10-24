@@ -13,7 +13,11 @@ export function shuffleScenarios(scenarios: Scenario[]): Scenario[] {
       }
       recommendedPosition = scenario.choices.findIndex((choice) => choice.recommended)
       attempts += 1
-    } while (scenarioIndex > 0 && recommendedPosition === shuffled[scenarioIndex - 1].choices.findIndex((choice) => choice.recommended) && attempts < 10)
+    } while (
+      scenarioIndex > 0 &&
+      recommendedPosition === shuffled[scenarioIndex - 1].choices.findIndex((choice) => choice.recommended) &&
+      attempts < 10
+    )
   })
 
   return shuffled

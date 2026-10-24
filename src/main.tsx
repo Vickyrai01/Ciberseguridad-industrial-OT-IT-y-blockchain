@@ -4,4 +4,8 @@ import App from './App'
 import './styles/tailwind.css'
 import './styles/visuals.css'
 import './styles/console.css'
-createRoot(document.getElementById('root')!).render(<StrictMode><App /></StrictMode>)
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)

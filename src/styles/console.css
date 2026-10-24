@@ -1,30 +1,101 @@
 /* Decision history stays readable from the projector. */
-.console-scroll { height: 132px; overflow-y: auto; scrollbar-color: #3b7d82 #0a1a20; scrollbar-width: thin; }
-.console-scroll::-webkit-scrollbar { width: 7px; }
-.console-scroll::-webkit-scrollbar-track { background: #0a1a20; }
-.console-scroll::-webkit-scrollbar-thumb { background: #3b7d82; border-radius: 10px; }
-.event-line { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.event-line.decision { color: #e8f1ef; }
-.event-line.decision .console-arrow { color: var(--cyan); }
-.event-line.state-update { color: var(--yellow); }
-.event-line.state-update .console-arrow { color: var(--yellow); }
-.event-line.impact { color: var(--orange); }
-.event-line.impact .console-arrow { color: var(--orange); }
+.console-scroll {
+  height: 132px;
+  overflow-y: auto;
+  scrollbar-color: #3b7d82 #0a1a20;
+  scrollbar-width: thin;
+}
+.console-scroll::-webkit-scrollbar {
+  width: 7px;
+}
+.console-scroll::-webkit-scrollbar-track {
+  background: #0a1a20;
+}
+.console-scroll::-webkit-scrollbar-thumb {
+  background: #3b7d82;
+  border-radius: 10px;
+}
+.event-line {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.event-line.decision {
+  color: #e8f1ef;
+}
+.event-line.decision .console-arrow {
+  color: var(--cyan);
+}
+.event-line.state-update {
+  color: var(--yellow);
+}
+.event-line.state-update .console-arrow {
+  color: var(--yellow);
+}
+.event-line.impact {
+  color: var(--orange);
+}
+.event-line.impact .console-arrow {
+  color: var(--orange);
+}
 
 /* Keep the event console anchored while the briefing changes height. */
 @media (min-width: 901px) {
-  .simulation { height: 100vh; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
-  .sim-grid { flex: 1 1 auto; height: auto; min-height: 0; overflow: hidden; }
-  .plant-column { min-height: 0; display: flex; flex-direction: column; }
-  .plant-frame { flex: 1 1 auto; height: auto; min-height: 0; }
-  .plant-caption { flex: 0 0 32px; }
-  .control-column { height: 100%; min-height: 0; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #294f58 #08161d; padding-right: 4px; }
-  .console { flex: 0 0 164px; height: 164px; margin: 0 3vw 18px; }
-  .console-scroll { height: 130px; }
+  .simulation {
+    height: 100vh;
+    min-height: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .sim-grid {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .plant-column {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .plant-frame {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
+  }
+  .plant-caption {
+    flex: 0 0 32px;
+  }
+  .control-column {
+    height: 100%;
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #294f58 #08161d;
+    padding-right: 4px;
+  }
+  .console {
+    flex: 0 0 164px;
+    height: 164px;
+    margin: 0 3vw 18px;
+  }
+  .console-scroll {
+    height: 130px;
+  }
 }
 
 @media (max-width: 900px) {
-  .simulation { height: auto; min-height: 100vh; overflow: visible; }
-  .sim-grid { height: auto; overflow: visible; }
-  .console { height: 164px; }
+  .simulation {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+  .sim-grid {
+    height: auto;
+    overflow: visible;
+  }
+  .console {
+    height: 164px;
+  }
 }

@@ -46,5 +46,21 @@ export function useSimulation() {
     else await document.exitFullscreen?.()
   }
 
-  return { screen, state, scenario, selected, sound, presenter, showHistory, outcome: finalOutcome(state), startSimulation, selectChoice, continueSimulation, setSound, setPresenter, setShowHistory, toggleFullscreen }
+  return {
+    screen,
+    state,
+    scenario,
+    selected,
+    sound,
+    presenter,
+    showHistory,
+    outcome: finalOutcome(state),
+    startSimulation,
+    selectChoice,
+    continueSimulation,
+    setSound,
+    setPresenter,
+    setShowHistory,
+    toggleFullscreen,
+  }
 }

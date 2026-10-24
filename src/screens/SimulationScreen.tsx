@@ -5,9 +5,120 @@ import { Topbar } from '../components/layout/Topbar'
 import { Plant } from '../components/plant/Plant'
 import type { Choice, GameState, Scenario } from '../types'
 
-interface SimulationScreenProps { state: GameState; scenario: Scenario; selected: string | null; presenter: boolean; sound: boolean; onSelect: (choice: Choice) => void; onContinue: () => void; onToggleSound: () => void; onFullscreen: () => void; onReset: () => void }
+interface SimulationScreenProps {
+  state: GameState
+  scenario: Scenario
+  selected: string | null
+  presenter: boolean
+  sound: boolean
+  onSelect: (choice: Choice) => void
+  onContinue: () => void
+  onToggleSound: () => void
+  onFullscreen: () => void
+  onReset: () => void
+}
 
-export function SimulationScreen({ state, scenario, selected, presenter, sound, onSelect, onContinue, onToggleSound, onFullscreen, onReset }: SimulationScreenProps) {
+export function SimulationScreen({
+  state,
+  scenario,
+  selected,
+  presenter,
+  sound,
+  onSelect,
+  onContinue,
+  onToggleSound,
+  onFullscreen,
+  onReset,
+}: SimulationScreenProps) {
   const selectedChoice = scenario.choices.find((choice) => choice.id === selected)
-  return <motion.main className={`simulation ot-layout-screen ${state.operationalStatus === 'CRÍTICO' ? 'critical' : ''}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}><Topbar state={state} sound={sound} onToggleSound={onToggleSound} onFullscreen={onFullscreen} onReset={onReset}/><div className="sim-grid"><section className="plant-column"><div className="section-tag ot-mono-label"><span className="pulse-dot"/> PLANT DIGITAL TWIN <span className="tag-right">SIMULATED / EDUCATIONAL</span></div><div className="plant-frame ot-panel-surface"><Plant state={state}/></div><div className="plant-caption"><span><i className="legend-dot green"/> OPERATING</span><span><i className="legend-dot yellow"/> MONITORING</span><span><i className="legend-dot red"/> COMPROMISED</span></div></section><aside className="control-column"><div className="scenario-progress"><div><span className="eyebrow">THREAT BRIEFING</span><strong>{String(scenario.id).padStart(2, '0')} <small>/ 05</small></strong></div><div className="progress-track"><span style={{ width: `${(scenario.id / 5) * 100}%` }}/></div></div><motion.div key={scenario.id} className="briefing ot-panel-surface" initial={{ y: 12, opacity: 0 }} animate={{ y: 0, opacity: 1 }}><div className="brief-kicker">{scenario.kicker}</div><h2>{scenario.title}</h2><p className="narrative">{scenario.narrative}</p><div className="question"><span>YOUR CALL</span><p>{scenario.question}</p></div><div className="choices">{scenario.choices.map((choice, index) => <button key={choice.id} className={`choice ot-focus-ring ${selected === choice.id ? 'chosen' : ''}`} onClick={() => onSelect(choice)}><span className="choice-key">{String.fromCharCode(65 + index)}</span><span>{choice.label}</span>{selected === choice.id && <Check size={16}/>}</button>)}</div>{selectedChoice && <div className={`feedback ${selectedChoice.recommended ? 'good' : 'warn'}`}><div className="feedback-icon">{selectedChoice.recommended ? <ShieldCheck size={16}/> : <AlertTriangle size={16}/>}</div><div><strong>{selectedChoice.recommended ? 'DECISIÓN RECOMENDADA' : 'CONSECUENCIA DETECTADA'}</strong><p>{selectedChoice.consequence}</p></div></div>}<button className="continue-btn ot-focus-ring" disabled={!selected} onClick={onContinue}>{state.currentScenario === 4 ? 'VER RESULTADO' : 'APLICAR DECISIÓN'} <ChevronRight size={17}/></button></motion.div><div className="concept-chip"><span>CONCEPTO CLAVE</span><strong>{scenario.concept}</strong>{presenter && <small>Tiempo sugerido: ~ 60 segundos · Lean la narrativa, voten y apliquen la decisión.</small>}</div></aside></div><EventConsole events={state.eventLog}/></motion.main>
+  return (
+    <motion.main
+      className={`simulation ot-layout-screen ${state.operationalStatus === 'CRÍTICO' ? 'critical' : ''}`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}>
+      <Topbar state={state} sound={sound} onToggleSound={onToggleSound} onFullscreen={onFullscreen} onReset={onReset} />
+      <div className="sim-grid">
+        <section className="plant-column">
+          <div className="section-tag ot-mono-label">
+            <span className="pulse-dot" /> PLANT DIGITAL TWIN <span className="tag-right">SIMULATED / EDUCATIONAL</span>
+          </div>
+          <div className="plant-frame ot-panel-surface">
+            <Plant state={state} />
+          </div>
+          <div className="plant-caption">
+            <span>
+              <i className="legend-dot green" /> OPERATING
+            </span>
+            <span>
+              <i className="legend-dot yellow" /> MONITORING
+            </span>
+            <span>
+              <i className="legend-dot red" /> COMPROMISED
+            </span>
+          </div>
+        </section>
+        <aside className="control-column">
+          <div className="scenario-progress">
+            <div>
+              <span className="eyebrow">THREAT BRIEFING</span>
+              <strong>
+                {String(scenario.id).padStart(2, '0')} <small>/ 05</small>
+              </strong>
+            </div>
+            <div className="progress-track">
+              <span style={{ width: `${(scenario.id / 5) * 100}%` }} />
+            </div>
+          </div>
+          <motion.div
+            key={scenario.id}
+            className="briefing ot-panel-surface"
+            initial={{ y: 12, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}>
+            <div className="brief-kicker">{scenario.kicker}</div>
+            <h2>{scenario.title}</h2>
+            <p className="narrative">{scenario.narrative}</p>
+            <div className="question">
+              <span>YOUR CALL</span>
+              <p>{scenario.question}</p>
+            </div>
+            <div className="choices">
+              {scenario.choices.map((choice, index) => (
+                <button
+                  key={choice.id}
+                  className={`choice ot-focus-ring ${selected === choice.id ? 'chosen' : ''}`}
+                  onClick={() => onSelect(choice)}>
+                  <span className="choice-key">{String.fromCharCode(65 + index)}</span>
+                  <span>{choice.label}</span>
+                  {selected === choice.id && <Check size={16} />}
+                </button>
+              ))}
+            </div>
+            {selectedChoice && (
+              <div className={`feedback ${selectedChoice.recommended ? 'good' : 'warn'}`}>
+                <div className="feedback-icon">
+                  {selectedChoice.recommended ? <ShieldCheck size={16} /> : <AlertTriangle size={16} />}
+                </div>
+                <div>
+                  <strong>{selectedChoice.recommended ? 'DECISIÓN RECOMENDADA' : 'CONSECUENCIA DETECTADA'}</strong>
+                  <p>{selectedChoice.consequence}</p>
+                </div>
+              </div>
+            )}
+            <button className="continue-btn ot-focus-ring" disabled={!selected} onClick={onContinue}>
+              {state.currentScenario === 4 ? 'VER RESULTADO' : 'APLICAR DECISIÓN'} <ChevronRight size={17} />
+            </button>
+          </motion.div>
+          <div className="concept-chip">
+            <span>CONCEPTO CLAVE</span>
+            <strong>{scenario.concept}</strong>
+            {presenter && (
+              <small>Tiempo sugerido: ~ 60 segundos · Lean la narrativa, voten y apliquen la decisión.</small>
+            )}
+          </div>
+        </aside>
+      </div>
+      <EventConsole events={state.eventLog} />
+    </motion.main>
+  )
 }
