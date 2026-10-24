@@ -6,6 +6,7 @@ import { Stat } from '../components/dashboard/Stat'
 import type { GameState } from '../types'
 import { pageMotion, pageTransition } from '../animations/motionTokens'
 import { SIMULATION_CONFIG, SIMULATION_OUTCOME, type SimulationOutcome } from '../constants/domain'
+import { DecisionHistory } from '../components/results/DecisionHistory'
 
 interface ResultsScreenProps {
   state: GameState
@@ -83,31 +84,5 @@ export function ResultsScreen({ state, outcome, showHistory, onToggleHistory, on
         <p className="closing">{t('common.closing')}</p>
       </div>
     </motion.main>
-  )
-}
-
-function DecisionHistory({ state }: { state: GameState }) {
-  const { t } = useTranslation()
-  return (
-    <div className="history">
-      {scenarios.map((scenario, index) => {
-        const selected = scenario.choices.find((choice) => choice.id === state.selectedAnswers[index])
-        return (
-          <div className="history-row" key={scenario.id}>
-            <span>0{scenario.id}</span>
-            <div>
-              <strong>{t(scenario.titleKey)}</strong>
-              <small>
-                {t('common.selected')}: {selected ? t(selected.labelKey) : '—'}
-              </small>
-              <small className="recommendation">
-                {t('common.recommendedAnswer')}:{' '}
-                {t(scenario.choices.find((choice) => choice.recommended)?.labelKey ?? '')}
-              </small>
-            </div>
-          </div>
-        )
-      })}
-    </div>
   )
 }

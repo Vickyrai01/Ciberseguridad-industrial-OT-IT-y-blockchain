@@ -1,15 +1,7 @@
 import type { GameState, ZoneState } from '../../types'
 import { useTranslation } from 'react-i18next'
 import { PLANT_ZONE, ZONE_STATE } from '../../constants/domain'
-
-interface NodeProps {
-  x: number | string
-  y: number | string
-  label: string
-  sub: string
-  icon: string
-  state: ZoneState
-}
+import { PlantNode } from './PlantNode'
 
 export function Plant({ state, compact = false }: { state: GameState; compact?: boolean }) {
   const { t } = useTranslation()
@@ -142,23 +134,5 @@ export function Plant({ state, compact = false }: { state: GameState; compact?: 
         </g>
       </svg>
     </div>
-  )
-}
-
-function PlantNode({ x, y, label, sub, icon, state }: NodeProps) {
-  return (
-    <g className={`node ${state}`} transform={`translate(${x} ${y})`}>
-      <rect width="108" height="68" rx="7" />
-      <circle cx="16" cy="17" r="6" />
-      <text x="29" y="21">
-        {icon.toUpperCase()}
-      </text>
-      <text x="10" y="43" className="node-label">
-        {label}
-      </text>
-      <text x="10" y="57" className="node-sub">
-        {sub}
-      </text>
-    </g>
   )
 }
