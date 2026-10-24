@@ -1,89 +1,17 @@
-import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { Activity, AlertTriangle, Check, ChevronRight, CircleDot, Maximize, RotateCcw, ShieldCheck, Volume2, VolumeX } from 'lucide-react'
-import { scenarios } from './data/scenarios'
-import { applyChoice, finalOutcome, initialState } from './engine/simulationEngine'
-import type { Choice, GameState, Screen, ZoneState } from './types'
-
-function shuffleScenarios() {
-  const shuffled = scenarios.map((scenario) => ({ ...scenario, choices: [...scenario.choices] }))
-  shuffled.forEach((scenario, scenarioIndex) => {
-    let previousRecommendedPosition = -1
-    let attempts = 0
-    do {
-      for (let index = scenario.choices.length - 1; index > 0; index -= 1) {
-        const swapIndex = Math.floor(Math.random() * (index + 1))
-        ;[scenario.choices[index], scenario.choices[swapIndex]] = [scenario.choices[swapIndex], scenario.choices[index]]
-      }
-      previousRecommendedPosition = scenario.choices.findIndex((choice) => choice.recommended)
-      attempts += 1
-    } while (scenarioIndex > 0 && previousRecommendedPosition === shuffled[scenarioIndex - 1].choices.findIndex((choice) => choice.recommended) && attempts < 10)
-  })
-  return shuffled
-}
+import { AnimatePresence } from 'framer-motion'
+import { CircleDot } from 'lucide-react'
+import { ResultsScreen } from './screens/ResultsScreen'
+import { SimulationScreen } from './screens/SimulationScreen'
+import { WelcomeScreen } from './screens/WelcomeScreen'
+import { useSimulation } from './hooks/useSimulation'
 
 function App() {
-  const [screen, setScreen] = useState<Screen>('welcome')
-  const [state, setState] = useState<GameState>(initialState)
-  const [activeScenarios, setActiveScenarios] = useState(scenarios)
-  const [selected, setSelected] = useState<string | null>(null)
-  const [sound, setSound] = useState(false)
-  const [presenter, setPresenter] = useState(false)
-  const [showHistory, setShowHistory] = useState(false)
-  const scenario = activeScenarios[state.currentScenario]
-  const outcome = finalOutcome(state)
-
-  const beep = (kind: 'click' | 'alert' | 'success') => {
-    if (!sound) return
-    const ctx = new AudioContext(); const osc = ctx.createOscillator(); const gain = ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.frequency.value = kind === 'alert' ? 130 : kind === 'success' ? 540 : 300; gain.gain.value = .045; osc.start(); osc.stop(ctx.currentTime + .09)
-  }
-  const start = () => { setActiveScenarios(shuffleScenarios()); setState(initialState()); setSelected(null); setScreen('simulation'); beep('click') }
-  const select = (choice: Choice) => { setSelected(choice.id); beep(choice.recommended ? 'success' : 'alert') }
-  const continueGame = () => { if (!selected || !scenario) return; const choice = scenario.choices.find((item) => item.id === selected)!; setState((current) => applyChoice(current, choice, current.currentScenario)); setSelected(null); if (state.currentScenario === scenarios.length - 1) setScreen('results'); beep('click') }
-  const toggleFullscreen = async () => { if (!document.fullscreenElement) await document.documentElement.requestFullscreen?.(); else await document.exitFullscreen?.() }
-  return <div className="app-shell">
-    <div className="scanlines" />
-    <AnimatePresence mode="wait">
-      {screen === 'welcome' && <Welcome onStart={start} presenter={presenter} setPresenter={setPresenter} />}
-      {screen === 'simulation' && scenario && <Simulation state={state} scenario={scenario} selected={selected} onSelect={select} onContinue={continueGame} sound={sound} setSound={setSound} onFullscreen={toggleFullscreen} presenter={presenter} onReset={start} />}
-      {screen === 'results' && <Results state={state} outcome={outcome} showHistory={showHistory} setShowHistory={setShowHistory} onReplay={start} />}
-    </AnimatePresence>
-    <button className="floating-help" title="Controles" onClick={() => setPresenter((value) => !value)}><CircleDot size={16}/></button>
-  </div>
+  const simulation = useSimulation()
+  return <div className="app-shell"><div className="scanlines"/><AnimatePresence mode="wait">
+    {simulation.screen === 'welcome' && <WelcomeScreen onStart={simulation.startSimulation} presenter={simulation.presenter} onTogglePresenter={() => simulation.setPresenter(!simulation.presenter)}/>} 
+    {simulation.screen === 'simulation' && simulation.scenario && <SimulationScreen state={simulation.state} scenario={simulation.scenario} selected={simulation.selected} presenter={simulation.presenter} sound={simulation.sound} onSelect={simulation.selectChoice} onContinue={simulation.continueSimulation} onToggleSound={() => simulation.setSound(!simulation.sound)} onFullscreen={simulation.toggleFullscreen} onReset={simulation.startSimulation}/>} 
+    {simulation.screen === 'results' && <ResultsScreen state={simulation.state} outcome={simulation.outcome} showHistory={simulation.showHistory} onToggleHistory={() => simulation.setShowHistory(!simulation.showHistory)} onReplay={simulation.startSimulation}/>} 
+  </AnimatePresence><button className="floating-help" title="Controles" onClick={() => simulation.setPresenter(!simulation.presenter)}><CircleDot size={16}/></button></div>
 }
 
-function Welcome({ onStart, presenter, setPresenter }: { onStart: () => void; presenter: boolean; setPresenter: (v: boolean) => void }) {
-  return <motion.main className="welcome" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-    <div className="welcome-grid" />
-    <div className="brand-lockup"><span className="eyebrow"><span className="pulse-dot"/> LIVE SIMULATION / OT-SECURITY LAB</span><h1>OT <span>UNDER</span> ATTACK</h1><p>Industrial Cybersecurity Simulator</p></div>
-    <div className="hero-plant"><Plant state={initialState()} compact /></div>
-    <div className="welcome-copy"><div className="time-mark">04:00 AM <span>·</span> PLANT NODE 07</div><p>Una planta industrial. Un incidente de seguridad. Tus decisiones determinan lo que ocurre.</p><p className="muted">Son las 04:00 AM. La operación es normal. En los próximos minutos, una serie de amenazas pondrá a prueba la seguridad de sus sistemas.</p></div>
-    <div className="welcome-actions"><button className="primary-btn" onClick={onStart}>INICIAR SIMULACIÓN <ChevronRight size={18}/></button><button className={`text-btn ${presenter ? 'active' : ''}`} onClick={() => setPresenter(!presenter)}>◉ MODO PRESENTADOR</button></div>
-    <div className="welcome-meta"><span>5 DECISIONES</span><span>~ 06 MINUTOS</span><span>SIMULACIÓN EDUCATIVA</span><span>GRUPO 3 · UTN FRBA</span></div>
-  </motion.main>
-}
-
-function Simulation({ state, scenario, selected, onSelect, onContinue, sound, setSound, onFullscreen, presenter, onReset }: { state: GameState; scenario: typeof scenarios[number]; selected: string | null; onSelect: (c: Choice) => void; onContinue: () => void; sound: boolean; setSound: (v: boolean) => void; onFullscreen: () => void; presenter: boolean; onReset: () => void }) {
-  const selectedChoice = scenario.choices.find((choice) => choice.id === selected)
-  return <motion.main className={`simulation ${state.operationalStatus === 'CRÍTICO' ? 'critical' : ''}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-    <Topbar state={state} sound={sound} setSound={setSound} onFullscreen={onFullscreen} onReset={onReset}/>
-    <div className="sim-grid">
-      <section className="plant-column"><div className="section-tag"><span className="pulse-dot"/> PLANT DIGITAL TWIN <span className="tag-right">SIMULATED / EDUCATIONAL</span></div><div className="plant-frame"><Plant state={state}/></div><div className="plant-caption"><span><i className="legend-dot green"/> OPERATING</span><span><i className="legend-dot yellow"/> MONITORING</span><span><i className="legend-dot red"/> COMPROMISED</span></div></section>
-      <aside className="control-column"><div className="scenario-progress"><div><span className="eyebrow">THREAT BRIEFING</span><strong>{String(scenario.id).padStart(2,'0')} <small>/ 05</small></strong></div><div className="progress-track"><span style={{ width: `${(scenario.id / 5) * 100}%` }}/></div></div><motion.div key={scenario.id} className="briefing" initial={{ y: 12, opacity: 0 }} animate={{ y: 0, opacity: 1 }}><div className="brief-kicker">{scenario.kicker}</div><h2>{scenario.title}</h2><p className="narrative">{scenario.narrative}</p><div className="question"><span>YOUR CALL</span><p>{scenario.question}</p></div><div className="choices">{scenario.choices.map((choice, index) => <button key={choice.id} className={`choice ${selected === choice.id ? 'chosen' : ''}`} onClick={() => onSelect(choice)}><span className="choice-key">{String.fromCharCode(65 + index)}</span><span>{choice.label}</span>{selected === choice.id && <Check size={16}/>}</button>)}</div>{selectedChoice && <div className={`feedback ${selectedChoice.recommended ? 'good' : 'warn'}`}><div className="feedback-icon">{selectedChoice.recommended ? <ShieldCheck size={16}/> : <AlertTriangle size={16}/>}</div><div><strong>{selectedChoice.recommended ? 'DECISIÓN RECOMENDADA' : 'CONSECUENCIA DETECTADA'}</strong><p>{selectedChoice.consequence}</p></div></div>}<button className="continue-btn" disabled={!selected} onClick={onContinue}>{state.currentScenario === 4 ? 'VER RESULTADO' : 'APLICAR DECISIÓN'} <ChevronRight size={17}/></button></motion.div><div className="concept-chip"><span>CONCEPTO CLAVE</span><strong>{scenario.concept}</strong>{presenter && <small>Tiempo sugerido: ~ 60 segundos · Lean la narrativa, voten y apliquen la decisión.</small>}</div></aside>
-    </div><EventConsole events={state.eventLog}/>
-  </motion.main>
-}
-
-function Topbar({ state, sound, setSound, onFullscreen, onReset }: { state: GameState; sound: boolean; setSound: (v: boolean) => void; onFullscreen: () => void; onReset: () => void }) { return <header className="topbar"><div className="top-brand"><span className="mark">OT</span><span><b>UNDER ATTACK</b><small>INDUSTRIAL CYBERSECURITY SIMULATOR</small></span></div><div className="status-line"><span className="live"><i className="pulse-dot"/> LIVE</span><span>04:0{state.currentScenario + 1}:12</span><span>NODE / 07</span></div><div className="top-actions"><button title="Sonido" onClick={() => setSound(!sound)}>{sound ? <Volume2 size={16}/> : <VolumeX size={16}/>}</button><button title="Pantalla completa" onClick={onFullscreen}><Maximize size={16}/></button><button title="Reiniciar" onClick={onReset}><RotateCcw size={16}/></button></div></header> }
-
-function Stat({ label, value, suffix, tone }: { label: string; value: number; suffix?: string; tone?: string }) { return <div className="stat"><div className="stat-label">{label}<span className={`tiny-dot ${tone || ''}`}/></div><div className="stat-value">{value}<small>{suffix}</small></div><div className="meter"><span className={tone || ''} style={{ width: `${value}%` }}/></div></div> }
-function Plant({ state, compact = false }: { state: GameState; compact?: boolean }) { const z = (name: string): ZoneState => state.zones[name] ?? 'stable'; return <div className={`plant ${compact ? 'compact' : ''}`}><div className="plant-noise"/><div className="zone-label it">IT ZONE <span>TRUST LEVEL: LOW</span></div><div className="zone-label ot">OT ZONE <span>PROCESS CONTROL</span></div><div className="zone-label safety">SAFETY <span>ISOLATED LAYER</span></div><svg viewBox="0 0 900 445" role="img" aria-label="Esquema de planta industrial con red IT, DMZ, red OT y proceso físico" className="plant-svg"><defs><linearGradient id="tank" x1="0" x2="1"><stop stopColor="#15242d"/><stop offset=".5" stopColor="#2a3d46"/><stop offset="1" stopColor="#0b151c"/></linearGradient><filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g className="grid-lines">{Array.from({length: 18}).map((_,i)=><line key={`v${i}`} x1={i*50} y1="0" x2={i*50} y2="445"/>)}{Array.from({length: 10}).map((_,i)=><line key={`h${i}`} x1="0" y1={i*50} x2="900" y2={i*50}/>)}</g><g className={`connection ${z('firewall')}`}><path d="M125 115 H290 M350 115 H450 M515 115 H710"/><path d="M450 115 V225 H590"/></g><g className={`connection ${z('plc')}`}><path d="M590 225 H710 M590 225 V345 H710"/></g><g className={`connection ${z('sis')}`}><path d="M590 225 V130 H710"/></g><g className="data-packets"><circle cx="190" cy="115" r="3"/><circle cx="399" cy="115" r="3"/><circle cx="650" cy="225" r="3"/></g><Node x="70" y="78" label="CORP SERVER" sub="ERP-01" icon="server" state={z('erp')}/><Node x="300" y="78" label="REMOTE ACCESS" sub="VPN GATEWAY" icon="lock" state="stable"/><Node x="435" y="78" label="INDUSTRIAL DMZ" sub="FW-01 / ALLOWLIST" icon="firewall" state={z('firewall')}/><Node x="700" y="78" label="SCADA CORE" sub="SCADA-01 · ONLINE" icon="monitor" state="stable"/><Node x="530" y="190" label="HMI STATION" sub="HMI-04 · OPERATOR" icon="monitor" state="stable"/><Node x="700" y="190" label="SAFETY SIS" sub="SIS-01 · ARMED" icon="shield" state={z('sis')}/><Node x="530" y="310" label="PLC CONTROLLER" sub="PLC-01 · RUN" icon="chip" state={z('plc')}/><g className="process"><rect x="705" y="285" width="92" height="107" rx="16" fill="url(#tank)" stroke="#4e7074"/><path d="M710 340 Q750 325 793 340 V381 H710Z" fill="#2b7d78" className="liquid"/><path d="M796 350 H850 V368 H796 M820 350 V308 H850" fill="none" stroke="#4e7074" strokeWidth="9"/><circle cx="748" cy="257" r="18" fill="#15242d" stroke="#e4b354"/><circle cx="748" cy="257" r="6" fill="#6fe0b0" className="pump-light"/><text x="715" y="414">TANK / PROCESS</text><text x="715" y="429" className="sensor-read">TEMP 180°C · PRESS 6.2 bar</text></g><g className="sensor-lines"><path d="M800 290 V225 H860"/><circle cx="860" cy="225" r="8"/><text x="835" y="210">SENSOR</text></g></svg></div> }
-function Node({ x, y, label, sub, icon, state }: { x:number|string;y:number|string;label:string;sub:string;icon:string;state:ZoneState }) { return <g className={`node ${state}`} transform={`translate(${x} ${y})`}><rect width="108" height="68" rx="7"/><circle cx="16" cy="17" r="6"/><text x="29" y="21">{icon.toUpperCase()}</text><text x="10" y="43" className="node-label">{label}</text><text x="10" y="57" className="node-sub">{sub}</text></g> }
-function EventConsole({ events }: { events: string[] }) {
-  const consoleRef = useRef<HTMLDivElement>(null)
-  useEffect(() => { if (consoleRef.current) consoleRef.current.scrollTop = consoleRef.current.scrollHeight }, [events.length])
-  return <section className="console"><div className="console-head"><span><span className="pulse-dot"/> DECISION LOG / EVENT STREAM</span><small>LOCAL / SCROLL TO REVIEW HISTORY</small><Activity size={15}/></div><div className="console-scroll" ref={consoleRef}>{events.map((event, index) => <motion.div className={`event-line ${event.includes('DECISION') ? 'decision' : event.includes('STATE UPDATE') ? 'state-update' : event.includes('IMPACT') ? 'impact' : ''}`} key={`${event}-${index}`} initial={{ opacity: 0, x: -5 }} animate={{ opacity: 1, x: 0 }}><span className="console-arrow">›</span>{event}</motion.div>)}</div></section>
-}
-
-function Results({ state, outcome, showHistory, setShowHistory, onReplay }: { state: GameState; outcome: 'controlled'|'contingency'|'critical'; showHistory: boolean; setShowHistory: (v:boolean)=>void; onReplay:()=>void }) { const correct = state.decisionsHistory.filter((entry, i) => scenarios[i].choices.find((choice) => choice.id === entry.choice)?.recommended).length; const title = outcome === 'controlled' ? 'INCIDENTE CONTROLADO' : outcome === 'critical' ? 'GAME OVER' : 'PLANTA EN CONTINGENCIA'; const rank = correct === 5 ? 'ARQUITECTO DE RESILIENCIA INDUSTRIAL' : correct >= 3 ? 'ESPECIALISTA EN CIBERSEGURIDAD INDUSTRIAL' : correct >= 1 ? 'ANALISTA OT JUNIOR' : 'AMENAZA INTERNA DEL AÑO'; return <motion.main className={`results ${outcome}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}><div className="results-orbit"/><div className="results-content"><div className="eyebrow"><span className="pulse-dot"/> SIMULATION COMPLETE / 04:06:22</div><h1>{title}</h1><p className="results-sub">{outcome === 'controlled' ? 'Las alarmas se estabilizaron. La operación continúa y las capas de defensa respondieron.' : outcome === 'critical' ? 'La cadena de decisiones cruzó el umbral de seguridad. El fallo mostrado es ficticio y didáctico.' : 'La operación se sostuvo con capacidades degradadas. Hay trabajo de recuperación pendiente.'}</p><div className="result-stats"><Stat label="SEGURIDAD" value={state.security} suffix="/ 100" tone={outcome === 'critical' ? 'red' : 'green'}/><Stat label="PRODUCCIÓN" value={state.production} suffix="%" tone="cyan"/><Stat label="SISTEMAS COMPROMETIDOS" value={state.compromisedSystems} suffix="" tone="orange"/><div className="result-stat"><span>DECISIONES</span><strong>{correct}<small>/ 5</small></strong></div></div><div className="rank-card"><span>CLASIFICACIÓN DE EQUIPO</span><strong>{rank}</strong><small>La seguridad industrial no consiste únicamente en impedir ataques: también implica mantener el control del proceso, proteger a las personas y recuperar la operación.</small></div><div className="results-actions"><button className="primary-btn" onClick={onReplay}><RotateCcw size={16}/> VOLVER A JUGAR</button><button className="secondary-btn" onClick={() => setShowHistory(!showHistory)}>{showHistory ? 'OCULTAR DECISIONES' : 'REVISAR DECISIONES'} <ChevronRight size={16}/></button></div>{showHistory && <div className="history">{scenarios.map((item, i) => { const selected = item.choices.find((choice) => choice.id === state.selectedAnswers[i]); return <div className="history-row" key={item.id}><span>0{item.id}</span><div><strong>{item.title}</strong><small>Elegida: {selected?.label}</small><small className="recommendation">Recomendada: {item.choices.find((choice) => choice.recommended)?.label}</small></div></div>})}</div>}<p className="closing">Blockchain puede proteger la integridad de un registro, pero no reemplaza la seguridad de los sistemas que generan los datos.</p></div></motion.main> }
 export default App
