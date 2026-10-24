@@ -6,7 +6,7 @@ export function WelcomeCopy() {
   return (
     <div className="welcome-copy">
       <div className="time-mark">
-        04:00 AM <span>·</span> {t('common.plantNode')}
+        {t('common.startTime')} <span>·</span> {t('common.plantNode')}
       </div>
       <p>{t('welcome.hero')}</p>
       <p className="muted">{t('welcome.description')}</p>

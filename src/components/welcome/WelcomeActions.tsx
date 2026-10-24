@@ -12,10 +12,14 @@ export function WelcomeActions({ presenter, onStart, onTogglePresenter }: Welcom
 
   return (
     <div className="welcome-actions">
-      <button className="primary-btn" onClick={onStart}>
+      <button type="button" className="primary-btn" onClick={onStart}>
         {t('common.start')} <ChevronRight size={18} />
       </button>
-      <button className={`text-btn ${presenter ? 'active' : ''}`} onClick={onTogglePresenter}>
+      <button
+        type="button"
+        className={`text-btn ${presenter ? 'active' : ''}`}
+        onClick={onTogglePresenter}
+        aria-pressed={presenter}>
         ◉ {t('common.presenterMode')}
       </button>
     </div>

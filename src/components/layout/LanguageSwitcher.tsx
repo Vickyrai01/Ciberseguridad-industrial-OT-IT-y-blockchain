@@ -6,13 +6,14 @@ export function LanguageSwitcher() {
   const currentLanguage = instance.language.startsWith(LANGUAGE.EN) ? LANGUAGE.EN : LANGUAGE.ES
 
   const changeLanguage = (language: SupportedLanguage) => {
-    localStorage.setItem(LANGUAGE_STORAGE_KEY, language)
+    if (typeof window !== 'undefined') window.localStorage.setItem(LANGUAGE_STORAGE_KEY, language)
     void i18n.changeLanguage(language)
   }
 
   return (
     <div className="language-switcher" aria-label={instance.t('common.languageSelector')}>
       <button
+        type="button"
         className={currentLanguage === LANGUAGE.ES ? 'active' : ''}
         onClick={() => changeLanguage(LANGUAGE.ES)}
         aria-pressed={currentLanguage === LANGUAGE.ES}>
@@ -20,6 +21,7 @@ export function LanguageSwitcher() {
       </button>
       <span>/</span>
       <button
+        type="button"
         className={currentLanguage === LANGUAGE.EN ? 'active' : ''}
         onClick={() => changeLanguage(LANGUAGE.EN)}
         aria-pressed={currentLanguage === LANGUAGE.EN}>

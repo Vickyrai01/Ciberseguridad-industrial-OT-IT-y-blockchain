@@ -35,9 +35,11 @@ export function ScenarioBriefing({ state, scenario, selected, onSelect, onContin
       <div className="choices">
         {scenario.choices.map((choice, index) => (
           <button
+            type="button"
             key={choice.id}
             className={`choice ot-focus-ring ${selected === choice.id ? 'chosen' : ''}`}
-            onClick={() => onSelect(choice)}>
+            onClick={() => onSelect(choice)}
+            aria-pressed={selected === choice.id}>
             <span className="choice-key">{String.fromCharCode(65 + index)}</span>
             <span>{t(choice.labelKey)}</span>
             {selected === choice.id && <Check size={16} />}
@@ -45,7 +47,7 @@ export function ScenarioBriefing({ state, scenario, selected, onSelect, onContin
         ))}
       </div>
       {selectedChoice && <ChoiceFeedback choice={selectedChoice} />}
-      <button className="continue-btn ot-focus-ring" disabled={!selected} onClick={onContinue}>
+      <button type="button" className="continue-btn ot-focus-ring" disabled={!selected} onClick={onContinue}>
         {isLastScenario ? t('common.seeResult') : t('common.applyDecision')} <ChevronRight size={17} />
       </button>
     </motion.div>

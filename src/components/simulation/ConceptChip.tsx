@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next'
+import type { TranslationKey } from '../../i18n/types'
 
 interface ConceptChipProps {
-  conceptKey: string
+  conceptKey: TranslationKey
   presenter: boolean
 }
 

@@ -61,6 +61,16 @@ export const EVENT_TONE = {
 
 export type EventTone = (typeof EVENT_TONE)[keyof typeof EVENT_TONE]
 
+export const EVENT_TYPE = {
+  SYSTEM: 'system',
+  DECISION: 'decision',
+  STATE_UPDATE: 'state-update',
+  IMPACT: 'impact',
+  MESSAGE: 'message',
+} as const
+
+export type EventType = (typeof EVENT_TYPE)[keyof typeof EVENT_TYPE]
+
 export const SOUND_EFFECT = {
   CLICK: 'click',
   ALERT: 'alert',

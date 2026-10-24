@@ -8,7 +8,8 @@ export const LANGUAGE_STORAGE_KEY = 'ot-under-attack-language'
 export const supportedLanguages = [LANGUAGE.ES, LANGUAGE.EN] as const
 export type SupportedLanguage = (typeof LANGUAGE)[keyof typeof LANGUAGE]
 
-const storedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY) as SupportedLanguage | null
+const storedLanguage =
+  typeof window !== 'undefined' ? (window.localStorage.getItem(LANGUAGE_STORAGE_KEY) as SupportedLanguage | null) : null
 const initialLanguage: SupportedLanguage =
   storedLanguage && supportedLanguages.includes(storedLanguage) ? storedLanguage : LANGUAGE.ES
 

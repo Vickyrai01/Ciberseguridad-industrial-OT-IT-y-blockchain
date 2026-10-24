@@ -50,7 +50,7 @@ Cada escenario tiene tres alternativas y una decisión recomendada. El orden de 
 
 Los escenarios están inspirados en conceptos de segmentación OT/IT, Modbus TCP heredado, Triton/SIS, ransomware y el problema del oráculo en blockchain. Las referencias históricas se distinguen de los valores inventados del videojuego.
 
-Las convenciones de animación y las reglas para futuras contribuciones están documentadas en [`docs/ANIMATIONS.md`](docs/ANIMATIONS.md).
+Las convenciones de animación y las reglas para futuras contribuciones están documentadas en [`docs/ANIMATIONS.md`](docs/ANIMATIONS.md). El motor conserva el orden real de los escenarios mezclados y registra eventos estructurados; la consola los traduce y presenta al usuario.
 
 ## Estructura
 
@@ -58,6 +58,7 @@ Las convenciones de animación y las reglas para futuras contribuciones están d
 src/
   data/scenarios.ts          contenido pedagógico
   engine/simulationEngine.ts estado y consecuencias
+  constants/domain.ts          estados, zonas, eventos y configuración
   components/                planta, consola, topbar e indicadores
   screens/                   bienvenida, simulación y resultados
   hooks/                     estado de partida y sonido
@@ -65,6 +66,7 @@ src/
   styles/visuals.css         identidad visual, responsive, SVG y animaciones
   styles/console.css         consola de decisiones y layout fijo
   styles/tailwind.css        utilidades Tailwind y tokens de componentes
+  utils/                     formateo de eventos, resultados y utilidades puras
 .github/workflows/deploy.yml despliegue estático
 ```
 

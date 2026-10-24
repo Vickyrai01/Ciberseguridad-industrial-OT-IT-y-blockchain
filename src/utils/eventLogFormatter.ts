@@ -1,46 +1,43 @@
+import { EVENT_TONE, EVENT_TYPE, SIMULATION_CONFIG, type EventTone } from '../constants/domain'
+import type { EventLogEntry } from '../types'
+
 export type Translator = (key: string) => string
-import { EVENT_TONE, type EventTone } from '../constants/domain'
 
 export interface FormattedEvent {
+  id: string
   message: string
   tone: EventTone
 }
 
-const decisionPattern = /^(\[[^\]]+\]) DECISION (\d+\/05): OPTION ([ABC]) SELECTED · (RECOMMENDED|RISK DETECTED)$/
-const stateUpdatePattern = /^(\[[^\]]+\]) STATE UPDATE: SECURITY (\d+)\/100 · PRODUCTION (\d+)% · STATUS ([A-Z]+)$/
-const impactPattern = /^(\[[^\]]+\]) IMPACT: (\d+) SYSTEM(S)? COMPROMISED · ZONE ([A-Z]+)$/
+export function formatEvent(event: EventLogEntry, translate: Translator): FormattedEvent {
+  const prefix = event.timestamp
 
-export function formatEvent(event: string, translate: Translator): FormattedEvent {
-  const decision = event.match(decisionPattern)
-  if (decision) {
-    return {
-      tone: EVENT_TONE.DECISION,
-      message: `${decision[1]} ${translate('log.decision')} ${decision[2]}: ${translate('log.option')} ${decision[3]} ${translate('log.selected')} · ${decision[4] === 'RECOMMENDED' ? translate('log.recommended') : translate('log.riskDetected')}`,
-    }
-  }
-
-  const stateUpdate = event.match(stateUpdatePattern)
-  if (stateUpdate) {
-    return {
-      tone: EVENT_TONE.STATE_UPDATE,
-      message: `${stateUpdate[1]} ${translate('log.stateUpdate')}: ${translate('log.security')} ${stateUpdate[2]}/100 · ${translate('log.production')} ${stateUpdate[3]}% · ${translate('log.status')} ${translate(`status.${stateUpdate[4].toLowerCase()}`)}`,
-    }
-  }
-
-  const impact = event.match(impactPattern)
-  if (impact) {
-    return {
-      tone: EVENT_TONE.IMPACT,
-      message: `${impact[1]} ${translate('log.impact')}: ${impact[2]} ${impact[3] === '1' ? translate('log.system') : translate('log.systems')} ${translate('log.compromised')} · ${translate('log.zone')} ${impact[5]}`,
-    }
-  }
-
-  return {
-    tone: EVENT_TONE.DEFAULT,
-    message: event
-      .replace('SYSTEM INITIALIZED', translate('log.systemInitialized'))
-      .replace('PLC-01 STATUS: RUN', translate('log.plcRun'))
-      .replace('SCADA TELEMETRY: NOMINAL', translate('log.scadaNominal')),
+  switch (event.type) {
+    case EVENT_TYPE.SYSTEM:
+    case EVENT_TYPE.MESSAGE:
+      return {
+        id: event.id,
+        tone: event.tone,
+        message: `${prefix} ${translate(event.messageKey ?? '')}`,
+      }
+    case EVENT_TYPE.DECISION:
+      return {
+        id: event.id,
+        tone: event.tone,
+        message: `${prefix} ${translate('log.decision')} ${String(event.scenarioId).padStart(2, '0')}/${String(SIMULATION_CONFIG.scenarioCount).padStart(2, '0')}: ${translate('log.option')} ${event.option?.toUpperCase()} ${translate('log.selected')} · ${event.recommended ? translate('log.recommended') : translate('log.riskDetected')}`,
+      }
+    case EVENT_TYPE.STATE_UPDATE:
+      return {
+        id: event.id,
+        tone: event.tone,
+        message: `${prefix} ${translate('log.stateUpdate')}: ${translate('log.security')} ${event.security}/100 · ${translate('log.production')} ${event.production}% · ${translate('log.status')} ${translate(`status.${event.status}`)}`,
+      }
+    case EVENT_TYPE.IMPACT:
+      return {
+        id: event.id,
+        tone: event.tone,
+        message: `${prefix} ${translate('log.impact')}: ${event.compromisedSystems} ${event.compromisedSystems === 1 ? translate('log.system') : translate('log.systems')} ${translate('log.compromised')} · ${translate('log.zone')} ${event.zone?.toUpperCase()}`,
+      }
   }
 }
 

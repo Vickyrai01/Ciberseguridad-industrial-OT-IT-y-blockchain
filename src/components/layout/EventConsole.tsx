@@ -4,8 +4,9 @@ import { Activity } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { eventMotion, eventTransition } from '../../animations/motionTokens'
 import { eventToneClass, formatEvent } from '../../utils/eventLogFormatter'
+import type { EventLogEntry } from '../../types'
 
-export function EventConsole({ events }: { events: string[] }) {
+export function EventConsole({ events }: { events: EventLogEntry[] }) {
   const { t } = useTranslation()
   const consoleRef = useRef<HTMLDivElement>(null)
   const formattedEvents = useMemo(() => events.map((event) => formatEvent(event, t)), [events, t])
@@ -22,10 +23,10 @@ export function EventConsole({ events }: { events: string[] }) {
         <Activity size={15} />
       </div>
       <div className="console-scroll" ref={consoleRef} role="log" aria-live="polite">
-        {formattedEvents.map((event, index) => (
+        {formattedEvents.map((event) => (
           <motion.div
             className={`event-line ${eventToneClass(event.tone)}`}
-            key={`${event.message}-${index}`}
+            key={event.id}
             {...eventMotion}
             transition={eventTransition}>
             <span className="console-arrow">›</span>

@@ -27,17 +27,32 @@ export function Topbar({ state, sound, onToggleSound, onFullscreen, onReset }: T
           <i className="pulse-dot" /> {t('common.live')}
         </span>
         <span>04:0{state.currentScenario + 1}:12</span>
-        <span>NODE / 07</span>
+        <span>{t('common.node')}</span>
       </div>
       <div className="top-actions">
         <LanguageSwitcher />
-        <button className="ot-focus-ring" title={t('common.sound')} onClick={onToggleSound}>
+        <button
+          type="button"
+          className="ot-focus-ring"
+          title={t('common.sound')}
+          aria-label={t('common.sound')}
+          onClick={onToggleSound}>
           {sound ? <Volume2 size={16} /> : <VolumeX size={16} />}
         </button>
-        <button className="ot-focus-ring" title={t('common.fullscreen')} onClick={onFullscreen}>
+        <button
+          type="button"
+          className="ot-focus-ring"
+          title={t('common.fullscreen')}
+          aria-label={t('common.fullscreen')}
+          onClick={onFullscreen}>
           <Maximize size={16} />
         </button>
-        <button className="ot-focus-ring" title={t('common.restart')} onClick={onReset}>
+        <button
+          type="button"
+          className="ot-focus-ring"
+          title={t('common.restart')}
+          aria-label={t('common.restart')}
+          onClick={onReset}>
           <RotateCcw size={16} />
         </button>
       </div>

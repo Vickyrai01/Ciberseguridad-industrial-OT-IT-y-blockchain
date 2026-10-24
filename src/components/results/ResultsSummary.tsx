@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
+import type { TranslationKey } from '../../i18n/types'
 
-export function ResultsSummary({ rank }: { rank: string }) {
+export function ResultsSummary({ rank }: { rank: TranslationKey }) {
   const { t } = useTranslation()
 
   return (

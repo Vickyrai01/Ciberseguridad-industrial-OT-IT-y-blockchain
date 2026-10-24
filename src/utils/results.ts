@@ -1,16 +1,17 @@
 import { scenarios } from '../data/scenarios'
 import { SIMULATION_CONFIG, SIMULATION_OUTCOME, type SimulationOutcome } from '../constants/domain'
 import type { GameState } from '../types'
+import type { TranslationKey } from '../i18n/types'
 
 interface ResultCopyKeys {
-  titleKey: string
-  subtitleKey: string
+  titleKey: TranslationKey
+  subtitleKey: TranslationKey
 }
 
 export function countCorrectDecisions(state: GameState): number {
   return state.decisionsHistory.reduce((correct, decision) => {
-    const scenario = scenarios.find(({ id }) => id === decision.scenario)
-    const selectedChoice = scenario?.choices.find(({ id }) => id === decision.choice)
+    const scenario = scenarios.find(({ id }) => id === decision.scenarioId)
+    const selectedChoice = scenario?.choices.find(({ id }) => id === decision.choiceId)
     return correct + (selectedChoice?.recommended ? 1 : 0)
   }, 0)
 }
@@ -34,7 +35,7 @@ export function getResultCopyKeys(outcome: SimulationOutcome): ResultCopyKeys {
   return copyByOutcome[outcome]
 }
 
-export function getRankKey(correctDecisions: number): string {
+export function getRankKey(correctDecisions: number): TranslationKey {
   if (correctDecisions === SIMULATION_CONFIG.scenarioCount) {
     return 'common.resilienceArchitect'
   }

@@ -1,5 +1,6 @@
 import { AnimatePresence, MotionConfig } from 'framer-motion'
 import { CircleDot } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { ResultsScreen } from './screens/ResultsScreen'
 import { SimulationScreen } from './screens/SimulationScreen'
 import { WelcomeScreen } from './screens/WelcomeScreen'
@@ -8,6 +9,7 @@ import { SCREEN } from './constants/domain'
 
 function App() {
   const simulation = useSimulation()
+  const { t } = useTranslation()
   return (
     <div className="app-shell ot-layout-screen">
       <div className="scanlines" />
@@ -17,7 +19,7 @@ function App() {
             <WelcomeScreen
               onStart={simulation.startSimulation}
               presenter={simulation.presenter}
-              onTogglePresenter={() => simulation.setPresenter(!simulation.presenter)}
+              onTogglePresenter={simulation.togglePresenter}
             />
           )}
           {simulation.screen === SCREEN.SIMULATION && simulation.scenario && (
@@ -29,7 +31,7 @@ function App() {
               sound={simulation.sound}
               onSelect={simulation.selectChoice}
               onContinue={simulation.continueSimulation}
-              onToggleSound={() => simulation.setSound(!simulation.sound)}
+              onToggleSound={simulation.toggleSound}
               onFullscreen={simulation.toggleFullscreen}
               onReset={simulation.startSimulation}
             />
@@ -39,16 +41,19 @@ function App() {
               state={simulation.state}
               outcome={simulation.outcome}
               showHistory={simulation.showHistory}
-              onToggleHistory={() => simulation.setShowHistory(!simulation.showHistory)}
+              onToggleHistory={simulation.toggleHistory}
               onReplay={simulation.startSimulation}
             />
           )}
         </AnimatePresence>
       </MotionConfig>
       <button
+        type="button"
         className="floating-help"
-        title="Controles"
-        onClick={() => simulation.setPresenter(!simulation.presenter)}>
+        title={t('common.controls')}
+        aria-label={t('common.controls')}
+        aria-pressed={simulation.presenter}
+        onClick={simulation.togglePresenter}>
         <CircleDot size={16} />
       </button>
     </div>

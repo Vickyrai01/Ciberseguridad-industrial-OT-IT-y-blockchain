@@ -1,5 +1,8 @@
-import type { Choice, GameState, OperationalStatus } from '../types'
+import type { Choice, EventLogEntry, GameState, OperationalStatus, Scenario } from '../types'
+import type { TranslationKey } from '../i18n/types'
 import {
+  EVENT_TONE,
+  EVENT_TYPE,
   OPERATIONAL_STATUS,
   PLANT_ZONE,
   SIMULATION_CONFIG,
@@ -7,7 +10,9 @@ import {
   ZONE_STATE,
   type SimulationOutcome,
 } from '../constants/domain'
-export const initialState = (): GameState => ({
+const createEvent = <T extends EventLogEntry>(event: T): T => event
+
+export const initialState = (scenarioOrder: number[] = []): GameState => ({
   currentScenario: 0,
   security: SIMULATION_CONFIG.initialSecurity,
   production: SIMULATION_CONFIG.initialProduction,
@@ -20,18 +25,45 @@ export const initialState = (): GameState => ({
     [PLANT_ZONE.ERP]: ZONE_STATE.STABLE,
     [PLANT_ZONE.BLOCKCHAIN]: ZONE_STATE.STABLE,
   },
-  eventLog: ['[04:00:00] SYSTEM INITIALIZED', '[04:00:12] PLC-01 STATUS: RUN', '[04:00:18] SCADA TELEMETRY: NOMINAL'],
-  selectedAnswers: [],
+  scenarioOrder,
+  eventLog: [
+    createEvent({
+      id: 'system-initialized',
+      timestamp: '[04:00:00]',
+      type: EVENT_TYPE.SYSTEM,
+      tone: EVENT_TONE.DEFAULT,
+      messageKey: 'log.systemInitialized',
+    }),
+    createEvent({
+      id: 'plc-status',
+      timestamp: '[04:00:12]',
+      type: EVENT_TYPE.SYSTEM,
+      tone: EVENT_TONE.DEFAULT,
+      messageKey: 'log.plcRun',
+    }),
+    createEvent({
+      id: 'scada-telemetry',
+      timestamp: '[04:00:18]',
+      type: EVENT_TYPE.SYSTEM,
+      tone: EVENT_TONE.DEFAULT,
+      messageKey: 'log.scadaNominal',
+    }),
+  ],
   decisionsHistory: [],
   simulationFinished: false,
 })
 const clamp = (n: number) => Math.max(SIMULATION_CONFIG.minMetric, Math.min(SIMULATION_CONFIG.maxMetric, n))
+
+const timestampFor = (scenarioIndex: number, seconds: number) =>
+  `[04:0${scenarioIndex + 1}:${String(seconds).padStart(2, '0')}]`
+
 export const applyChoice = (
   state: GameState,
+  scenario: Scenario,
   choice: Choice,
-  scenarioIndex: number,
-  eventMessages: string[],
+  eventKeys: TranslationKey[],
 ): GameState => {
+  const scenarioIndex = state.currentScenario
   const nextZones = {
     ...state.zones,
     [choice.zone]:
@@ -48,9 +80,41 @@ export const applyChoice = (
     nextSecurity < SIMULATION_CONFIG.criticalSecurityThreshold || choice.status === OPERATIONAL_STATUS.CRITICAL
       ? OPERATIONAL_STATUS.CRITICAL
       : choice.status
-  const decisionLog = `[04:0${scenarioIndex + 1}:00] DECISION ${String(scenarioIndex + 1).padStart(2, '0')}/05: OPTION ${choice.id.toUpperCase()} SELECTED ${choice.recommended ? '· RECOMMENDED' : '· RISK DETECTED'}`
-  const stateLog = `[04:0${scenarioIndex + 1}:01] STATE UPDATE: SECURITY ${nextSecurity}/100 · PRODUCTION ${nextProduction}% · STATUS ${nextStatus.toUpperCase()}`
-  const impactLog = `[04:0${scenarioIndex + 1}:02] IMPACT: ${nextCompromised} SYSTEM${nextCompromised === 1 ? '' : 'S'} COMPROMISED · ZONE ${choice.zone.toUpperCase()}`
+  const decisionLog = createEvent({
+    id: `scenario-${scenario.id}-decision`,
+    timestamp: timestampFor(scenarioIndex, 0),
+    type: EVENT_TYPE.DECISION,
+    tone: EVENT_TONE.DECISION,
+    scenarioId: scenario.id,
+    option: choice.id,
+    recommended: choice.recommended,
+  })
+  const stateLog = createEvent({
+    id: `scenario-${scenario.id}-state`,
+    timestamp: timestampFor(scenarioIndex, 1),
+    type: EVENT_TYPE.STATE_UPDATE,
+    tone: EVENT_TONE.STATE_UPDATE,
+    security: nextSecurity,
+    production: nextProduction,
+    status: nextStatus,
+  })
+  const impactLog = createEvent({
+    id: `scenario-${scenario.id}-impact`,
+    timestamp: timestampFor(scenarioIndex, 2),
+    type: EVENT_TYPE.IMPACT,
+    tone: EVENT_TONE.IMPACT,
+    compromisedSystems: nextCompromised,
+    zone: choice.zone,
+  })
+  const messageLogs = eventKeys.map((messageKey, index) =>
+    createEvent({
+      id: `scenario-${scenario.id}-message-${index}`,
+      timestamp: timestampFor(scenarioIndex, index + 3),
+      type: EVENT_TYPE.MESSAGE,
+      tone: EVENT_TONE.DEFAULT,
+      messageKey,
+    }),
+  )
   return {
     ...state,
     currentScenario: scenarioIndex + 1,
@@ -59,17 +123,8 @@ export const applyChoice = (
     compromisedSystems: nextCompromised,
     operationalStatus: nextStatus,
     zones: nextZones,
-    eventLog: [
-      ...state.eventLog,
-      decisionLog,
-      stateLog,
-      impactLog,
-      ...eventMessages.map(
-        (event, index) => `[04:0${scenarioIndex + 1}:${String(index + 3).padStart(2, '0')}] ${event}`,
-      ),
-    ],
-    selectedAnswers: [...state.selectedAnswers, choice.id],
-    decisionsHistory: [...state.decisionsHistory, { scenario: scenarioIndex, choice: choice.id }],
+    eventLog: [...state.eventLog, decisionLog, stateLog, impactLog, ...messageLogs],
+    decisionsHistory: [...state.decisionsHistory, { scenarioId: scenario.id, choiceId: choice.id }],
     simulationFinished: scenarioIndex === SIMULATION_CONFIG.lastScenarioIndex,
   }
 }

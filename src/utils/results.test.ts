@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { countCorrectDecisions, getRankKey, getResultCopyKeys } from './results'
-import { SIMULATION_OUTCOME } from '../constants/domain'
+import { OPERATIONAL_STATUS, PLANT_ZONE, SIMULATION_OUTCOME, ZONE_STATE } from '../constants/domain'
 import type { GameState } from '../types'
 
 const createState = (decisionsHistory: GameState['decisionsHistory']): GameState => ({
@@ -8,16 +8,16 @@ const createState = (decisionsHistory: GameState['decisionsHistory']): GameState
   security: 100,
   production: 100,
   compromisedSystems: 0,
-  operationalStatus: 'normal',
+  operationalStatus: OPERATIONAL_STATUS.NORMAL,
   zones: {
-    firewall: 'stable',
-    plc: 'stable',
-    sis: 'stable',
-    erp: 'stable',
-    blockchain: 'stable',
+    [PLANT_ZONE.FIREWALL]: ZONE_STATE.STABLE,
+    [PLANT_ZONE.PLC]: ZONE_STATE.STABLE,
+    [PLANT_ZONE.SIS]: ZONE_STATE.STABLE,
+    [PLANT_ZONE.ERP]: ZONE_STATE.STABLE,
+    [PLANT_ZONE.BLOCKCHAIN]: ZONE_STATE.STABLE,
   },
   eventLog: [],
-  selectedAnswers: [],
+  scenarioOrder: [1, 2, 3],
   decisionsHistory,
   simulationFinished: true,
 })
@@ -25,9 +25,9 @@ const createState = (decisionsHistory: GameState['decisionsHistory']): GameState
 describe('results utilities', () => {
   it('counts correct decisions by scenario id instead of array position', () => {
     const state = createState([
-      { scenario: 2, choice: 'b' },
-      { scenario: 1, choice: 'b' },
-      { scenario: 3, choice: 'a' },
+      { scenarioId: 2, choiceId: 'b' },
+      { scenarioId: 1, choiceId: 'b' },
+      { scenarioId: 3, choiceId: 'a' },
     ])
 
     expect(countCorrectDecisions(state)).toBe(2)

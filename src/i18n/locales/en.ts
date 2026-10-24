@@ -1,8 +1,11 @@
+import type { TranslationResource } from '../types'
+
 const en = {
   common: {
     liveSimulation: 'LIVE SIMULATION / OT-SECURITY LAB',
     simulator: 'Industrial Cybersecurity Simulator',
     plantNode: 'PLANT NODE 07',
+    startTime: '04:00 AM',
     live: 'LIVE',
     node: 'NODE / 07',
     start: 'START SIMULATION',
@@ -47,6 +50,7 @@ const en = {
     reviewDecisions: 'REVIEW DECISIONS',
     hideDecisions: 'HIDE DECISIONS',
     selected: 'Selected',
+    notAvailable: 'Not available',
     recommendedAnswer: 'Recommended',
     juniorAnalyst: 'JUNIOR OT ANALYST',
     industrialSpecialist: 'INDUSTRIAL CYBERSECURITY SPECIALIST',
@@ -279,6 +283,6 @@ const en = {
       },
     },
   },
-} as const
+} satisfies TranslationResource
 
 export default en

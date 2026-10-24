@@ -1,30 +1,70 @@
-import type { ChoiceId, OperationalStatus, PlantZone, ZoneState } from './constants/domain'
+import type { ChoiceId, EventType, EventTone, OperationalStatus, PlantZone, ZoneState } from './constants/domain'
+import type { TranslationKey } from './i18n/types'
 
-export type { ChoiceId, OperationalStatus, PlantZone, Screen, ZoneState } from './constants/domain'
+export type {
+  ChoiceId,
+  EventType,
+  EventTone,
+  OperationalStatus,
+  PlantZone,
+  Screen,
+  ZoneState,
+} from './constants/domain'
 
 export interface Choice {
   id: ChoiceId
-  labelKey: string
-  consequenceKey: string
+  labelKey: TranslationKey
+  consequenceKey: TranslationKey
   recommended: boolean
   security: number
   production: number
   compromised: number
   status: OperationalStatus
   zone: PlantZone
-  eventKeys: string[]
+  eventKeys: TranslationKey[]
 }
 export interface Scenario {
   id: number
-  kickerKey: string
-  titleKey: string
-  narrativeKey: string
-  questionKey: string
-  conceptKey: string
+  kickerKey: TranslationKey
+  titleKey: TranslationKey
+  narrativeKey: TranslationKey
+  questionKey: TranslationKey
+  conceptKey: TranslationKey
   choices: Choice[]
-  insightKey: string
-  referenceKey?: string
+  insightKey: TranslationKey
+  referenceKey?: TranslationKey
 }
+
+export interface DecisionRecord {
+  scenarioId: number
+  choiceId: ChoiceId
+}
+
+interface EventBase<Type extends EventType, Tone extends EventTone> {
+  id: string
+  timestamp: string
+  type: Type
+  tone: Tone
+}
+
+export type EventLogEntry =
+  | (EventBase<'system', 'default'> & { messageKey: TranslationKey })
+  | (EventBase<'message', 'default'> & { messageKey: TranslationKey })
+  | (EventBase<'decision', 'decision'> & {
+      scenarioId: number
+      option: ChoiceId
+      recommended: boolean
+    })
+  | (EventBase<'state-update', 'state-update'> & {
+      security: number
+      production: number
+      status: OperationalStatus
+    })
+  | (EventBase<'impact', 'impact'> & {
+      compromisedSystems: number
+      zone: PlantZone
+    })
+
 export interface GameState {
   currentScenario: number
   security: number
@@ -32,8 +72,8 @@ export interface GameState {
   compromisedSystems: number
   operationalStatus: OperationalStatus
   zones: Record<PlantZone, ZoneState>
-  eventLog: string[]
-  selectedAnswers: ChoiceId[]
-  decisionsHistory: { scenario: number; choice: ChoiceId }[]
+  scenarioOrder: number[]
+  eventLog: EventLogEntry[]
+  decisionsHistory: DecisionRecord[]
   simulationFinished: boolean
 }
