@@ -1,4 +1,4 @@
-import type { ChoiceId, EventType, EventTone, OperationalStatus, PlantZone, ZoneState } from './constants/domain'
+import type { ChoiceId, EventType, EventTone, OperationalStatus, PlantZone, ZoneState } from './shared/constants/domain'
 import type { TranslationKey } from './i18n/types'
 
 export type {
@@ -9,7 +9,7 @@ export type {
   PlantZone,
   Screen,
   ZoneState,
-} from './constants/domain'
+} from './shared/constants/domain'
 
 export interface Choice {
   id: ChoiceId

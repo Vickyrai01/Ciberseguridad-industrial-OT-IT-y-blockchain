@@ -1,11 +1,11 @@
 import { AnimatePresence, MotionConfig } from 'framer-motion'
 import { CircleDot } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { ResultsScreen } from './screens/ResultsScreen'
-import { SimulationScreen } from './screens/SimulationScreen'
-import { WelcomeScreen } from './screens/WelcomeScreen'
-import { useSimulation } from './hooks/useSimulation'
-import { SCREEN } from './constants/domain'
+import { ResultsScreen } from './features/results/ResultsScreen'
+import { SimulationScreen } from './features/simulation/SimulationScreen'
+import { useSimulation } from './features/simulation/hooks/useSimulation'
+import { WelcomeScreen } from './features/welcome/WelcomeScreen'
+import { SCREEN } from './shared/constants/domain'
 
 function App() {
   const simulation = useSimulation()

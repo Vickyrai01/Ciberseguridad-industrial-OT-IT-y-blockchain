@@ -58,12 +58,18 @@ Las convenciones de animación y las reglas para futuras contribuciones están d
 
 ```text
 src/
-  data/scenarios.ts          contenido pedagógico
-  engine/simulationEngine.ts estado y consecuencias
-  constants/domain.ts          estados, zonas, eventos y configuración
-  components/                planta, consola, topbar e indicadores
-  screens/                   bienvenida, simulación y resultados
-  hooks/                     estado de partida y sonido
+  features/
+    simulation/              escenario, motor, estado y pantalla de simulación
+      data/                  contenido pedagógico y reglas de consecuencias
+      components/            briefing, progreso, feedback y panel de planta
+    plant/                   componentes del gemelo digital industrial
+    results/                 pantalla, historial y clasificación final
+    welcome/                 pantalla y componentes de bienvenida
+  shared/
+    components/              layout, consola, topbar e indicadores reutilizables
+    constants/               estados, zonas, eventos y configuración
+    utils/                   formateo de eventos y utilidades compartidas
+    hooks/                   sonido reutilizable
   i18n/locales/              textos ES/EN y configuración de i18next
   styles/visuals.css         identidad visual, responsive, SVG y animaciones
   styles/console.css         consola de decisiones y layout fijo
