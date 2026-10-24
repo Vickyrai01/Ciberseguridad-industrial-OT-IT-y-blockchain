@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { AlertTriangle, Check, ChevronRight, ShieldCheck } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { EventConsole } from '../components/layout/EventConsole'
 import { Topbar } from '../components/layout/Topbar'
 import { Plant } from '../components/plant/Plant'
@@ -30,10 +31,11 @@ export function SimulationScreen({
   onFullscreen,
   onReset,
 }: SimulationScreenProps) {
+  const { t } = useTranslation()
   const selectedChoice = scenario.choices.find((choice) => choice.id === selected)
   return (
     <motion.main
-      className={`simulation ot-layout-screen ${state.operationalStatus === 'CRÍTICO' ? 'critical' : ''}`}
+      className={`simulation ot-layout-screen ${state.operationalStatus === 'critical' ? 'critical' : ''}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}>
@@ -41,27 +43,28 @@ export function SimulationScreen({
       <div className="sim-grid">
         <section className="plant-column">
           <div className="section-tag ot-mono-label">
-            <span className="pulse-dot" /> PLANT DIGITAL TWIN <span className="tag-right">SIMULATED / EDUCATIONAL</span>
+            <span className="pulse-dot" /> {t('common.plantTwin')}{' '}
+            <span className="tag-right">{t('common.simulatedEducational')}</span>
           </div>
           <div className="plant-frame ot-panel-surface">
             <Plant state={state} />
           </div>
           <div className="plant-caption">
             <span>
-              <i className="legend-dot green" /> OPERATING
+              <i className="legend-dot green" /> {t('common.operating')}
             </span>
             <span>
-              <i className="legend-dot yellow" /> MONITORING
+              <i className="legend-dot yellow" /> {t('common.monitoring')}
             </span>
             <span>
-              <i className="legend-dot red" /> COMPROMISED
+              <i className="legend-dot red" /> {t('common.compromised')}
             </span>
           </div>
         </section>
         <aside className="control-column">
           <div className="scenario-progress">
             <div>
-              <span className="eyebrow">THREAT BRIEFING</span>
+              <span className="eyebrow">{t('common.threatBriefing')}</span>
               <strong>
                 {String(scenario.id).padStart(2, '0')} <small>/ 05</small>
               </strong>
@@ -75,12 +78,12 @@ export function SimulationScreen({
             className="briefing ot-panel-surface"
             initial={{ y: 12, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}>
-            <div className="brief-kicker">{scenario.kicker}</div>
-            <h2>{scenario.title}</h2>
-            <p className="narrative">{scenario.narrative}</p>
+            <div className="brief-kicker">{t(scenario.kickerKey)}</div>
+            <h2>{t(scenario.titleKey)}</h2>
+            <p className="narrative">{t(scenario.narrativeKey)}</p>
             <div className="question">
-              <span>YOUR CALL</span>
-              <p>{scenario.question}</p>
+              <span>{t('common.yourCall')}</span>
+              <p>{t(scenario.questionKey)}</p>
             </div>
             <div className="choices">
               {scenario.choices.map((choice, index) => (
@@ -89,7 +92,7 @@ export function SimulationScreen({
                   className={`choice ot-focus-ring ${selected === choice.id ? 'chosen' : ''}`}
                   onClick={() => onSelect(choice)}>
                   <span className="choice-key">{String.fromCharCode(65 + index)}</span>
-                  <span>{choice.label}</span>
+                  <span>{t(choice.labelKey)}</span>
                   {selected === choice.id && <Check size={16} />}
                 </button>
               ))}
@@ -100,21 +103,22 @@ export function SimulationScreen({
                   {selectedChoice.recommended ? <ShieldCheck size={16} /> : <AlertTriangle size={16} />}
                 </div>
                 <div>
-                  <strong>{selectedChoice.recommended ? 'DECISIÓN RECOMENDADA' : 'CONSECUENCIA DETECTADA'}</strong>
-                  <p>{selectedChoice.consequence}</p>
+                  <strong>
+                    {selectedChoice.recommended ? t('common.recommended') : t('common.consequenceDetected')}
+                  </strong>
+                  <p>{t(selectedChoice.consequenceKey)}</p>
                 </div>
               </div>
             )}
             <button className="continue-btn ot-focus-ring" disabled={!selected} onClick={onContinue}>
-              {state.currentScenario === 4 ? 'VER RESULTADO' : 'APLICAR DECISIÓN'} <ChevronRight size={17} />
+              {state.currentScenario === 4 ? t('common.seeResult') : t('common.applyDecision')}{' '}
+              <ChevronRight size={17} />
             </button>
           </motion.div>
           <div className="concept-chip">
-            <span>CONCEPTO CLAVE</span>
-            <strong>{scenario.concept}</strong>
-            {presenter && (
-              <small>Tiempo sugerido: ~ 60 segundos · Lean la narrativa, voten y apliquen la decisión.</small>
-            )}
+            <span>{t('common.keyConcept')}</span>
+            <strong>{t(scenario.conceptKey)}</strong>
+            {presenter && <small>{t('common.suggestedTime')}</small>}
           </div>
         </aside>
       </div>

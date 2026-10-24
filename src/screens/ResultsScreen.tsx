@@ -1,5 +1,6 @@
 import { ChevronRight, RotateCcw } from 'lucide-react'
 import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { scenarios } from '../data/scenarios'
 import { Stat } from '../components/dashboard/Stat'
 import type { GameState } from '../types'
@@ -13,45 +14,50 @@ interface ResultsScreenProps {
 }
 
 export function ResultsScreen({ state, outcome, showHistory, onToggleHistory, onReplay }: ResultsScreenProps) {
+  const { t } = useTranslation()
   const correct = state.decisionsHistory.filter(
     (entry, index) => scenarios[index].choices.find((choice) => choice.id === entry.choice)?.recommended,
   ).length
   const title =
-    outcome === 'controlled' ? 'INCIDENTE CONTROLADO' : outcome === 'critical' ? 'GAME OVER' : 'PLANTA EN CONTINGENCIA'
+    outcome === 'controlled'
+      ? t('common.controlledTitle')
+      : outcome === 'critical'
+        ? t('common.criticalTitle')
+        : t('common.contingencyTitle')
   const rank =
     correct === 5
-      ? 'ARQUITECTO DE RESILIENCIA INDUSTRIAL'
+      ? t('common.resilienceArchitect')
       : correct >= 3
-        ? 'ESPECIALISTA EN CIBERSEGURIDAD INDUSTRIAL'
+        ? t('common.industrialSpecialist')
         : correct >= 1
-          ? 'ANALISTA OT JUNIOR'
-          : 'AMENAZA INTERNA DEL AÑO'
+          ? t('common.juniorAnalyst')
+          : t('common.insiderThreat')
   return (
     <motion.main className={`results ${outcome}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <div className="results-orbit" />
       <div className="results-content">
         <div className="eyebrow">
-          <span className="pulse-dot" /> SIMULATION COMPLETE / 04:06:22
+          <span className="pulse-dot" /> {t('common.simulationComplete')}
         </div>
         <h1>{title}</h1>
         <p className="results-sub">
           {outcome === 'controlled'
-            ? 'Las alarmas se estabilizaron. La operación continúa y las capas de defensa respondieron.'
+            ? t('common.controlledSubtitle')
             : outcome === 'critical'
-              ? 'La cadena de decisiones cruzó el umbral de seguridad. El fallo mostrado es ficticio y didáctico.'
-              : 'La operación se sostuvo con capacidades degradadas. Hay trabajo de recuperación pendiente.'}
+              ? t('common.criticalSubtitle')
+              : t('common.contingencySubtitle')}
         </p>
         <div className="result-stats">
           <Stat
-            label="SEGURIDAD"
+            label={t('common.security')}
             value={state.security}
             suffix="/ 100"
             tone={outcome === 'critical' ? 'red' : 'green'}
           />
-          <Stat label="PRODUCCIÓN" value={state.production} suffix="%" tone="cyan" />
-          <Stat label="SISTEMAS COMPROMETIDOS" value={state.compromisedSystems} suffix="" tone="orange" />
+          <Stat label={t('common.production')} value={state.production} suffix="%" tone="cyan" />
+          <Stat label={t('common.systemsCompromised')} value={state.compromisedSystems} suffix="" tone="orange" />
           <div className="result-stat">
-            <span>DECISIONES</span>
+            <span>{t('common.decisions')}</span>
             <strong>
               {correct}
               <small>/ 5</small>
@@ -59,32 +65,27 @@ export function ResultsScreen({ state, outcome, showHistory, onToggleHistory, on
           </div>
         </div>
         <div className="rank-card">
-          <span>CLASIFICACIÓN DE EQUIPO</span>
+          <span>{t('common.classification')}</span>
           <strong>{rank}</strong>
-          <small>
-            La seguridad industrial no consiste únicamente en impedir ataques: también implica mantener el control del
-            proceso, proteger a las personas y recuperar la operación.
-          </small>
+          <small>{t('common.reflection')}</small>
         </div>
         <div className="results-actions">
           <button className="primary-btn" onClick={onReplay}>
-            <RotateCcw size={16} /> VOLVER A JUGAR
+            <RotateCcw size={16} /> {t('common.replay')}
           </button>
           <button className="secondary-btn" onClick={onToggleHistory}>
-            {showHistory ? 'OCULTAR DECISIONES' : 'REVISAR DECISIONES'} <ChevronRight size={16} />
+            {showHistory ? t('common.hideDecisions') : t('common.reviewDecisions')} <ChevronRight size={16} />
           </button>
         </div>
         {showHistory && <DecisionHistory state={state} />}
-        <p className="closing">
-          Blockchain puede proteger la integridad de un registro, pero no reemplaza la seguridad de los sistemas que
-          generan los datos.
-        </p>
+        <p className="closing">{t('common.closing')}</p>
       </div>
     </motion.main>
   )
 }
 
 function DecisionHistory({ state }: { state: GameState }) {
+  const { t } = useTranslation()
   return (
     <div className="history">
       {scenarios.map((scenario, index) => {
@@ -93,10 +94,13 @@ function DecisionHistory({ state }: { state: GameState }) {
           <div className="history-row" key={scenario.id}>
             <span>0{scenario.id}</span>
             <div>
-              <strong>{scenario.title}</strong>
-              <small>Elegida: {selected?.label}</small>
+              <strong>{t(scenario.titleKey)}</strong>
+              <small>
+                {t('common.selected')}: {selected ? t(selected.labelKey) : '—'}
+              </small>
               <small className="recommendation">
-                Recomendada: {scenario.choices.find((choice) => choice.recommended)?.label}
+                {t('common.recommendedAnswer')}:{' '}
+                {t(scenario.choices.find((choice) => choice.recommended)?.labelKey ?? '')}
               </small>
             </div>
           </div>

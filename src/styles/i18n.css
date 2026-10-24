@@ -1,0 +1,24 @@
+.language-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 8px;
+  color: #52727a;
+  font:
+    10px 'DM Mono',
+    monospace;
+  letter-spacing: 0.08em;
+}
+
+.language-switcher button {
+  border: 0;
+  padding: 5px 3px;
+  background: transparent;
+  color: #52727a;
+  font: inherit;
+}
+
+.language-switcher button.active,
+.language-switcher button:hover {
+  color: var(--cyan);
+}

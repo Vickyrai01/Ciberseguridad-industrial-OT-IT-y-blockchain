@@ -1,4 +1,5 @@
 import type { GameState, ZoneState } from '../../types'
+import { useTranslation } from 'react-i18next'
 
 interface NodeProps {
   x: number | string
@@ -10,24 +11,21 @@ interface NodeProps {
 }
 
 export function Plant({ state, compact = false }: { state: GameState; compact?: boolean }) {
+  const { t } = useTranslation()
   const zone = (name: string): ZoneState => state.zones[name] ?? 'stable'
   return (
     <div className={`plant ${compact ? 'compact' : ''}`}>
       <div className="plant-noise" />
       <div className="zone-label it">
-        IT ZONE <span>TRUST LEVEL: LOW</span>
+        {t('plant.itZone')} <span>{t('plant.trustLevel')}</span>
       </div>
       <div className="zone-label ot">
-        OT ZONE <span>PROCESS CONTROL</span>
+        {t('plant.otZone')} <span>{t('plant.processControl')}</span>
       </div>
       <div className="zone-label safety">
-        SAFETY <span>ISOLATED LAYER</span>
+        {t('plant.safety')} <span>{t('plant.isolatedLayer')}</span>
       </div>
-      <svg
-        viewBox="0 0 900 445"
-        role="img"
-        aria-label="Esquema de planta industrial con red IT, DMZ, red OT y proceso físico"
-        className="plant-svg">
+      <svg viewBox="0 0 900 445" role="img" aria-label={t('plant.diagramLabel')} className="plant-svg">
         <defs>
           <linearGradient id="tank" x1="0" x2="1">
             <stop stopColor="#15242d" />
@@ -65,20 +63,62 @@ export function Plant({ state, compact = false }: { state: GameState; compact?: 
           <circle cx="399" cy="115" r="3" />
           <circle cx="650" cy="225" r="3" />
         </g>
-        <PlantNode x="70" y="78" label="CORP SERVER" sub="ERP-01" icon="server" state={zone('erp')} />
-        <PlantNode x="300" y="78" label="REMOTE ACCESS" sub="VPN GATEWAY" icon="lock" state="stable" />
+        <PlantNode
+          x="70"
+          y="78"
+          label={t('plant.corpServer')}
+          sub="ERP-01"
+          icon={t('plant.server')}
+          state={zone('erp')}
+        />
+        <PlantNode
+          x="300"
+          y="78"
+          label={t('plant.remoteAccess')}
+          sub={t('plant.vpnGateway')}
+          icon={t('plant.lock')}
+          state="stable"
+        />
         <PlantNode
           x="435"
           y="78"
-          label="INDUSTRIAL DMZ"
-          sub="FW-01 / ALLOWLIST"
-          icon="firewall"
+          label={t('plant.industrialDmz')}
+          sub={t('plant.allowlist')}
+          icon={t('plant.firewall')}
           state={zone('firewall')}
         />
-        <PlantNode x="700" y="78" label="SCADA CORE" sub="SCADA-01 · ONLINE" icon="monitor" state="stable" />
-        <PlantNode x="530" y="190" label="HMI STATION" sub="HMI-04 · OPERATOR" icon="monitor" state="stable" />
-        <PlantNode x="700" y="190" label="SAFETY SIS" sub="SIS-01 · ARMED" icon="shield" state={zone('sis')} />
-        <PlantNode x="530" y="310" label="PLC CONTROLLER" sub="PLC-01 · RUN" icon="chip" state={zone('plc')} />
+        <PlantNode
+          x="700"
+          y="78"
+          label={t('plant.scadaCore')}
+          sub={t('plant.scadaOnline')}
+          icon={t('plant.monitor')}
+          state="stable"
+        />
+        <PlantNode
+          x="530"
+          y="190"
+          label={t('plant.hmiStation')}
+          sub={t('plant.hmiOperator')}
+          icon={t('plant.monitor')}
+          state="stable"
+        />
+        <PlantNode
+          x="700"
+          y="190"
+          label={t('plant.safetySis')}
+          sub={t('plant.sisArmed')}
+          icon={t('plant.shield')}
+          state={zone('sis')}
+        />
+        <PlantNode
+          x="530"
+          y="310"
+          label={t('plant.plcController')}
+          sub={t('plant.plcRun')}
+          icon={t('plant.chip')}
+          state={zone('plc')}
+        />
         <g className="process">
           <rect x="705" y="285" width="92" height="107" rx="16" fill="url(#tank)" stroke="#4e7074" />
           <path d="M710 340 Q750 325 793 340 V381 H710Z" fill="#2b7d78" className="liquid" />
@@ -86,17 +126,17 @@ export function Plant({ state, compact = false }: { state: GameState; compact?: 
           <circle cx="748" cy="257" r="18" fill="#15242d" stroke="#e4b354" />
           <circle cx="748" cy="257" r="6" fill="#6fe0b0" className="pump-light" />
           <text x="715" y="414">
-            TANK / PROCESS
+            {t('plant.tankProcess')}
           </text>
           <text x="715" y="429" className="sensor-read">
-            TEMP 180°C · PRESS 6.2 bar
+            {t('plant.sensorRead')}
           </text>
         </g>
         <g className="sensor-lines">
           <path d="M800 290 V225 H860" />
           <circle cx="860" cy="225" r="8" />
           <text x="835" y="210">
-            SENSOR
+            {t('plant.sensor')}
           </text>
         </g>
       </svg>

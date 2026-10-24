@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { scenarios } from '../data/scenarios'
 import { applyChoice, finalOutcome, initialState } from '../engine/simulationEngine'
 import { useSound } from './useSound'
@@ -14,6 +15,7 @@ export function useSimulation() {
   const [presenter, setPresenter] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
   const { beep } = useSound(sound)
+  const { t } = useTranslation()
   const scenario = activeScenarios[state.currentScenario]
 
   const startSimulation = () => {
@@ -34,7 +36,12 @@ export function useSimulation() {
     if (!selected || !scenario) return
     const choice = scenario.choices.find((item) => item.id === selected)
     if (!choice) return
-    const nextState = applyChoice(state, choice, state.currentScenario)
+    const nextState = applyChoice(
+      state,
+      choice,
+      state.currentScenario,
+      choice.eventKeys.map((key) => t(key)),
+    )
     setState(nextState)
     setSelected(null)
     if (nextState.simulationFinished) setScreen('results')

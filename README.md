@@ -11,6 +11,7 @@ La experiencia propone cinco decisiones frente a incidentes de OT/IT. El estado 
 - Lucide React para iconos
 - Tailwind CSS para layout, responsive, tokens y estados de componentes
 - CSS visual dedicado con SVG para la planta, conexiones y animaciones especiales
+- i18next + react-i18next para español e inglés, con preferencia persistida localmente
 - Vitest para el motor de consecuencias
 
 No hay backend, base de datos, autenticación ni servicios externos requeridos para jugar. El sonido usa Web Audio API y comienza desactivado.
@@ -58,6 +59,7 @@ src/
   components/                planta, consola, topbar e indicadores
   screens/                   bienvenida, simulación y resultados
   hooks/                     estado de partida y sonido
+  i18n/locales/              textos ES/EN y configuración de i18next
   styles/visuals.css         identidad visual, responsive, SVG y animaciones
   styles/console.css         consola de decisiones y layout fijo
   styles/tailwind.css        utilidades Tailwind y tokens de componentes

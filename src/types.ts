@@ -1,29 +1,29 @@
 export type Screen = 'welcome' | 'simulation' | 'results'
-export type OperationalStatus = 'NORMAL' | 'ADVERTENCIA' | 'INCIDENTE' | 'CONTINGENCIA' | 'CRÍTICO' | 'RECUPERACIÓN'
+export type OperationalStatus = 'normal' | 'warning' | 'incident' | 'contingency' | 'critical' | 'recovery'
 export type ZoneState = 'stable' | 'alert' | 'compromised' | 'isolated'
 
 export interface Choice {
   id: string
-  label: string
-  consequence: string
+  labelKey: string
+  consequenceKey: string
   recommended: boolean
   security: number
   production: number
   compromised: number
   status: OperationalStatus
   zone: string
-  events: string[]
+  eventKeys: string[]
 }
 export interface Scenario {
   id: number
-  kicker: string
-  title: string
-  narrative: string
-  question: string
-  concept: string
+  kickerKey: string
+  titleKey: string
+  narrativeKey: string
+  questionKey: string
+  conceptKey: string
   choices: Choice[]
-  insight: string
-  reference?: string
+  insightKey: string
+  referenceKey?: string
 }
 export interface GameState {
   currentScenario: number
