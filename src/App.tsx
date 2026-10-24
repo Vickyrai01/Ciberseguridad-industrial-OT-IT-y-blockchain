@@ -5,21 +5,39 @@ import { scenarios } from './data/scenarios'
 import { applyChoice, finalOutcome, initialState } from './engine/simulationEngine'
 import type { Choice, GameState, Screen, ZoneState } from './types'
 
+function shuffleScenarios() {
+  const shuffled = scenarios.map((scenario) => ({ ...scenario, choices: [...scenario.choices] }))
+  shuffled.forEach((scenario, scenarioIndex) => {
+    let previousRecommendedPosition = -1
+    let attempts = 0
+    do {
+      for (let index = scenario.choices.length - 1; index > 0; index -= 1) {
+        const swapIndex = Math.floor(Math.random() * (index + 1))
+        ;[scenario.choices[index], scenario.choices[swapIndex]] = [scenario.choices[swapIndex], scenario.choices[index]]
+      }
+      previousRecommendedPosition = scenario.choices.findIndex((choice) => choice.recommended)
+      attempts += 1
+    } while (scenarioIndex > 0 && previousRecommendedPosition === shuffled[scenarioIndex - 1].choices.findIndex((choice) => choice.recommended) && attempts < 10)
+  })
+  return shuffled
+}
+
 function App() {
   const [screen, setScreen] = useState<Screen>('welcome')
   const [state, setState] = useState<GameState>(initialState)
+  const [activeScenarios, setActiveScenarios] = useState(scenarios)
   const [selected, setSelected] = useState<string | null>(null)
   const [sound, setSound] = useState(false)
   const [presenter, setPresenter] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
-  const scenario = scenarios[state.currentScenario]
+  const scenario = activeScenarios[state.currentScenario]
   const outcome = finalOutcome(state)
 
   const beep = (kind: 'click' | 'alert' | 'success') => {
     if (!sound) return
     const ctx = new AudioContext(); const osc = ctx.createOscillator(); const gain = ctx.createGain(); osc.connect(gain); gain.connect(ctx.destination); osc.frequency.value = kind === 'alert' ? 130 : kind === 'success' ? 540 : 300; gain.gain.value = .045; osc.start(); osc.stop(ctx.currentTime + .09)
   }
-  const start = () => { setState(initialState()); setSelected(null); setScreen('simulation'); beep('click') }
+  const start = () => { setActiveScenarios(shuffleScenarios()); setState(initialState()); setSelected(null); setScreen('simulation'); beep('click') }
   const select = (choice: Choice) => { setSelected(choice.id); beep(choice.recommended ? 'success' : 'alert') }
   const continueGame = () => { if (!selected || !scenario) return; const choice = scenario.choices.find((item) => item.id === selected)!; setState((current) => applyChoice(current, choice, current.currentScenario)); setSelected(null); if (state.currentScenario === scenarios.length - 1) setScreen('results'); beep('click') }
   const toggleFullscreen = async () => { if (!document.fullscreenElement) await document.documentElement.requestFullscreen?.(); else await document.exitFullscreen?.() }

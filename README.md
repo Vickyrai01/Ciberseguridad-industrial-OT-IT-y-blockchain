@@ -42,7 +42,7 @@ VITE_BASE_PATH=/nombre-del-repositorio/ npm run build
 
 ## Mecánica
 
-Cada escenario tiene tres alternativas y una decisión recomendada. El motor aplica consecuencias acumulativas, ajusta valores acotados entre 0 y 100 y actualiza las zonas de la planta. Las salidas posibles son `INCIDENTE CONTROLADO`, `PLANTA EN CONTINGENCIA` y `GAME OVER`. Un error aislado no termina la partida automáticamente.
+Cada escenario tiene tres alternativas y una decisión recomendada. El orden de las alternativas se mezcla al iniciar cada partida para evitar patrones predecibles; la evaluación usa el identificador interno de cada opción. El motor aplica consecuencias acumulativas, ajusta valores acotados entre 0 y 100 y actualiza las zonas de la planta. Las salidas posibles son `INCIDENTE CONTROLADO`, `PLANTA EN CONTINGENCIA` y `GAME OVER`. Un error aislado no termina la partida automáticamente.
 
 Los escenarios están inspirados en conceptos de segmentación OT/IT, Modbus TCP heredado, Triton/SIS, ransomware y el problema del oráculo en blockchain. Las referencias históricas se distinguen de los valores inventados del videojuego.
 
