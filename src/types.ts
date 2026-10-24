@@ -1,9 +1,9 @@
-export type Screen = 'welcome' | 'simulation' | 'results'
-export type OperationalStatus = 'normal' | 'warning' | 'incident' | 'contingency' | 'critical' | 'recovery'
-export type ZoneState = 'stable' | 'alert' | 'compromised' | 'isolated'
+import type { ChoiceId, OperationalStatus, PlantZone, ZoneState } from './constants/domain'
+
+export type { ChoiceId, OperationalStatus, PlantZone, Screen, ZoneState } from './constants/domain'
 
 export interface Choice {
-  id: string
+  id: ChoiceId
   labelKey: string
   consequenceKey: string
   recommended: boolean
@@ -11,7 +11,7 @@ export interface Choice {
   production: number
   compromised: number
   status: OperationalStatus
-  zone: string
+  zone: PlantZone
   eventKeys: string[]
 }
 export interface Scenario {
@@ -31,9 +31,9 @@ export interface GameState {
   production: number
   compromisedSystems: number
   operationalStatus: OperationalStatus
-  zones: Record<string, ZoneState>
+  zones: Record<PlantZone, ZoneState>
   eventLog: string[]
-  selectedAnswers: string[]
-  decisionsHistory: { scenario: number; choice: string }[]
+  selectedAnswers: ChoiceId[]
+  decisionsHistory: { scenario: number; choice: ChoiceId }[]
   simulationFinished: boolean
 }

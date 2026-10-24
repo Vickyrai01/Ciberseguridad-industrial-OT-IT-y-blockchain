@@ -5,12 +5,13 @@ import { EventConsole } from '../components/layout/EventConsole'
 import { Topbar } from '../components/layout/Topbar'
 import { Plant } from '../components/plant/Plant'
 import type { Choice, GameState, Scenario } from '../types'
+import { SIMULATION_CONFIG, OPERATIONAL_STATUS } from '../constants/domain'
 import { briefingMotion, briefingTransition, pageMotion, pageTransition } from '../animations/motionTokens'
 
 interface SimulationScreenProps {
   state: GameState
   scenario: Scenario
-  selected: string | null
+  selected: Choice['id'] | null
   presenter: boolean
   sound: boolean
   onSelect: (choice: Choice) => void
@@ -36,7 +37,7 @@ export function SimulationScreen({
   const selectedChoice = scenario.choices.find((choice) => choice.id === selected)
   return (
     <motion.main
-      className={`simulation ot-layout-screen ${state.operationalStatus === 'critical' ? 'critical' : ''}`}
+      className={`simulation ot-layout-screen ${state.operationalStatus === OPERATIONAL_STATUS.CRITICAL ? 'critical' : ''}`}
       {...pageMotion}
       transition={pageTransition}>
       <Topbar state={state} sound={sound} onToggleSound={onToggleSound} onFullscreen={onFullscreen} onReset={onReset} />
@@ -111,7 +112,9 @@ export function SimulationScreen({
               </div>
             )}
             <button className="continue-btn ot-focus-ring" disabled={!selected} onClick={onContinue}>
-              {state.currentScenario === 4 ? t('common.seeResult') : t('common.applyDecision')}{' '}
+              {state.currentScenario === SIMULATION_CONFIG.lastScenarioIndex
+                ? t('common.seeResult')
+                : t('common.applyDecision')}{' '}
               <ChevronRight size={17} />
             </button>
           </motion.div>

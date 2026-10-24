@@ -5,12 +5,13 @@ import { applyChoice, finalOutcome, initialState } from '../engine/simulationEng
 import { useSound } from './useSound'
 import { shuffleScenarios } from '../utils/shuffleScenarios'
 import type { Choice, Screen } from '../types'
+import { SCREEN, SOUND_EFFECT } from '../constants/domain'
 
 export function useSimulation() {
-  const [screen, setScreen] = useState<Screen>('welcome')
+  const [screen, setScreen] = useState<Screen>(SCREEN.WELCOME)
   const [state, setState] = useState(initialState)
   const [activeScenarios, setActiveScenarios] = useState(scenarios)
-  const [selected, setSelected] = useState<string | null>(null)
+  const [selected, setSelected] = useState<Choice['id'] | null>(null)
   const [sound, setSound] = useState(false)
   const [presenter, setPresenter] = useState(false)
   const [showHistory, setShowHistory] = useState(false)
@@ -23,13 +24,13 @@ export function useSimulation() {
     setState(initialState())
     setSelected(null)
     setShowHistory(false)
-    setScreen('simulation')
-    beep('click')
+    setScreen(SCREEN.SIMULATION)
+    beep(SOUND_EFFECT.CLICK)
   }
 
   const selectChoice = (choice: Choice) => {
     setSelected(choice.id)
-    beep(choice.recommended ? 'success' : 'alert')
+    beep(choice.recommended ? SOUND_EFFECT.SUCCESS : SOUND_EFFECT.ALERT)
   }
 
   const continueSimulation = () => {
@@ -44,8 +45,8 @@ export function useSimulation() {
     )
     setState(nextState)
     setSelected(null)
-    if (nextState.simulationFinished) setScreen('results')
-    beep('click')
+    if (nextState.simulationFinished) setScreen(SCREEN.RESULTS)
+    beep(SOUND_EFFECT.CLICK)
   }
 
   const toggleFullscreen = async () => {

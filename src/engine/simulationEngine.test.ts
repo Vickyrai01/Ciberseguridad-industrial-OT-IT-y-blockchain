@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { applyChoice, finalOutcome, initialState } from './simulationEngine'
 import { scenarios } from '../data/scenarios'
+import { OPERATIONAL_STATUS, SIMULATION_OUTCOME } from '../constants/domain'
 describe('simulation engine', () => {
   it('accumulates secure choices into a controlled outcome', () => {
     let state = initialState()
@@ -13,12 +14,12 @@ describe('simulation engine', () => {
       )
     })
     expect(state.simulationFinished).toBe(true)
-    expect(finalOutcome(state)).toBe('controlled')
+    expect(finalOutcome(state)).toBe(SIMULATION_OUTCOME.CONTROLLED)
     expect(state.compromisedSystems).toBe(0)
   })
   it('does not turn a single wrong answer into game over', () => {
     const state = applyChoice(initialState(), scenarios[0].choices[2], 0, scenarios[0].choices[2].eventKeys)
-    expect(state.operationalStatus).toBe('incident')
+    expect(state.operationalStatus).toBe(OPERATIONAL_STATUS.INCIDENT)
     expect(state.security).toBeGreaterThan(0)
     expect(state.simulationFinished).toBe(false)
   })

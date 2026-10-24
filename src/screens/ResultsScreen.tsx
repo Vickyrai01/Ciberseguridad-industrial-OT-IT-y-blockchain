@@ -5,10 +5,11 @@ import { scenarios } from '../data/scenarios'
 import { Stat } from '../components/dashboard/Stat'
 import type { GameState } from '../types'
 import { pageMotion, pageTransition } from '../animations/motionTokens'
+import { SIMULATION_CONFIG, SIMULATION_OUTCOME, type SimulationOutcome } from '../constants/domain'
 
 interface ResultsScreenProps {
   state: GameState
-  outcome: 'controlled' | 'contingency' | 'critical'
+  outcome: SimulationOutcome
   showHistory: boolean
   onToggleHistory: () => void
   onReplay: () => void
@@ -20,17 +21,17 @@ export function ResultsScreen({ state, outcome, showHistory, onToggleHistory, on
     (entry, index) => scenarios[index].choices.find((choice) => choice.id === entry.choice)?.recommended,
   ).length
   const title =
-    outcome === 'controlled'
+    outcome === SIMULATION_OUTCOME.CONTROLLED
       ? t('common.controlledTitle')
-      : outcome === 'critical'
+      : outcome === SIMULATION_OUTCOME.CRITICAL
         ? t('common.criticalTitle')
         : t('common.contingencyTitle')
   const rank =
-    correct === 5
+    correct === SIMULATION_CONFIG.scenarioCount
       ? t('common.resilienceArchitect')
-      : correct >= 3
+      : correct >= SIMULATION_CONFIG.specialistCorrectThreshold
         ? t('common.industrialSpecialist')
-        : correct >= 1
+        : correct >= SIMULATION_CONFIG.juniorCorrectThreshold
           ? t('common.juniorAnalyst')
           : t('common.insiderThreat')
   return (
@@ -42,9 +43,9 @@ export function ResultsScreen({ state, outcome, showHistory, onToggleHistory, on
         </div>
         <h1>{title}</h1>
         <p className="results-sub">
-          {outcome === 'controlled'
+          {outcome === SIMULATION_OUTCOME.CONTROLLED
             ? t('common.controlledSubtitle')
-            : outcome === 'critical'
+            : outcome === SIMULATION_OUTCOME.CRITICAL
               ? t('common.criticalSubtitle')
               : t('common.contingencySubtitle')}
         </p>
@@ -53,7 +54,7 @@ export function ResultsScreen({ state, outcome, showHistory, onToggleHistory, on
             label={t('common.security')}
             value={state.security}
             suffix="/ 100"
-            tone={outcome === 'critical' ? 'red' : 'green'}
+            tone={outcome === SIMULATION_OUTCOME.CRITICAL ? 'red' : 'green'}
           />
           <Stat label={t('common.production')} value={state.production} suffix="%" tone="cyan" />
           <Stat label={t('common.systemsCompromised')} value={state.compromisedSystems} suffix="" tone="orange" />

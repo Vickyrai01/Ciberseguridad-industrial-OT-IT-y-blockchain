@@ -1,5 +1,6 @@
 import type { GameState, ZoneState } from '../../types'
 import { useTranslation } from 'react-i18next'
+import { PLANT_ZONE, ZONE_STATE } from '../../constants/domain'
 
 interface NodeProps {
   x: number | string
@@ -12,7 +13,7 @@ interface NodeProps {
 
 export function Plant({ state, compact = false }: { state: GameState; compact?: boolean }) {
   const { t } = useTranslation()
-  const zone = (name: string): ZoneState => state.zones[name] ?? 'stable'
+  const zone = (name: keyof typeof PLANT_ZONE): ZoneState => state.zones[PLANT_ZONE[name]] ?? ZONE_STATE.STABLE
   return (
     <div className={`plant ${compact ? 'compact' : ''}`}>
       <div className="plant-noise" />
@@ -48,14 +49,14 @@ export function Plant({ state, compact = false }: { state: GameState; compact?: 
             <line key={`h${index}`} x1="0" y1={index * 50} x2="900" y2={index * 50} />
           ))}
         </g>
-        <g className={`connection ${zone('firewall')}`}>
+        <g className={`connection ${zone('FIREWALL')}`}>
           <path d="M125 115 H290 M350 115 H450 M515 115 H710" />
           <path d="M450 115 V225 H590" />
         </g>
-        <g className={`connection ${zone('plc')}`}>
+        <g className={`connection ${zone('PLC')}`}>
           <path d="M590 225 H710 M590 225 V345 H710" />
         </g>
-        <g className={`connection ${zone('sis')}`}>
+        <g className={`connection ${zone('SIS')}`}>
           <path d="M590 225 V130 H710" />
         </g>
         <g className="data-packets">
@@ -69,7 +70,7 @@ export function Plant({ state, compact = false }: { state: GameState; compact?: 
           label={t('plant.corpServer')}
           sub="ERP-01"
           icon={t('plant.server')}
-          state={zone('erp')}
+          state={zone('ERP')}
         />
         <PlantNode
           x="300"
@@ -77,7 +78,7 @@ export function Plant({ state, compact = false }: { state: GameState; compact?: 
           label={t('plant.remoteAccess')}
           sub={t('plant.vpnGateway')}
           icon={t('plant.lock')}
-          state="stable"
+          state={ZONE_STATE.STABLE}
         />
         <PlantNode
           x="435"
@@ -85,7 +86,7 @@ export function Plant({ state, compact = false }: { state: GameState; compact?: 
           label={t('plant.industrialDmz')}
           sub={t('plant.allowlist')}
           icon={t('plant.firewall')}
-          state={zone('firewall')}
+          state={zone('FIREWALL')}
         />
         <PlantNode
           x="700"
@@ -93,7 +94,7 @@ export function Plant({ state, compact = false }: { state: GameState; compact?: 
           label={t('plant.scadaCore')}
           sub={t('plant.scadaOnline')}
           icon={t('plant.monitor')}
-          state="stable"
+          state={ZONE_STATE.STABLE}
         />
         <PlantNode
           x="530"
@@ -101,7 +102,7 @@ export function Plant({ state, compact = false }: { state: GameState; compact?: 
           label={t('plant.hmiStation')}
           sub={t('plant.hmiOperator')}
           icon={t('plant.monitor')}
-          state="stable"
+          state={ZONE_STATE.STABLE}
         />
         <PlantNode
           x="700"
@@ -109,7 +110,7 @@ export function Plant({ state, compact = false }: { state: GameState; compact?: 
           label={t('plant.safetySis')}
           sub={t('plant.sisArmed')}
           icon={t('plant.shield')}
-          state={zone('sis')}
+          state={zone('SIS')}
         />
         <PlantNode
           x="530"
@@ -117,7 +118,7 @@ export function Plant({ state, compact = false }: { state: GameState; compact?: 
           label={t('plant.plcController')}
           sub={t('plant.plcRun')}
           icon={t('plant.chip')}
-          state={zone('plc')}
+          state={zone('PLC')}
         />
         <g className="process">
           <rect x="705" y="285" width="92" height="107" rx="16" fill="url(#tank)" stroke="#4e7074" />

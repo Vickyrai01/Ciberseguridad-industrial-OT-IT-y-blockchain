@@ -1,5 +1,5 @@
-export type EventTone = 'default' | 'decision' | 'state-update' | 'impact'
 export type Translator = (key: string) => string
+import { EVENT_TONE, type EventTone } from '../constants/domain'
 
 export interface FormattedEvent {
   message: string
@@ -14,7 +14,7 @@ export function formatEvent(event: string, translate: Translator): FormattedEven
   const decision = event.match(decisionPattern)
   if (decision) {
     return {
-      tone: 'decision',
+      tone: EVENT_TONE.DECISION,
       message: `${decision[1]} ${translate('log.decision')} ${decision[2]}: ${translate('log.option')} ${decision[3]} ${translate('log.selected')} · ${decision[4] === 'RECOMMENDED' ? translate('log.recommended') : translate('log.riskDetected')}`,
     }
   }
@@ -22,7 +22,7 @@ export function formatEvent(event: string, translate: Translator): FormattedEven
   const stateUpdate = event.match(stateUpdatePattern)
   if (stateUpdate) {
     return {
-      tone: 'state-update',
+      tone: EVENT_TONE.STATE_UPDATE,
       message: `${stateUpdate[1]} ${translate('log.stateUpdate')}: ${translate('log.security')} ${stateUpdate[2]}/100 · ${translate('log.production')} ${stateUpdate[3]}% · ${translate('log.status')} ${translate(`status.${stateUpdate[4].toLowerCase()}`)}`,
     }
   }
@@ -30,13 +30,13 @@ export function formatEvent(event: string, translate: Translator): FormattedEven
   const impact = event.match(impactPattern)
   if (impact) {
     return {
-      tone: 'impact',
+      tone: EVENT_TONE.IMPACT,
       message: `${impact[1]} ${translate('log.impact')}: ${impact[2]} ${impact[3] === '1' ? translate('log.system') : translate('log.systems')} ${translate('log.compromised')} · ${translate('log.zone')} ${impact[5]}`,
     }
   }
 
   return {
-    tone: 'default',
+    tone: EVENT_TONE.DEFAULT,
     message: event
       .replace('SYSTEM INITIALIZED', translate('log.systemInitialized'))
       .replace('PLC-01 STATUS: RUN', translate('log.plcRun'))
@@ -45,5 +45,5 @@ export function formatEvent(event: string, translate: Translator): FormattedEven
 }
 
 export function eventToneClass(tone: EventTone): string {
-  return tone === 'default' ? '' : tone
+  return tone === EVENT_TONE.DEFAULT ? '' : tone
 }
