@@ -37,6 +37,7 @@ CSS loop durations live in [`src/styles/motion.css`](../src/styles/motion.css):
 - `--motion-loop-flow`: network conduit movement.
 - `--motion-loop-packets`: data packet travel.
 - `--motion-loop-liquid`: process liquid movement.
+- `--motion-loop-liquid-highlight`: slower liquid surface highlight movement.
 - `--motion-loop-pump`: pump status pulse.
 - `--motion-loop-critical`: critical-state pulse.
 

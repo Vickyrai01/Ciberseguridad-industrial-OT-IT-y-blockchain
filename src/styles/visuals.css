@@ -373,8 +373,17 @@ button:focus-visible {
   fill: var(--yellow);
   font-size: 7px;
 }
-.liquid {
-  animation: ot-process-liquid var(--motion-loop-liquid) ease-in-out infinite;
+.liquid-fill {
+  opacity: 0.9;
+}
+.liquid-wave {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ot-process-wave var(--motion-loop-liquid) ease-in-out infinite;
+}
+.liquid-wave-highlight {
+  animation-duration: var(--motion-loop-liquid-highlight);
+  animation-delay: -0.8s;
 }
 .pump-light {
   animation: ot-pump-pulse var(--motion-loop-pump) ease-in-out infinite;

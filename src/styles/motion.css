@@ -5,6 +5,7 @@
   --motion-loop-flow: 1.5s;
   --motion-loop-packets: 3s;
   --motion-loop-liquid: 3s;
+  --motion-loop-liquid-highlight: 4.5s;
   --motion-loop-pump: 1.4s;
   --motion-loop-critical: 1.4s;
   --motion-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
@@ -32,13 +33,13 @@
   }
 }
 
-@keyframes ot-process-liquid {
+@keyframes ot-process-wave {
   0%,
   100% {
-    transform: translateY(0);
+    transform: translateX(-7px) translateY(1px);
   }
   50% {
-    transform: translateY(3px);
+    transform: translateX(7px) translateY(-1px);
   }
 }
 
