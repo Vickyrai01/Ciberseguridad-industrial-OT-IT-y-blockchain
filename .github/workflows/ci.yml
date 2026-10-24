@@ -1,4 +1,4 @@
-name: CI
+name: CI / Deploy
 
 on:
   pull_request:
@@ -10,11 +10,12 @@ permissions:
   contents: read
 
 concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
+  group: ci-deploy-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   quality:
+    name: Quality checks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,6 +27,40 @@ jobs:
       - run: npm run format:check
       - run: npm run lint
       - run: npm run test
+
+  build:
+    name: Build application
+    needs: quality
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
       - run: npm run build
         env:
           VITE_BASE_PATH: /${{ github.event.repository.name }}/
+      - name: Verify Pages artifact
+        run: |
+          test -f dist/index.html
+          test -f dist/favicon.svg
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    name: Deploy to GitHub Pages
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -36,7 +36,7 @@ npm run preview    # servir dist localmente
 
 ## GitHub Pages
 
-El workflow `.github/workflows/ci.yml` valida formato, lint, tests y build en cada Pull Request y en `main`. El workflow `.github/workflows/deploy.yml` publica `dist` en GitHub Pages únicamente después de un CI exitoso en `main`. En la configuración del repositorio, activar Pages con **GitHub Actions** como fuente.
+El workflow `.github/workflows/ci.yml` muestra un único hilo de ejecución con los jobs `Quality checks`, `Build application` y `Deploy to GitHub Pages`. En cada Pull Request ejecuta calidad y build; al hacer push a `main`, además publica `dist` en GitHub Pages. En la configuración del repositorio, activar Pages con **GitHub Actions** como fuente.
 
 Dependabot revisa semanalmente las dependencias de npm. La versión de Node esperada está definida en `.nvmrc` y en `package.json`. El deploy verifica que el artefacto incluya `index.html` y el favicon antes de publicarlo.
 
