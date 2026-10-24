@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { scenarios } from '../data/scenarios'
 import { Stat } from '../components/dashboard/Stat'
 import type { GameState } from '../types'
+import { pageMotion, pageTransition } from '../animations/motionTokens'
 
 interface ResultsScreenProps {
   state: GameState
@@ -33,7 +34,7 @@ export function ResultsScreen({ state, outcome, showHistory, onToggleHistory, on
           ? t('common.juniorAnalyst')
           : t('common.insiderThreat')
   return (
-    <motion.main className={`results ${outcome}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+    <motion.main className={`results ${outcome}`} {...pageMotion} transition={pageTransition}>
       <div className="results-orbit" />
       <div className="results-content">
         <div className="eyebrow">

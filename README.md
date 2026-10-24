@@ -50,6 +50,8 @@ Cada escenario tiene tres alternativas y una decisión recomendada. El orden de 
 
 Los escenarios están inspirados en conceptos de segmentación OT/IT, Modbus TCP heredado, Triton/SIS, ransomware y el problema del oráculo en blockchain. Las referencias históricas se distinguen de los valores inventados del videojuego.
 
+Las convenciones de animación y las reglas para futuras contribuciones están documentadas en [`docs/ANIMATIONS.md`](docs/ANIMATIONS.md).
+
 ## Estructura
 
 ```text

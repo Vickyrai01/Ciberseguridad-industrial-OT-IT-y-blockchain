@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { pageMotion, pageTransition } from '../animations/motionTokens'
 import { Plant } from '../components/plant/Plant'
 import { initialState } from '../engine/simulationEngine'
 
@@ -13,7 +14,7 @@ interface WelcomeScreenProps {
 export function WelcomeScreen({ onStart, presenter, onTogglePresenter }: WelcomeScreenProps) {
   const { t } = useTranslation()
   return (
-    <motion.main className="welcome" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+    <motion.main className="welcome" {...pageMotion} transition={pageTransition}>
       <div className="welcome-grid" />
       <div className="brand-lockup">
         <span className="eyebrow">

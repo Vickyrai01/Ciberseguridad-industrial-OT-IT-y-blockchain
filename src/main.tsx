@@ -6,6 +6,7 @@ import './styles/tailwind.css'
 import './styles/visuals.css'
 import './styles/console.css'
 import './styles/i18n.css'
+import './styles/motion.css'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />

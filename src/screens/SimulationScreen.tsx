@@ -5,6 +5,7 @@ import { EventConsole } from '../components/layout/EventConsole'
 import { Topbar } from '../components/layout/Topbar'
 import { Plant } from '../components/plant/Plant'
 import type { Choice, GameState, Scenario } from '../types'
+import { briefingMotion, briefingTransition, pageMotion, pageTransition } from '../animations/motionTokens'
 
 interface SimulationScreenProps {
   state: GameState
@@ -36,9 +37,8 @@ export function SimulationScreen({
   return (
     <motion.main
       className={`simulation ot-layout-screen ${state.operationalStatus === 'critical' ? 'critical' : ''}`}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}>
+      {...pageMotion}
+      transition={pageTransition}>
       <Topbar state={state} sound={sound} onToggleSound={onToggleSound} onFullscreen={onFullscreen} onReset={onReset} />
       <div className="sim-grid">
         <section className="plant-column">
@@ -76,8 +76,8 @@ export function SimulationScreen({
           <motion.div
             key={scenario.id}
             className="briefing ot-panel-surface"
-            initial={{ y: 12, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}>
+            {...briefingMotion}
+            transition={briefingTransition}>
             <div className="brief-kicker">{t(scenario.kickerKey)}</div>
             <h2>{t(scenario.titleKey)}</h2>
             <p className="narrative">{t(scenario.narrativeKey)}</p>
