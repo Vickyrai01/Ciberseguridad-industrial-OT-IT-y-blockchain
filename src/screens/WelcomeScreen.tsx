@@ -1,8 +1,10 @@
 import { motion } from 'framer-motion'
-import { ChevronRight } from 'lucide-react'
-import { useTranslation } from 'react-i18next'
 import { pageMotion, pageTransition } from '../animations/motionTokens'
 import { Plant } from '../components/plant/Plant'
+import { WelcomeActions } from '../components/welcome/WelcomeActions'
+import { WelcomeBrand } from '../components/welcome/WelcomeBrand'
+import { WelcomeCopy } from '../components/welcome/WelcomeCopy'
+import { WelcomeMeta } from '../components/welcome/WelcomeMeta'
 import { initialState } from '../engine/simulationEngine'
 
 interface WelcomeScreenProps {
@@ -12,43 +14,16 @@ interface WelcomeScreenProps {
 }
 
 export function WelcomeScreen({ onStart, presenter, onTogglePresenter }: WelcomeScreenProps) {
-  const { t } = useTranslation()
   return (
     <motion.main className="welcome" {...pageMotion} transition={pageTransition}>
       <div className="welcome-grid" />
-      <div className="brand-lockup">
-        <span className="eyebrow">
-          <span className="pulse-dot" /> {t('common.liveSimulation')}
-        </span>
-        <h1>
-          OT <span>UNDER</span> ATTACK
-        </h1>
-        <p>{t('common.simulator')}</p>
-      </div>
+      <WelcomeBrand />
       <div className="hero-plant">
         <Plant state={initialState()} compact />
       </div>
-      <div className="welcome-copy">
-        <div className="time-mark">
-          04:00 AM <span>·</span> {t('common.plantNode')}
-        </div>
-        <p>{t('welcome.hero')}</p>
-        <p className="muted">{t('welcome.description')}</p>
-      </div>
-      <div className="welcome-actions">
-        <button className="primary-btn" onClick={onStart}>
-          {t('common.start')} <ChevronRight size={18} />
-        </button>
-        <button className={`text-btn ${presenter ? 'active' : ''}`} onClick={onTogglePresenter}>
-          ◉ {t('common.presenterMode')}
-        </button>
-      </div>
-      <div className="welcome-meta">
-        <span>5 {t('common.decisions')}</span>
-        <span>{t('common.minutes')}</span>
-        <span>{t('common.educational')}</span>
-        <span>{t('common.group')}</span>
-      </div>
+      <WelcomeCopy />
+      <WelcomeActions presenter={presenter} onStart={onStart} onTogglePresenter={onTogglePresenter} />
+      <WelcomeMeta />
     </motion.main>
   )
 }
