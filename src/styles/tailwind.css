@@ -1,0 +1,8 @@
+@tailwind utilities;
+
+@layer utilities {
+  .ot-layout-screen { @apply min-h-screen overflow-hidden bg-ot-bg; }
+  .ot-panel-surface { @apply border border-ot-line bg-ot-panel; }
+  .ot-mono-label { @apply font-mono text-[10px] uppercase tracking-[0.13em]; }
+  .ot-focus-ring { @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ot-cyan; }
+}

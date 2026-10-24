@@ -9,7 +9,8 @@ La experiencia propone cinco decisiones frente a incidentes de OT/IT. El estado 
 - React + TypeScript + Vite
 - Framer Motion para transiciones
 - Lucide React para iconos
-- CSS propio con SVG para la planta, conexiones y animaciones
+- Tailwind CSS para layout, responsive, tokens y estados de componentes
+- CSS visual dedicado con SVG para la planta, conexiones y animaciones especiales
 - Vitest para el motor de consecuencias
 
 No hay backend, base de datos, autenticación ni servicios externos requeridos para jugar. El sonido usa Web Audio API y comienza desactivado.
@@ -52,8 +53,12 @@ Los escenarios están inspirados en conceptos de segmentación OT/IT, Modbus TCP
 src/
   data/scenarios.ts          contenido pedagógico
   engine/simulationEngine.ts estado y consecuencias
-  components (integrados)    planta, consola, feedback y resultados en App.tsx
-  styles.css                 identidad visual y responsive
+  components/                planta, consola, topbar e indicadores
+  screens/                   bienvenida, simulación y resultados
+  hooks/                     estado de partida y sonido
+  styles/visuals.css         identidad visual, responsive, SVG y animaciones
+  styles/console.css         consola de decisiones y layout fijo
+  styles/tailwind.css        utilidades Tailwind y tokens de componentes
 .github/workflows/deploy.yml despliegue estático
 ```
 
