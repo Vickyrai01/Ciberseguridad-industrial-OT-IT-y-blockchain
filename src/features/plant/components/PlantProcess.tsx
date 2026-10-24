@@ -23,9 +23,19 @@ export function PlantProcess() {
           className="liquid-wave liquid-wave-highlight"
         />
       </g>
-      <path d="M796 350 H850 V368 H796 M820 350 V308 H850" fill="none" stroke="#4e7074" strokeWidth="9" />
-      <circle cx="748" cy="257" r="18" fill="#15242d" stroke="#e4b354" />
-      <circle cx="748" cy="257" r="6" fill="#6fe0b0" className="pump-light" />
+      <path d="M797 352 H835 V322 H860" className="process-pipe" />
+      <circle cx="835" cy="352" r="9" className="process-valve" />
+      <path d="M829 346 L841 358 M841 346 L829 358" className="process-valve-mark" />
+      <text x="817" y="332" className="process-tag">
+        {t('plant.outlet')}
+      </text>
+      <path d="M670 293 V302 H705" className="pump-shaft" />
+      <circle cx="670" cy="275" r="18" className="pump-housing" />
+      <circle cx="670" cy="275" r="6" fill="#6fe0b0" className="pump-light" />
+      <path d="M663 275 L670 268 L677 275 L670 282 Z" className="pump-symbol" />
+      <text x="653" y="250" className="process-tag">
+        {t('plant.pump')}
+      </text>
       <text x="715" y="414">
         {t('plant.tankProcess')}
       </text>

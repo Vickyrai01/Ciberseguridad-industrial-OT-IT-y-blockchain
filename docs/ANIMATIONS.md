@@ -35,10 +35,10 @@ Framer Motion values live in [`src/animations/motionTokens.ts`](../src/animation
 CSS loop durations live in [`src/styles/motion.css`](../src/styles/motion.css):
 
 - `--motion-loop-flow`: network conduit movement.
-- `--motion-loop-packets`: data packet travel.
 - `--motion-loop-liquid`: process liquid movement.
 - `--motion-loop-liquid-highlight`: slower liquid surface highlight movement.
 - `--motion-loop-pump`: pump status pulse.
+- `--motion-loop-sensor`: level sensor telemetry pulse.
 - `--motion-loop-critical`: critical-state pulse.
 
 If a new duration is needed, add it to the token file first and explain why in the code review. Avoid magic numbers such as `0.37`, `1.73s`, or one-off cubic-bezier values.

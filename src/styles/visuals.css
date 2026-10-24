@@ -313,17 +313,6 @@ button:focus-visible {
   stroke: #728089;
   stroke-dasharray: 2 8;
 }
-.data-packets circle {
-  fill: var(--cyan);
-  filter: url(#glow);
-  animation: ot-data-packets var(--motion-loop-packets) linear infinite;
-}
-.data-packets circle:nth-child(2) {
-  animation-delay: 1s;
-}
-.data-packets circle:nth-child(3) {
-  animation-delay: 2s;
-}
 .node rect {
   fill: #0c2028;
   stroke: #35555d;
@@ -340,7 +329,7 @@ button:focus-visible {
 }
 .node .node-label {
   fill: #d6e3df;
-  font: 600 9px 'Space Grotesk';
+  font: 600 8px 'Space Grotesk';
   letter-spacing: 0.01em;
 }
 .node .node-sub {
@@ -372,6 +361,70 @@ button:focus-visible {
 .process .sensor-read {
   fill: var(--yellow);
   font-size: 7px;
+}
+.process-tag {
+  fill: #76979b;
+  font: 7px 'DM Mono';
+  letter-spacing: 0.08em;
+}
+.process-pipe {
+  fill: none;
+  stroke: #66858a;
+  stroke-width: 8;
+  stroke-linecap: square;
+  stroke-linejoin: round;
+}
+.process-valve {
+  fill: #162a31;
+  stroke: var(--yellow);
+  stroke-width: 2;
+}
+.process-valve-mark {
+  fill: none;
+  stroke: var(--yellow);
+  stroke-width: 1.5;
+}
+.pump-housing {
+  fill: #15242d;
+  stroke: var(--yellow);
+  stroke-width: 2;
+}
+.pump-shaft {
+  stroke: #66858a;
+  stroke-width: 4;
+}
+.pump-symbol {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 1.5;
+}
+.sensor-cable {
+  fill: none;
+  stroke: var(--cyan);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+  opacity: 0.8;
+}
+.sensor-probe {
+  stroke: var(--cyan);
+  stroke-width: 2;
+  opacity: 0.9;
+}
+.sensor-probe-tip {
+  fill: var(--cyan);
+  filter: url(#glow);
+  animation: ot-sensor-pulse var(--motion-loop-sensor) ease-in-out infinite;
+}
+.sensor-node {
+  fill: #10232b;
+  stroke: var(--cyan);
+  stroke-width: 2;
+  filter: url(#glow);
+}
+.sensor-label {
+  fill: #8cb4b6;
+  font: 7px 'DM Mono';
+  letter-spacing: 0.08em;
 }
 .liquid-fill {
   opacity: 0.9;

@@ -53,6 +53,8 @@
     height: auto;
     min-height: 0;
     overflow: hidden;
+    width: min(1600px, calc(100% - 6vw));
+    padding-inline: 0;
   }
   .plant-column {
     min-height: 0;
@@ -78,7 +80,8 @@
   .console {
     flex: 0 0 164px;
     height: 164px;
-    margin: 0 3vw 18px;
+    width: min(1600px, calc(100% - 6vw));
+    margin: 0 auto 18px;
   }
   .console-scroll {
     height: 130px;
@@ -94,8 +97,10 @@
   .sim-grid {
     height: auto;
     overflow: visible;
+    width: auto;
   }
   .console {
     height: 164px;
+    width: auto;
   }
 }

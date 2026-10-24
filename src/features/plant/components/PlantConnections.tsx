@@ -19,11 +19,6 @@ export function PlantConnections({ firewall, plc, sis }: PlantConnectionsProps) 
       <g className={`connection ${sis}`}>
         <path d="M590 225 V130 H710" />
       </g>
-      <g className="data-packets">
-        <circle cx="190" cy="115" r="3" />
-        <circle cx="399" cy="115" r="3" />
-        <circle cx="650" cy="225" r="3" />
-      </g>
     </>
   )
 }
