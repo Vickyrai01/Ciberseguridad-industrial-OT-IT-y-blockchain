@@ -36,7 +36,9 @@ npm run preview    # servir dist localmente
 
 ## GitHub Pages
 
-El workflow `.github/workflows/deploy.yml` compila y publica `dist` en GitHub Pages al hacer push a `main`. En la configuración del repositorio, activar Pages con **GitHub Actions** como fuente.
+El workflow `.github/workflows/ci.yml` valida formato, lint, tests y build en cada Pull Request y en `main`. El workflow `.github/workflows/deploy.yml` publica `dist` en GitHub Pages únicamente después de un CI exitoso en `main`. En la configuración del repositorio, activar Pages con **GitHub Actions** como fuente.
+
+Dependabot revisa semanalmente las dependencias de npm. La versión de Node esperada está definida en `.nvmrc` y en `package.json`. El deploy verifica que el artefacto incluya `index.html` y el favicon antes de publicarlo.
 
 Vite usa `/` por defecto en desarrollo. Para un subpath explícito se puede compilar con:
 
