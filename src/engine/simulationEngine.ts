@@ -1,0 +1,9 @@
+import type { Choice, GameState, OperationalStatus } from '../types'
+export const initialState = (): GameState => ({ currentScenario: 0, security: 72, production: 100, compromisedSystems: 0, operationalStatus: 'NORMAL', zones: { firewall:'stable', plc:'stable', sis:'stable', erp:'stable', blockchain:'stable' }, eventLog: ['[04:00:00] SYSTEM INITIALIZED', '[04:00:12] PLC-01 STATUS: RUN', '[04:00:18] SCADA TELEMETRY: NOMINAL'], selectedAnswers: [], decisionsHistory: [], simulationFinished: false })
+const clamp = (n: number) => Math.max(0, Math.min(100, n))
+export const applyChoice = (state: GameState, choice: Choice, scenarioIndex: number): GameState => {
+  const nextZones = { ...state.zones, [choice.zone]: choice.status === 'CRÍTICO' ? 'compromised' : choice.recommended ? 'stable' : 'alert' } as GameState['zones']
+  const nextStatus: OperationalStatus = state.security + choice.security < 28 || choice.status === 'CRÍTICO' ? 'CRÍTICO' : choice.status
+  return { ...state, currentScenario: scenarioIndex + 1, security: clamp(state.security + choice.security), production: clamp(state.production + choice.production), compromisedSystems: Math.max(0, state.compromisedSystems + choice.compromised), operationalStatus: nextStatus, zones: nextZones, eventLog: [...state.eventLog, ...choice.events.map((event, index) => `[04:0${scenarioIndex + 1}:${String(index + 1).padStart(2, '0')}] ${event}`)], selectedAnswers: [...state.selectedAnswers, choice.id], decisionsHistory: [...state.decisionsHistory, { scenario: scenarioIndex, choice: choice.id }], simulationFinished: scenarioIndex === 4 }
+}
+export const finalOutcome = (state: GameState): 'controlled' | 'contingency' | 'critical' => state.security < 28 || state.operationalStatus === 'CRÍTICO' ? 'critical' : state.security >= 75 && state.production >= 88 && state.compromisedSystems <= 1 ? 'controlled' : 'contingency'
