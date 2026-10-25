@@ -14,6 +14,8 @@ export default {
         'ot-yellow': '#e4b354',
         'ot-red': '#f36c61',
         'ot-orange': '#f49a6c',
+        'ot-zone': '#7a9ba0',
+        'ot-zone-muted': '#506e75',
       },
       fontFamily: {
         display: ['Space Grotesk', 'sans-serif'],

@@ -1,4 +1,5 @@
 import type { ZoneState } from '../../../types'
+import { PLANT_CONNECTIONS } from '../constants/plantLayout'
 
 interface PlantConnectionsProps {
   firewall: ZoneState
@@ -7,18 +8,17 @@ interface PlantConnectionsProps {
 }
 
 export function PlantConnections({ firewall, plc, sis }: PlantConnectionsProps) {
+  const connectionStates = { firewall, plc, sis }
+
   return (
     <>
-      <g className={`connection ${firewall}`}>
-        <path d="M125 115 H290 M350 115 H450 M515 115 H710" />
-        <path d="M450 115 V225 H590" />
-      </g>
-      <g className={`connection ${plc}`}>
-        <path d="M590 225 H710 M590 225 V345 H710" />
-      </g>
-      <g className={`connection ${sis}`}>
-        <path d="M590 225 V130 H710" />
-      </g>
+      {PLANT_CONNECTIONS.map(({ key, paths }) => (
+        <g className={`connection ${connectionStates[key]}`} key={key}>
+          {paths.map((path) => (
+            <path d={path} key={path} />
+          ))}
+        </g>
+      ))}
     </>
   )
 }

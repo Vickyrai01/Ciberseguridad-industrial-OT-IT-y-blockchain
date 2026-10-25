@@ -10,6 +10,12 @@
   .ot-mono-label {
     @apply font-mono text-[10px] uppercase tracking-[0.13em];
   }
+  .ot-plant-zone-label {
+    @apply absolute top-[14px] z-[2] font-mono text-[10px] uppercase tracking-[0.1em] text-ot-zone max-[520px]:text-[7px];
+  }
+  .ot-plant-zone-detail {
+    @apply mt-[3px] block text-[8px] tracking-[0.1em] text-ot-zone-muted max-[520px]:text-[6px];
+  }
   .ot-focus-ring {
     @apply focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ot-cyan;
   }
