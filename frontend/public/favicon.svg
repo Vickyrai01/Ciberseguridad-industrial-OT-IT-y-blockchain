@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title>OT Under Attack</title>
+  <rect width="64" height="64" rx="12" fill="#061017" />
+  <rect x="3" y="3" width="58" height="58" rx="9" fill="none" stroke="#67e0b0" stroke-width="2" />
+  <rect x="9" y="17" width="22" height="30" rx="5" fill="none" stroke="#67e0b0" stroke-width="5" />
+  <path d="M36 17h20v6h-7v24h-7V23h-6z" fill="#6dd9e5" />
+  <circle cx="53" cy="11" r="3" fill="#e4b354" />
+</svg>
