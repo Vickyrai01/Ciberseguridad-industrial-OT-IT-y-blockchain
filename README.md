@@ -57,7 +57,8 @@ Las convenciones de animación y las reglas para futuras contribuciones están d
 ## Estructura
 
 ```text
-src/
+frontend/                 aplicación React y sus dependencias
+  package.json
   features/
     simulation/              escenario, motor, estado y pantalla de simulación
       data/                  contenido pedagógico y reglas de consecuencias
@@ -75,6 +76,11 @@ src/
   styles/console.css         consola de decisiones y layout fijo
   styles/tailwind.css        utilidades Tailwind y tokens de componentes
   utils/                     formateo de eventos, resultados y utilidades puras
+supabase/                 Edge Functions, Deno y PostgreSQL
+  deno.json
+  functions/
+  migrations/
+package.json              workspaces y comandos del monorepo
 .github/workflows/deploy.yml despliegue estático
 ```
 

@@ -1,0 +1,4 @@
+project_id = "ot-under-attack"
+
+[functions.multiplayer]
+verify_jwt = false

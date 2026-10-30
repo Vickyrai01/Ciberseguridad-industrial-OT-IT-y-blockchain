@@ -13,18 +13,18 @@ This document is the source of truth for animation work in **OT UNDER ATTACK**. 
 
 Use the layer that matches the job:
 
-| Layer           | Location                                           | Use it for                                                               |
-| --------------- | -------------------------------------------------- | ------------------------------------------------------------------------ |
-| Framer Motion   | `src/animations/motionTokens.ts` and React screens | Page transitions, briefings, event entry and component state transitions |
-| CSS transitions | Component styles in `src/styles/visuals.css`       | Hover, focus, active and short visual feedback                           |
-| CSS keyframes   | `src/styles/motion.css`                            | Continuous telemetry loops and ambient plant motion                      |
-| Web Audio       | `src/hooks/useSound.ts`                            | Optional feedback sound only; never required for meaning                 |
+| Layer           | Location                                                | Use it for                                                               |
+| --------------- | ------------------------------------------------------- | ------------------------------------------------------------------------ |
+| Framer Motion   | `frontend/animations/motionTokens.ts` and React screens | Page transitions, briefings, event entry and component state transitions |
+| CSS transitions | Component styles in `frontend/styles/visuals.css`       | Hover, focus, active and short visual feedback                           |
+| CSS keyframes   | `frontend/styles/motion.css`                            | Continuous telemetry loops and ambient plant motion                      |
+| Web Audio       | `frontend/hooks/useSound.ts`                            | Optional feedback sound only; never required for meaning                 |
 
 Do not create ad-hoc animation values in a component when a token or preset already exists.
 
 ## Canonical tokens
 
-Framer Motion values live in [`src/animations/motionTokens.ts`](../src/animations/motionTokens.ts):
+Framer Motion values live in [`frontend/animations/motionTokens.ts`](../frontend/animations/motionTokens.ts):
 
 - `fast`: 180 ms — event entry and micro feedback.
 - `base`: 240 ms — cards and local state transitions.
@@ -32,7 +32,7 @@ Framer Motion values live in [`src/animations/motionTokens.ts`](../src/animation
 - `standard`: decelerating ease for normal UI motion.
 - `emphasis`: stronger entrance ease for screen changes.
 
-CSS loop durations live in [`src/styles/motion.css`](../src/styles/motion.css):
+CSS loop durations live in [`frontend/styles/motion.css`](../frontend/styles/motion.css):
 
 - `--motion-loop-flow`: network conduit movement.
 - `--motion-loop-liquid`: process liquid movement.
@@ -79,7 +79,7 @@ Do not use infinite animations for ordinary buttons, reading text, or large layo
 ## Accessibility and performance
 
 - `MotionConfig reducedMotion="user"` is configured at the application root.
-- `src/styles/motion.css` disables or minimizes CSS motion under `prefers-reduced-motion: reduce`.
+- `frontend/styles/motion.css` disables or minimizes CSS motion under `prefers-reduced-motion: reduce`.
 - Avoid `width`, `height`, `top`, `left`, and layout-affecting properties in animated elements. Prefer `opacity`, `transform`, and SVG stroke properties.
 - Keep animation work local to the affected component. Do not animate the whole page when one node changes.
 - Do not introduce rapid flashing. Critical states must remain readable and projector-safe.
