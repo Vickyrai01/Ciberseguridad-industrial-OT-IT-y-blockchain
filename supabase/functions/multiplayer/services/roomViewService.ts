@@ -1,13 +1,16 @@
 import { TOTAL_QUESTIONS } from '../domain/rooms.ts'
 import { findRoomById, listAnswerCounts, listAnswerScores, listParticipants } from '../repositories/roomRepository.ts'
-import { MULTIPLAYER_CONFIG } from '../shared/constants.ts'
+import { MULTIPLAYER_CONFIG, PARTICIPANT_STATUS } from '../shared/constants.ts'
 
 export async function getRoomView(roomId: string, currentParticipantId?: string) {
   const room = await findRoomById(roomId)
   const participants = await listParticipants(roomId)
+  const connectedParticipants = participants.filter(
+    (participant) => participant.status !== PARTICIPANT_STATUS.DISCONNECTED,
+  )
   const completedCounts = await listAnswerCounts(roomId)
   const answerScores = await listAnswerScores(roomId)
-  const leaderboard = [...participants]
+  const leaderboard = [...connectedParticipants]
     .sort(
       (a, b) =>
         (answerScores.get(b.id) ?? b.total_score) - (answerScores.get(a.id) ?? a.total_score) ||
@@ -28,12 +31,16 @@ export async function getRoomView(roomId: string, currentParticipantId?: string)
   return {
     ...room,
     current_question_index: room.current_question_index ?? 0,
-    participants: participants.map((participant) => ({
-      id: participant.id,
-      nickname: participant.nickname,
-      status: participant.status,
-      connected: Date.now() - new Date(participant.last_seen_at).getTime() < MULTIPLAYER_CONFIG.sessionFreshnessMs,
-    })),
+    participants: participants
+      .map((participant) => ({
+        id: participant.id,
+        nickname: participant.nickname,
+        status: participant.status,
+        connected:
+          participant.status !== PARTICIPANT_STATUS.DISCONNECTED &&
+          Date.now() - new Date(participant.last_seen_at).getTime() < MULTIPLAYER_CONFIG.sessionFreshnessMs,
+      }))
+      .filter(({ connected }) => connected),
     leaderboard,
   }
 }

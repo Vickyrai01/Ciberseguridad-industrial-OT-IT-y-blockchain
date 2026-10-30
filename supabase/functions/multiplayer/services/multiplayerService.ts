@@ -19,19 +19,29 @@ import {
   findRoomById,
   insertParticipant,
   insertRoom,
+  markParticipantConnected,
+  markParticipantDisconnected,
   openQuestion,
   submitAnswer,
   updateRoomStatus,
   advanceRoomQuestion,
 } from '../repositories/roomRepository.ts'
 import { getRoomView } from './roomViewService.ts'
-import { ERROR_CODE, HTTP_STATUS, MULTIPLAYER_CONFIG, OPERATION, type Operation } from '../shared/constants.ts'
+import {
+  ERROR_CODE,
+  HTTP_STATUS,
+  MULTIPLAYER_CONFIG,
+  OPERATION,
+  PARTICIPANT_STATUS,
+  type Operation,
+} from '../shared/constants.ts'
 
 type OperationHandler = (body: Record<string, unknown>) => Promise<unknown>
 
 const operationHandlers: Record<Operation, OperationHandler> = {
   [OPERATION.CREATE_ROOM]: () => createRoom(),
   [OPERATION.JOIN_ROOM]: joinRoom,
+  [OPERATION.LEAVE_ROOM]: leaveRoom,
   [OPERATION.RESUME_PARTICIPANT]: resumeParticipant,
   [OPERATION.GET_ROOM]: getRoom,
   [OPERATION.GET_LEADERBOARD]: getLeaderboard,
@@ -85,10 +95,25 @@ async function joinRoom(body: Record<string, unknown>) {
   }
 }
 
+async function leaveRoom(body: Record<string, unknown>) {
+  const participantToken = requiredString(body, 'participantToken')
+  const participant = await findParticipantByTokenHash(await hashToken(participantToken))
+  await markParticipantDisconnected(participant.id)
+  await broadcastRoomUpdated(participant.room_id)
+  return { left: true }
+}
+
 async function resumeParticipant(body: Record<string, unknown>) {
   const participantToken = requiredString(body, 'participantToken')
   const participant = await findParticipantByTokenHash(await hashToken(participantToken))
   const room = await findRoomById(participant.room_id, true)
+  const participantStatus =
+    room.status === ROOM_STATUS.WAITING
+      ? PARTICIPANT_STATUS.WAITING
+      : room.status === ROOM_STATUS.IN_PROGRESS
+        ? PARTICIPANT_STATUS.PLAYING
+        : PARTICIPANT_STATUS.FINISHED
+  await markParticipantConnected(participant.id, participantStatus)
   return {
     room: await getRoomView(room.id, participant.id),
     participantId: participant.id,

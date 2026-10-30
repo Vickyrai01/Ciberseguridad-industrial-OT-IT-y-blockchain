@@ -8,11 +8,10 @@ interface MultiplayerEntryProps {
   error: string | null
   loading: boolean
   onBack: () => void
-  onCreate: () => void
   onJoin: (code: string, nickname: string) => void
 }
 
-export function MultiplayerEntry({ error, loading, onBack, onCreate, onJoin }: MultiplayerEntryProps) {
+export function MultiplayerEntry({ error, loading, onBack, onJoin }: MultiplayerEntryProps) {
   const { t } = useTranslation()
   const [code, setCode] = useState(() => new URLSearchParams(window.location.search).get('room')?.toUpperCase() ?? '')
   const [nickname, setNickname] = useState('')
@@ -45,17 +44,15 @@ export function MultiplayerEntry({ error, loading, onBack, onCreate, onJoin }: M
         </label>
         <PrimaryButton
           disabled={
-            loading ||
             code.trim().length < MULTIPLAYER_CONFIG.roomCodeMinLength ||
             nickname.trim().length < MULTIPLAYER_CONFIG.minNicknameLength
           }
+          loading={loading}
+          loadingLabel={t('multiplayer.connecting')}
           onClick={() => onJoin(code, nickname)}>
           {t('multiplayer.join')}
         </PrimaryButton>
-        <button type="button" className="secondary-btn multiplayer-create-btn" onClick={onCreate}>
-          {t('multiplayer.create')}
-        </button>
-        <button type="button" className="text-btn" onClick={onBack}>
+        <button type="button" className="text-btn" disabled={loading} onClick={onBack}>
           {t('common.back')}
         </button>
       </div>

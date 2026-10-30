@@ -11,6 +11,7 @@ export interface MultiplayerService {
   isConfigured(): boolean
   createRoom(): Promise<ParticipantSession>
   joinRoom(code: string, nickname: string): Promise<ParticipantSession>
+  leaveRoom(participantToken: string): Promise<void>
   resumeParticipant(participantToken: string): Promise<ParticipantSession>
   getRoom(roomId: string, participantToken?: string, presenterToken?: string): Promise<RoomSnapshot>
   startRoom(roomId: string, presenterToken: string): Promise<RoomSnapshot>
@@ -35,6 +36,8 @@ export const multiplayerService: MultiplayerService = {
   createRoom: () => httpClient.request<ParticipantSession>(MULTIPLAYER_OPERATION.CREATE_ROOM),
   joinRoom: (code, nickname) =>
     httpClient.request<ParticipantSession>(MULTIPLAYER_OPERATION.JOIN_ROOM, { code, nickname }),
+  leaveRoom: (participantToken) =>
+    httpClient.request<void>(MULTIPLAYER_OPERATION.LEAVE_ROOM, { participantToken }, true),
   resumeParticipant: (participantToken) =>
     httpClient.request<ParticipantSession>(MULTIPLAYER_OPERATION.RESUME_PARTICIPANT, { participantToken }),
   getRoom: (roomId, participantToken, presenterToken) =>

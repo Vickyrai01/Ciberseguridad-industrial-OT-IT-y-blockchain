@@ -1,7 +1,7 @@
 import { supabase } from '../infrastructure/supabase.ts'
 import { AppError } from '../shared/errors.ts'
 import type { RoomStatus } from '../domain/rooms.ts'
-import { HTTP_STATUS, QUESTION_STATUS } from '../shared/constants.ts'
+import { HTTP_STATUS, PARTICIPANT_STATUS, QUESTION_STATUS, type ParticipantStatus } from '../shared/constants.ts'
 
 export async function insertRoom(input: { code: string; presenterTokenHash: string; scenarioOrder: number[] }) {
   const { data, error } = await supabase
@@ -68,6 +68,7 @@ export async function countParticipants(roomId: string): Promise<number> {
     .from('game_participants')
     .select('id', { count: 'exact', head: true })
     .eq('room_id', roomId)
+    .neq('status', PARTICIPANT_STATUS.DISCONNECTED)
   if (error) throw error
   return count ?? 0
 }
@@ -93,6 +94,22 @@ export async function insertParticipant(input: {
     throw error
   }
   return data as { id: string }
+}
+
+export async function markParticipantDisconnected(participantId: string) {
+  const { error } = await supabase
+    .from('game_participants')
+    .update({ status: PARTICIPANT_STATUS.DISCONNECTED, last_seen_at: new Date(0).toISOString() })
+    .eq('id', participantId)
+  if (error) throw error
+}
+
+export async function markParticipantConnected(participantId: string, status: ParticipantStatus) {
+  const { error } = await supabase
+    .from('game_participants')
+    .update({ status, last_seen_at: new Date().toISOString() })
+    .eq('id', participantId)
+  if (error) throw error
 }
 
 export async function findParticipantByTokenHash(tokenHash: string | undefined) {

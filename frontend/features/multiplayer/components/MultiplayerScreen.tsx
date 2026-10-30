@@ -13,7 +13,6 @@ export interface MultiplayerScreenProps {
   error: string | null
   loading: boolean
   onJoin: (code: string, nickname: string) => void
-  onCreate: () => void
   onStart: () => void
   onBack: () => void
 }
@@ -33,15 +32,7 @@ export function MultiplayerScreen(props: MultiplayerScreenProps) {
     )
 
   if (props.mode === MULTIPLAYER_MODE.ENTRY)
-    return (
-      <MultiplayerEntry
-        error={props.error}
-        loading={props.loading}
-        onBack={props.onBack}
-        onCreate={props.onCreate}
-        onJoin={props.onJoin}
-      />
-    )
+    return <MultiplayerEntry error={props.error} loading={props.loading} onBack={props.onBack} onJoin={props.onJoin} />
 
   return (
     <MultiplayerRoom

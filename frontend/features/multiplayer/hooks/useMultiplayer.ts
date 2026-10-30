@@ -73,6 +73,15 @@ export function useMultiplayer() {
     })
     return unsubscribe
   }, [refresh, state.session])
+  useEffect(() => {
+    const participantToken = state.session?.presenterToken ? null : state.session?.participantToken
+    if (!participantToken) return
+    const leaveRoom = () => {
+      void multiplayerService.leaveRoom(participantToken)
+    }
+    window.addEventListener('pagehide', leaveRoom)
+    return () => window.removeEventListener('pagehide', leaveRoom)
+  }, [state.session?.participantToken, state.session?.presenterToken])
   const run = useCallback(async <T>(action: () => Promise<T>, onSuccess: (result: T) => void) => {
     dispatch({ type: 'LOADING', value: true })
     try {
@@ -163,7 +172,11 @@ export function useMultiplayer() {
     [run, state.session],
   )
   const enter = useCallback(() => dispatch({ type: 'ENTRY' }), [])
-  const reset = useCallback(() => dispatch({ type: 'RESET' }), [])
+  const reset = useCallback(() => {
+    const participantToken = state.session?.presenterToken ? null : state.session?.participantToken
+    if (participantToken) void multiplayerService.leaveRoom(participantToken)
+    dispatch({ type: 'RESET' })
+  }, [state.session])
   return {
     ...state,
     configured: multiplayerService.isConfigured(),

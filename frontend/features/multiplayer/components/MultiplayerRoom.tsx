@@ -88,14 +88,20 @@ export function MultiplayerRoom({ error, loading, mode, onBack, onStart, room, s
       <MultiplayerLeaderboard entries={room?.leaderboard ?? []} currentParticipantId={session?.participantId} />
       <div className="multiplayer-actions">
         {session?.presenterToken && mode === MULTIPLAYER_MODE.LOBBY && (
-          <PrimaryButton disabled={loading || (room?.participants.length ?? 0) < 1} onClick={onStart}>
+          <PrimaryButton
+            disabled={(room?.participants.length ?? 0) < 1}
+            loading={loading}
+            loadingLabel={t('multiplayer.starting')}
+            onClick={onStart}>
             {t('multiplayer.start')}
           </PrimaryButton>
         )}
         {session && !session.presenterToken && mode === MULTIPLAYER_MODE.LOBBY && (
-          <PrimaryButton disabled={loading || room?.status !== ROOM_STATUS.IN_PROGRESS} onClick={onStart}>
-            {t('multiplayer.enterGame')}
-          </PrimaryButton>
+          <p className="multiplayer-room-status" role="status">
+            {room?.status === ROOM_STATUS.IN_PROGRESS
+              ? t('multiplayer.connecting')
+              : t('multiplayer.waitingForPresenterStart')}
+          </p>
         )}
         {session?.presenterToken && mode === MULTIPLAYER_MODE.FINISHED && <p>{t('multiplayer.podiumReady')}</p>}
         <button type="button" className="text-btn" onClick={onBack}>

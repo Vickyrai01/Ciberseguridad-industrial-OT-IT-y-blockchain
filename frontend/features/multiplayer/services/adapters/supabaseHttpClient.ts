@@ -32,11 +32,12 @@ export function createSupabaseHttpClient() {
 
   return {
     isConfigured: () => config !== null,
-    request: async <T>(operation: string, body: Record<string, unknown> = {}): Promise<T> => {
+    request: async <T>(operation: string, body: Record<string, unknown> = {}, keepalive = false): Promise<T> => {
       if (!config) throw new Error('MULTIPLAYER_NOT_CONFIGURED')
       const response = await fetch(`${config.url}/functions/v1/multiplayer`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', apikey: config.publishableKey },
+        keepalive,
         body: JSON.stringify({ version: MULTIPLAYER_CONFIG.apiVersion, operation, ...body }),
       })
       const payload = (await response.json()) as T & ApiErrorPayload

@@ -1,13 +1,16 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { LoadingButton } from './LoadingButton'
 
 interface PrimaryButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
+  loading?: boolean
+  loadingLabel?: ReactNode
 }
 
-export function PrimaryButton({ children, className = '', type = 'button', ...props }: PrimaryButtonProps) {
+export function PrimaryButton({ children, loading, loadingLabel, ...props }: PrimaryButtonProps) {
   return (
-    <button type={type} className={`primary-btn${className ? ` ${className}` : ''}`} {...props}>
+    <LoadingButton {...props} loading={loading} loadingLabel={loadingLabel} variant="primary">
       {children}
-    </button>
+    </LoadingButton>
   )
 }

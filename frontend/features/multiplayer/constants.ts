@@ -35,6 +35,7 @@ export type ParticipantStatus = (typeof PARTICIPANT_STATUS)[keyof typeof PARTICI
 export const MULTIPLAYER_OPERATION = {
   CREATE_ROOM: 'createRoom',
   JOIN_ROOM: 'joinRoom',
+  LEAVE_ROOM: 'leaveRoom',
   RESUME_PARTICIPANT: 'resumeParticipant',
   GET_ROOM: 'getRoom',
   START_ROOM: 'startRoom',

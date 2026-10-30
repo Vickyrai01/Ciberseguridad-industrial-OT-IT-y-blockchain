@@ -3,6 +3,7 @@ export const API_VERSION = 'v1' as const
 export const OPERATION = {
   CREATE_ROOM: 'createRoom',
   JOIN_ROOM: 'joinRoom',
+  LEAVE_ROOM: 'leaveRoom',
   RESUME_PARTICIPANT: 'resumeParticipant',
   GET_ROOM: 'getRoom',
   GET_LEADERBOARD: 'getLeaderboard',
@@ -28,6 +29,7 @@ export const PARTICIPANT_STATUS = {
   FINISHED: 'FINISHED',
   DISCONNECTED: 'DISCONNECTED',
 } as const
+export type ParticipantStatus = (typeof PARTICIPANT_STATUS)[keyof typeof PARTICIPANT_STATUS]
 export const QUESTION_STATUS = { OPEN: 'OPEN', ANSWERED: 'ANSWERED' } as const
 export const CHOICE_ID = { A: 'a', B: 'b', C: 'c' } as const
 export const CHOICE_IDS = Object.values(CHOICE_ID)
