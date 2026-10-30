@@ -76,7 +76,11 @@ export function PresenterDashboard({ room, error, loading, onAdvance, onFinish }
       </div>
 
       <footer className="presenter-dashboard-actions">
-        <PrimaryButton disabled={loading || isLastQuestion || !allParticipantsAnswered} onClick={onAdvance}>
+        <PrimaryButton
+          disabled={isLastQuestion || !allParticipantsAnswered}
+          loading={loading}
+          loadingLabel={t('multiplayer.connecting')}
+          onClick={onAdvance}>
           {t('multiplayer.nextQuestion')}
         </PrimaryButton>
         <button type="button" className="text-btn" disabled={loading} onClick={onFinish}>
