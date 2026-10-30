@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { initialState } from '../../simulation/engine/simulationEngine'
 import { PlantPanel } from '../../simulation/components/PlantPanel'
@@ -16,6 +16,7 @@ interface PresenterDashboardProps {
 
 export function PresenterDashboard({ room, error, loading, onAdvance, onFinish }: PresenterDashboardProps) {
   const { t } = useTranslation()
+  const [answerRevealed, setAnswerRevealed] = useState(false)
   const questionIndex = Number.isInteger(room.currentQuestionIndex) ? room.currentQuestionIndex : 0
   const totalQuestions = room.scenarioOrder.length
   const plantState = useMemo(() => initialState(room.scenarioOrder), [room.scenarioOrder])
@@ -23,11 +24,16 @@ export function PresenterDashboard({ room, error, loading, onAdvance, onFinish }
     () => scenarios.find(({ id }) => id === room.scenarioOrder[questionIndex]) ?? scenarios[0],
     [questionIndex, room.scenarioOrder],
   )
+  const correctChoice = scenario.choices.find(({ recommended }) => recommended)
   const answeredParticipants = room.leaderboard.filter(
     ({ completedQuestions }) => completedQuestions > questionIndex,
   ).length
   const isLastQuestion = questionIndex === totalQuestions - 1
   const allParticipantsAnswered = room.participants.length > 0 && answeredParticipants === room.participants.length
+
+  useEffect(() => {
+    setAnswerRevealed(false)
+  }, [questionIndex, scenario.id])
 
   return (
     <main className="presenter-dashboard ot-layout-screen">
@@ -52,11 +58,22 @@ export function PresenterDashboard({ room, error, loading, onAdvance, onFinish }
             <p className="presenter-question-copy">{t(scenario.questionKey)}</p>
             <div className="presenter-choices">
               {scenario.choices.map((choice) => (
-                <div className="presenter-choice" key={choice.id}>
+                <div
+                  className={`presenter-choice${answerRevealed && choice.recommended ? ' correct' : ''}`}
+                  key={choice.id}>
                   <span>{choice.id.toUpperCase()}</span>
                   <p>{t(choice.labelKey)}</p>
+                  {answerRevealed && choice.recommended && (
+                    <strong className="presenter-choice-badge">{t('multiplayer.correctAnswer')}</strong>
+                  )}
                 </div>
               ))}
+              {answerRevealed && correctChoice && (
+                <div className="presenter-answer-review" role="status">
+                  <span className="eyebrow">{t('multiplayer.explanation')}</span>
+                  <p>{t(scenario.insightKey)}</p>
+                </div>
+              )}
             </div>
           </section>
 
@@ -76,8 +93,15 @@ export function PresenterDashboard({ room, error, loading, onAdvance, onFinish }
       </div>
 
       <footer className="presenter-dashboard-actions">
+        <button
+          type="button"
+          className="presenter-reveal-button"
+          disabled={!allParticipantsAnswered || answerRevealed || loading}
+          onClick={() => setAnswerRevealed(true)}>
+          {answerRevealed ? t('multiplayer.answerRevealed') : t('multiplayer.revealAnswer')}
+        </button>
         <PrimaryButton
-          disabled={isLastQuestion || !allParticipantsAnswered}
+          disabled={isLastQuestion || !allParticipantsAnswered || !answerRevealed}
           loading={loading}
           loadingLabel={t('multiplayer.connecting')}
           onClick={onAdvance}>
