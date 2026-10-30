@@ -19,9 +19,7 @@ export function AppScreens({ controller }: AppScreensProps) {
     <AnimatePresence mode="wait">
       {simulation.screen === SCREEN.WELCOME && multiplayer.mode === MULTIPLAYER_MODE.IDLE && (
         <WelcomeScreen
-          onStart={simulation.startSimulation}
-          presenter={simulation.presenter}
-          onTogglePresenter={simulation.togglePresenter}
+          onStart={() => simulation.startSimulation()}
           onJoin={multiplayer.enter}
           onCreate={multiplayer.createRoom}
         />
@@ -37,7 +35,6 @@ export function AppScreens({ controller }: AppScreensProps) {
           onJoin={multiplayer.joinRoom}
           onCreate={multiplayer.createRoom}
           onStart={multiplayer.session?.presenterToken ? multiplayer.startRoom : multiplayer.startPlayer}
-          onFinish={multiplayer.finishRoom}
           onBack={multiplayer.reset}
         />
       )}
@@ -49,13 +46,14 @@ export function AppScreens({ controller }: AppScreensProps) {
             state={simulation.state}
             scenario={simulation.scenario}
             selected={simulation.selected}
-            presenter={simulation.presenter}
             sound={simulation.sound}
             onSelect={simulation.selectChoice}
             onContinue={simulation.continueSimulation}
             onToggleSound={simulation.toggleSound}
             onFullscreen={simulation.toggleFullscreen}
-            onReset={multiplayer.mode === MULTIPLAYER_MODE.PLAYING ? () => undefined : simulation.startSimulation}
+            onReset={
+              multiplayer.mode === MULTIPLAYER_MODE.PLAYING ? () => undefined : () => simulation.startSimulation()
+            }
             waitingForPresenter={simulation.waitingForPresenter}
           />
         )}
@@ -81,7 +79,7 @@ export function AppScreens({ controller }: AppScreensProps) {
           outcome={simulation.outcome}
           showHistory={simulation.showHistory}
           onToggleHistory={simulation.toggleHistory}
-          onReplay={simulation.startSimulation}
+          onReplay={() => simulation.startSimulation()}
         />
       )}
     </AnimatePresence>

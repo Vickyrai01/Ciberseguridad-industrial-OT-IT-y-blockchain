@@ -9,13 +9,11 @@ import { initialState } from '../simulation/engine/simulationEngine'
 
 interface WelcomeScreenProps {
   onStart: () => void
-  presenter: boolean
-  onTogglePresenter: () => void
   onJoin: () => void
   onCreate: () => void
 }
 
-export function WelcomeScreen({ onStart, presenter, onTogglePresenter, onJoin, onCreate }: WelcomeScreenProps) {
+export function WelcomeScreen({ onStart, onJoin, onCreate }: WelcomeScreenProps) {
   return (
     <motion.main className="welcome" {...pageMotion} transition={pageTransition}>
       <div className="welcome-grid" />
@@ -24,13 +22,7 @@ export function WelcomeScreen({ onStart, presenter, onTogglePresenter, onJoin, o
         <Plant state={initialState()} compact />
       </div>
       <WelcomeCopy />
-      <WelcomeActions
-        presenter={presenter}
-        onStart={onStart}
-        onTogglePresenter={onTogglePresenter}
-        onJoin={onJoin}
-        onCreate={onCreate}
-      />
+      <WelcomeActions onStart={onStart} onJoin={onJoin} onCreate={onCreate} />
       <WelcomeMeta />
     </motion.main>
   )

@@ -3,14 +3,12 @@ import { useTranslation } from 'react-i18next'
 import { PrimaryButton } from '../../shared/components/ui/PrimaryButton'
 
 interface WelcomeActionsProps {
-  presenter: boolean
   onStart: () => void
-  onTogglePresenter: () => void
   onJoin: () => void
   onCreate: () => void
 }
 
-export function WelcomeActions({ presenter, onStart, onTogglePresenter, onJoin, onCreate }: WelcomeActionsProps) {
+export function WelcomeActions({ onStart, onJoin, onCreate }: WelcomeActionsProps) {
   const { t } = useTranslation()
 
   return (
@@ -23,13 +21,6 @@ export function WelcomeActions({ presenter, onStart, onTogglePresenter, onJoin, 
       </button>
       <button type="button" className="text-btn" onClick={onCreate}>
         {t('multiplayer.create')}
-      </button>
-      <button
-        type="button"
-        className={`text-btn ${presenter ? 'active' : ''}`}
-        onClick={onTogglePresenter}
-        aria-pressed={presenter}>
-        ◉ {t('common.presenterMode')}
       </button>
     </div>
   )

@@ -14,7 +14,6 @@ interface SimulationScreenProps {
   state: GameState
   scenario: Scenario
   selected: Choice['id'] | null
-  presenter: boolean
   sound: boolean
   onSelect: (choice: Choice) => void
   onContinue: () => void
@@ -28,7 +27,6 @@ export function SimulationScreen({
   state,
   scenario,
   selected,
-  presenter,
   sound,
   onSelect,
   onContinue,
@@ -55,7 +53,7 @@ export function SimulationScreen({
             onContinue={onContinue}
             waitingForPresenter={waitingForPresenter}
           />
-          <ConceptChip conceptKey={scenario.conceptKey} presenter={presenter} />
+          <ConceptChip conceptKey={scenario.conceptKey} />
         </aside>
       </div>
       <EventConsole events={state.eventLog} />

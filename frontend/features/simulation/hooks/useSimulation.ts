@@ -22,7 +22,6 @@ interface SimulationViewState {
   activeScenarios: Scenario[]
   selected: Choice['id'] | null
   sound: boolean
-  presenter: boolean
   showHistory: boolean
   pendingAnswer: PendingAnswer | null
   waitingForPresenter: boolean
@@ -36,7 +35,6 @@ type SimulationAction =
   | { type: 'APPLY_PENDING'; scenario: Scenario }
   | { type: 'CLEAR_PENDING' }
   | { type: 'TOGGLE_SOUND' }
-  | { type: 'TOGGLE_PRESENTER' }
   | { type: 'TOGGLE_HISTORY' }
 
 const createInitialViewState = (): SimulationViewState => ({
@@ -45,7 +43,6 @@ const createInitialViewState = (): SimulationViewState => ({
   activeScenarios: scenarios,
   selected: null,
   sound: false,
-  presenter: false,
   showHistory: false,
   pendingAnswer: null,
   waitingForPresenter: false,
@@ -98,8 +95,6 @@ function simulationReducer(state: SimulationViewState, action: SimulationAction)
       return { ...state, pendingAnswer: null, waitingForPresenter: false }
     case 'TOGGLE_SOUND':
       return { ...state, sound: !state.sound }
-    case 'TOGGLE_PRESENTER':
-      return { ...state, presenter: !state.presenter }
     case 'TOGGLE_HISTORY':
       return { ...state, showHistory: !state.showHistory }
   }
@@ -173,7 +168,6 @@ export function useSimulation(options: SimulationOptions = {}) {
     scenario,
     selected: view.selected,
     sound: view.sound,
-    presenter: view.presenter,
     showHistory: view.showHistory,
     waitingForPresenter: view.waitingForPresenter,
     outcome: finalOutcome(view.state),
@@ -183,7 +177,6 @@ export function useSimulation(options: SimulationOptions = {}) {
     advanceToQuestion,
     applyPendingAnswer,
     toggleSound: () => dispatch({ type: 'TOGGLE_SOUND' }),
-    togglePresenter: () => dispatch({ type: 'TOGGLE_PRESENTER' }),
     toggleHistory: () => dispatch({ type: 'TOGGLE_HISTORY' }),
     toggleFullscreen,
   }

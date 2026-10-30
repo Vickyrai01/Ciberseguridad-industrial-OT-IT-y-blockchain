@@ -1,5 +1,4 @@
 import { MotionConfig } from 'framer-motion'
-import { AppControls } from './app/AppControls'
 import { AppScreens } from './app/AppScreens'
 import { useAppController } from './app/useAppController'
 
@@ -12,7 +11,6 @@ function App() {
       <MotionConfig reducedMotion="user">
         <AppScreens controller={controller} />
       </MotionConfig>
-      <AppControls simulation={controller.simulation} />
     </div>
   )
 }
