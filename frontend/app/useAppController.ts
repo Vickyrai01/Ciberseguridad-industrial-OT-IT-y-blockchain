@@ -19,16 +19,16 @@ export function useAppController() {
   }, [enter, resume])
 
   useEffect(() => {
-    if (mode === MULTIPLAYER_MODE.PLAYING && screen === SCREEN.WELCOME) {
+    if (mode === MULTIPLAYER_MODE.PLAYING && !session?.presenterToken && screen === SCREEN.WELCOME) {
       startSimulation(scenarioOrder)
     }
-  }, [mode, scenarioOrder, screen, startSimulation])
+  }, [mode, scenarioOrder, screen, session?.presenterToken, startSimulation])
 
   useEffect(() => {
-    if (mode === MULTIPLAYER_MODE.PLAYING && activeScenarioId !== undefined) {
+    if (mode === MULTIPLAYER_MODE.PLAYING && !session?.presenterToken && activeScenarioId !== undefined) {
       openQuestion(activeScenarioId)
     }
-  }, [activeScenarioId, mode, openQuestion])
+  }, [activeScenarioId, mode, openQuestion, session?.presenterToken])
 
   useEffect(() => {
     if (mode === MULTIPLAYER_MODE.LOBBY && room?.status === ROOM_STATUS.IN_PROGRESS && !session?.presenterToken) {

@@ -82,6 +82,13 @@ const es = {
     leaderboard: 'RANKING EN VIVO',
     live: 'EN VIVO',
     noScores: 'Todavía no hay respuestas registradas.',
+    presenterMode: 'MODO AULA / PRESENTADOR',
+    questionLabel: 'PREGUNTA {{current}} DE {{total}}',
+    connectedParticipants: 'PARTICIPANTES CONECTADOS',
+    answersReceived: 'RESPUESTAS RECIBIDAS',
+    previousQuestion: 'PREGUNTA ANTERIOR',
+    nextQuestion: 'SIGUIENTE PREGUNTA',
+    finish: 'FINALIZAR PARTIDA',
     status: { WAITING: 'ESPERANDO', IN_PROGRESS: 'JUGANDO', FINISHED: 'FINALIZÓ', DISCONNECTED: 'DESCONECTADO' },
     errors: {
       MULTIPLAYER_NOT_CONFIGURED: 'Supabase no está configurado.',

@@ -1082,6 +1082,106 @@ button:focus-visible {
 .multiplayer-error {
   color: #ff9a8f;
 }
+.presenter-dashboard {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(15rem, 22rem);
+  grid-template-rows: auto 1fr auto;
+  gap: 1.5rem;
+  width: min(1180px, 100%);
+  min-height: 100%;
+  padding: clamp(1.5rem, 4vw, 4rem);
+}
+.presenter-dashboard-header {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+.presenter-dashboard h1,
+.presenter-dashboard h2 {
+  margin: 0.5rem 0 0;
+}
+.presenter-room-code,
+.presenter-progress {
+  display: grid;
+  gap: 0.35rem;
+  border: 1px solid rgba(102, 211, 201, 0.25);
+  background: rgba(3, 18, 24, 0.72);
+  padding: 1rem;
+}
+.presenter-room-code span,
+.presenter-progress span {
+  color: #82aaa7;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.presenter-room-code strong {
+  color: #f7b955;
+  font-size: 1.8rem;
+  letter-spacing: 0.14em;
+}
+.presenter-question {
+  border: 1px solid rgba(102, 211, 201, 0.25);
+  background: rgba(3, 18, 24, 0.72);
+  padding: clamp(1.25rem, 3vw, 2.5rem);
+}
+.presenter-question h2 {
+  font-size: clamp(1.6rem, 3vw, 2.8rem);
+}
+.presenter-narrative,
+.presenter-question-copy {
+  max-width: 70ch;
+  color: #c5d6d8;
+  line-height: 1.65;
+}
+.presenter-question-copy {
+  margin-top: 1.5rem;
+  color: #67d9e1;
+  font-weight: 600;
+}
+.presenter-choices {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 1.5rem;
+}
+.presenter-choice {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  border: 1px solid rgba(102, 211, 201, 0.16);
+  padding: 0.9rem;
+}
+.presenter-choice > span {
+  color: #f7b955;
+  font-weight: 700;
+}
+.presenter-choice p {
+  margin: 0;
+  color: #e1eeee;
+}
+.presenter-progress {
+  align-content: start;
+  gap: 1.25rem;
+}
+.presenter-progress div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+}
+.presenter-progress strong {
+  color: #f7b955;
+  font-size: 1.4rem;
+}
+.presenter-dashboard-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
 @media (max-width: 600px) {
   .multiplayer-page {
     padding: 1rem;
@@ -1096,5 +1196,22 @@ button:focus-visible {
     right: 1rem;
     bottom: 1rem;
     width: calc(100vw - 2rem);
+  }
+  .presenter-dashboard {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+  }
+  .presenter-dashboard-header {
+    display: block;
+  }
+  .presenter-room-code {
+    margin-top: 1rem;
+  }
+  .presenter-dashboard-actions {
+    justify-content: stretch;
+  }
+  .presenter-dashboard-actions button {
+    flex: 1 1 100%;
   }
 }

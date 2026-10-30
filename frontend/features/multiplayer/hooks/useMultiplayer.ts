@@ -107,7 +107,7 @@ export function useMultiplayer() {
       state.session?.presenterToken &&
       void run(
         () => multiplayerService.startRoom(state.session!.room.id, state.session!.presenterToken!),
-        (room) => dispatch({ type: 'ROOM', room }),
+        (room) => dispatch({ type: 'PLAYING', room }),
       ),
     [run, state.session],
   )

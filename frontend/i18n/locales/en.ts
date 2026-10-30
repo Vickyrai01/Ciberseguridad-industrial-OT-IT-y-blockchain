@@ -84,6 +84,13 @@ const en = {
     leaderboard: 'LIVE LEADERBOARD',
     live: 'LIVE',
     noScores: 'No answers have been recorded yet.',
+    presenterMode: 'CLASSROOM / PRESENTER MODE',
+    questionLabel: 'QUESTION {{current}} OF {{total}}',
+    connectedParticipants: 'CONNECTED PARTICIPANTS',
+    answersReceived: 'ANSWERS RECEIVED',
+    previousQuestion: 'PREVIOUS QUESTION',
+    nextQuestion: 'NEXT QUESTION',
+    finish: 'FINISH MATCH',
     status: { WAITING: 'WAITING', IN_PROGRESS: 'PLAYING', FINISHED: 'FINISHED', DISCONNECTED: 'DISCONNECTED' },
     errors: {
       MULTIPLAYER_NOT_CONFIGURED: 'Supabase is not configured.',
