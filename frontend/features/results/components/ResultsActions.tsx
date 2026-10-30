@@ -1,5 +1,6 @@
 import { ChevronRight, RotateCcw } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { PrimaryButton } from '../../../shared/components/ui/PrimaryButton'
 
 interface ResultsActionsProps {
   showHistory: boolean
@@ -12,9 +13,9 @@ export function ResultsActions({ showHistory, onToggleHistory, onReplay }: Resul
 
   return (
     <div className="results-actions">
-      <button type="button" className="primary-btn" onClick={onReplay}>
+      <PrimaryButton onClick={onReplay}>
         <RotateCcw size={16} /> {t('common.replay')}
-      </button>
+      </PrimaryButton>
       <button type="button" className="secondary-btn" onClick={onToggleHistory} aria-expanded={showHistory}>
         {showHistory ? t('common.hideDecisions') : t('common.reviewDecisions')} <ChevronRight size={16} />
       </button>

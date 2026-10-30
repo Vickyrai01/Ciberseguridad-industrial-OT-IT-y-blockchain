@@ -4,6 +4,7 @@ import { initialState } from '../../simulation/engine/simulationEngine'
 import { PlantPanel } from '../../simulation/components/PlantPanel'
 import { scenarios } from '../../simulation/data/scenarios'
 import type { RoomSnapshot } from '../types'
+import { PrimaryButton } from '../../../shared/components/ui/PrimaryButton'
 
 interface PresenterDashboardProps {
   room: RoomSnapshot
@@ -75,13 +76,9 @@ export function PresenterDashboard({ room, error, loading, onAdvance, onFinish }
       </div>
 
       <footer className="presenter-dashboard-actions">
-        <button
-          type="button"
-          className="primary-btn"
-          disabled={loading || isLastQuestion || !allParticipantsAnswered}
-          onClick={onAdvance}>
+        <PrimaryButton disabled={loading || isLastQuestion || !allParticipantsAnswered} onClick={onAdvance}>
           {t('multiplayer.nextQuestion')}
-        </button>
+        </PrimaryButton>
         <button type="button" className="text-btn" disabled={loading} onClick={onFinish}>
           {t('multiplayer.finish')}
         </button>

@@ -5,6 +5,7 @@ import { ConceptChip } from './components/ConceptChip'
 import { PlantPanel } from './components/PlantPanel'
 import { ScenarioBriefing } from './components/ScenarioBriefing'
 import { ScenarioProgress } from './components/ScenarioProgress'
+import { WaitingForPresenterModal } from './components/WaitingForPresenterModal'
 import type { Choice, GameState, Scenario } from '../../types'
 import { OPERATIONAL_STATUS } from '../../shared/constants/domain'
 import { pageMotion, pageTransition } from '../../animations/motionTokens'
@@ -58,6 +59,7 @@ export function SimulationScreen({
         </aside>
       </div>
       <EventConsole events={state.eventLog} />
+      {waitingForPresenter && <WaitingForPresenterModal />}
     </motion.main>
   )
 }

@@ -1,5 +1,6 @@
 import { ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { PrimaryButton } from '../../shared/components/ui/PrimaryButton'
 
 interface WelcomeActionsProps {
   presenter: boolean
@@ -14,9 +15,9 @@ export function WelcomeActions({ presenter, onStart, onTogglePresenter, onJoin, 
 
   return (
     <div className="welcome-actions">
-      <button type="button" className="primary-btn" onClick={onStart}>
+      <PrimaryButton onClick={onStart}>
         {t('common.start')} <ChevronRight size={18} />
-      </button>
+      </PrimaryButton>
       <button type="button" className="secondary-btn" onClick={onJoin}>
         {t('multiplayer.join')}
       </button>

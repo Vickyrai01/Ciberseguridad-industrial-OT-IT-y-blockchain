@@ -56,11 +56,6 @@ export function ScenarioBriefing({
         ))}
       </div>
       {selectedChoice && <ChoiceFeedback choice={selectedChoice} />}
-      {waitingForPresenter && (
-        <p className="multiplayer-waiting" role="status">
-          {t('multiplayer.waitingForPresenter')}
-        </p>
-      )}
       <button
         type="button"
         className="continue-btn ot-focus-ring"

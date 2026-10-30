@@ -8,6 +8,7 @@
   --motion-loop-pump: 1.4s;
   --motion-loop-sensor: 2.4s;
   --motion-loop-critical: 1.4s;
+  --motion-loop-presenter-sync: 1.8s;
   --motion-ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
   --motion-ease-emphasis: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -50,6 +51,15 @@
 @keyframes ot-critical-pulse {
   50% {
     box-shadow: inset 0 0 60px #f36c6130;
+  }
+}
+
+@keyframes ot-presenter-sync-scan {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(240%);
   }
 }
 
