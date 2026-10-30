@@ -25,7 +25,7 @@ All simulator values are educational. They do not represent real industrial meas
 ## Structure
 
 ```text
-src/
+frontend/
   features/
     plant/
       components/              industrial digital twin and SVG parts
@@ -59,9 +59,9 @@ If an auxiliary component has its own responsibility, it must live in its own fi
 
 ### Feature-oriented organization
 
-Code specific to a feature must remain inside `src/features/<feature>`.
+Code specific to a feature must remain inside `frontend/features/<feature>`.
 
-Use `src/shared` only for code genuinely reused by two or more features. Do not move code to `shared` merely to shorten imports.
+Use `frontend/shared` only for code genuinely reused by two or more features. Do not move code to `shared` merely to shorten imports.
 
 ### Separate content from rules
 
@@ -90,7 +90,7 @@ The history must store stable identifiers (`scenarioId` and `choiceId`) and must
 ## Constants and types
 
 - Do not compare states, zones, outcomes, or event types with string literals.
-- Use the constants from `src/shared/constants/domain.ts`.
+- Use the constants from `frontend/shared/constants/domain.ts`.
 - When adding a domain value, add its derived type as well.
 - Avoid `string` when a union or specific type exists.
 - Do not use `any`, `@ts-ignore`, or unnecessary casts.
@@ -107,7 +107,7 @@ if (state.operationalStatus === OPERATIONAL_STATUS.CRITICAL) {
 ## Translations
 
 - Every user-facing string must use i18next.
-- Every new key must be added to both `src/i18n/locales/es.ts` and `src/i18n/locales/en.ts`.
+- Every new key must be added to both `frontend/i18n/locales/es.ts` and `frontend/i18n/locales/en.ts`.
 - Translation keys are typed; the build must detect incomplete structures.
 - Do not hardcode visible text in components, buttons, labels, tooltips, error messages, or logs.
 - Technical values that belong to the domain model may remain data, but their presentation must be translated when appropriate.
@@ -119,7 +119,7 @@ if (state.operationalStatus === OPERATIONAL_STATUS.CRITICAL) {
 - Do not duplicate the same rule between Tailwind and global CSS.
 - Do not change the visual identity unless the task explicitly requests it.
 - Check desktop, tablet, and mobile behavior when changing layout.
-- Keep animation tokens in `src/animations/motionTokens.ts`.
+- Keep animation tokens in `frontend/animations/motionTokens.ts`.
 - Follow `docs/ANIMATIONS.md` for any new or modified animation.
 
 ## Accessibility
