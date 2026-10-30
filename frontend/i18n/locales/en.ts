@@ -81,6 +81,9 @@ const en = {
     start: 'START MATCH',
     enterGame: 'ENTER MATCH',
     podiumReady: 'The final podium is ready to project.',
+    leaderboard: 'LIVE LEADERBOARD',
+    live: 'LIVE',
+    noScores: 'No answers have been recorded yet.',
     status: { WAITING: 'WAITING', IN_PROGRESS: 'PLAYING', FINISHED: 'FINISHED', DISCONNECTED: 'DISCONNECTED' },
     errors: {
       MULTIPLAYER_NOT_CONFIGURED: 'Supabase is not configured.',

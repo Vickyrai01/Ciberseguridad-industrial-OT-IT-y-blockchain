@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { pageMotion, pageTransition } from '../../../animations/motionTokens'
 import type { ParticipantSession, RoomSnapshot } from '../types'
 import { MULTIPLAYER_CONFIG, MULTIPLAYER_MODE, ROOM_STATUS, type MultiplayerViewMode } from '../constants'
+import { MultiplayerLeaderboard } from './MultiplayerLeaderboard'
 
 interface MultiplayerScreenProps {
   mode: MultiplayerViewMode
@@ -114,6 +115,10 @@ export function MultiplayerScreen(props: MultiplayerScreenProps) {
           </div>
         ))}
       </div>
+      <MultiplayerLeaderboard
+        entries={props.room?.leaderboard ?? []}
+        currentParticipantId={props.session?.participantId}
+      />
       <div className="multiplayer-actions">
         {props.session?.presenterToken && props.mode === MULTIPLAYER_MODE.LOBBY && (
           <button

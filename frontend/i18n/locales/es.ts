@@ -79,6 +79,9 @@ const es = {
     start: 'INICIAR PARTIDA',
     enterGame: 'ENTRAR A LA PARTIDA',
     podiumReady: 'El podio final está listo para proyectar.',
+    leaderboard: 'RANKING EN VIVO',
+    live: 'EN VIVO',
+    noScores: 'Todavía no hay respuestas registradas.',
     status: { WAITING: 'ESPERANDO', IN_PROGRESS: 'JUGANDO', FINISHED: 'FINALIZÓ', DISCONNECTED: 'DESCONECTADO' },
     errors: {
       MULTIPLAYER_NOT_CONFIGURED: 'Supabase no está configurado.',

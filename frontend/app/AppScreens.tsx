@@ -1,5 +1,6 @@
 import { AnimatePresence } from 'framer-motion'
 import { MultiplayerScreen } from '../features/multiplayer/components/MultiplayerScreen'
+import { MultiplayerLeaderboard } from '../features/multiplayer/components/MultiplayerLeaderboard'
 import { ResultsScreen } from '../features/results/ResultsScreen'
 import { SimulationScreen } from '../features/simulation/SimulationScreen'
 import { WelcomeScreen } from '../features/welcome/WelcomeScreen'
@@ -55,6 +56,13 @@ export function AppScreens({ controller }: AppScreensProps) {
             onReset={multiplayer.mode === MULTIPLAYER_MODE.PLAYING ? () => undefined : simulation.startSimulation}
           />
         )}
+      {multiplayer.mode === MULTIPLAYER_MODE.PLAYING && simulation.screen === SCREEN.RESULTS && multiplayer.room && (
+        <MultiplayerLeaderboard
+          entries={multiplayer.room.leaderboard}
+          currentParticipantId={multiplayer.session?.participantId}
+          floating
+        />
+      )}
       {simulation.screen === SCREEN.RESULTS && (
         <ResultsScreen
           state={simulation.state}

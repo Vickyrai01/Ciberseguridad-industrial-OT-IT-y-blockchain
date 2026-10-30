@@ -986,7 +986,69 @@ button:focus-visible {
 }
 .multiplayer-roster {
   margin: 2rem 0;
+  max-height: 16rem;
+  overflow-y: auto;
   border-top: 1px solid rgba(102, 211, 201, 0.25);
+  scrollbar-gutter: stable;
+}
+.multiplayer-leaderboard {
+  margin-top: 1.25rem;
+  border: 1px solid rgba(102, 211, 201, 0.25);
+  background: rgba(3, 18, 24, 0.72);
+  padding: 0.8rem;
+}
+.multiplayer-leaderboard.floating {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 5;
+  width: min(22rem, calc(100vw - 3rem));
+}
+.leaderboard-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: #67d9e1;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.leaderboard-list {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 0.65rem;
+}
+.leaderboard-row {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) 3rem 4rem;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.5rem;
+  color: #c5d6d8;
+  font-size: 0.82rem;
+}
+.leaderboard-row.current {
+  background: rgba(102, 211, 201, 0.12);
+  color: #fff;
+}
+.leaderboard-position,
+.leaderboard-progress {
+  color: #71959b;
+  font-size: 0.72rem;
+}
+.leaderboard-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.leaderboard-score {
+  color: #f7b955;
+  text-align: right;
+}
+.leaderboard-empty {
+  margin: 0.7rem 0 0;
+  color: #71959b;
+  font-size: 0.8rem;
 }
 .roster-title,
 .roster-row {
@@ -1029,5 +1091,10 @@ button:focus-visible {
   }
   .multiplayer-qr {
     margin-top: 1rem;
+  }
+  .multiplayer-leaderboard.floating {
+    right: 1rem;
+    bottom: 1rem;
+    width: calc(100vw - 2rem);
   }
 }

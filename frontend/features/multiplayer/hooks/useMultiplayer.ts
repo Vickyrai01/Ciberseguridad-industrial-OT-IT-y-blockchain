@@ -121,11 +121,13 @@ export function useMultiplayer() {
     [run, state.session],
   )
   const submitAnswer = useCallback(
-    (scenarioId: number, choiceId: string): Promise<AnswerResult> =>
-      state.session
-        ? multiplayerService.submitAnswer(state.session.participantToken, scenarioId, choiceId)
-        : Promise.reject(new Error('PARTICIPANT_SESSION_MISSING')),
-    [state.session],
+    async (scenarioId: number, choiceId: string): Promise<AnswerResult> => {
+      if (!state.session) throw new Error('PARTICIPANT_SESSION_MISSING')
+      const result = await multiplayerService.submitAnswer(state.session.participantToken, scenarioId, choiceId)
+      void refresh()
+      return result
+    },
+    [refresh, state.session],
   )
   const openQuestion = useCallback(
     (scenarioId: number) => {
