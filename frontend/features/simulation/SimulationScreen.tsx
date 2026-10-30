@@ -20,6 +20,7 @@ interface SimulationScreenProps {
   onToggleSound: () => void
   onFullscreen: () => void
   onReset: () => void
+  waitingForPresenter: boolean
 }
 
 export function SimulationScreen({
@@ -33,6 +34,7 @@ export function SimulationScreen({
   onToggleSound,
   onFullscreen,
   onReset,
+  waitingForPresenter,
 }: SimulationScreenProps) {
   return (
     <motion.main
@@ -50,6 +52,7 @@ export function SimulationScreen({
             selected={selected}
             onSelect={onSelect}
             onContinue={onContinue}
+            waitingForPresenter={waitingForPresenter}
           />
           <ConceptChip conceptKey={scenario.conceptKey} presenter={presenter} />
         </aside>

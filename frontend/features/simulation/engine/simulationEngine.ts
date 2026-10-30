@@ -12,8 +12,8 @@ import {
 } from '../../../shared/constants/domain'
 const createEvent = <T extends EventLogEntry>(event: T): T => event
 
-export const initialState = (scenarioOrder: number[] = []): GameState => ({
-  currentScenario: 0,
+export const initialState = (scenarioOrder: number[] = [], currentScenario = 0): GameState => ({
+  currentScenario,
   security: SIMULATION_CONFIG.initialSecurity,
   production: SIMULATION_CONFIG.initialProduction,
   compromisedSystems: 0,

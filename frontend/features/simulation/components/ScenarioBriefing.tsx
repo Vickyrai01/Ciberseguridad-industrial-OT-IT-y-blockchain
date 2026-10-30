@@ -12,9 +12,17 @@ interface ScenarioBriefingProps {
   selected: Choice['id'] | null
   onSelect: (choice: Choice) => void
   onContinue: () => void
+  waitingForPresenter: boolean
 }
 
-export function ScenarioBriefing({ state, scenario, selected, onSelect, onContinue }: ScenarioBriefingProps) {
+export function ScenarioBriefing({
+  state,
+  scenario,
+  selected,
+  onSelect,
+  onContinue,
+  waitingForPresenter,
+}: ScenarioBriefingProps) {
   const { t } = useTranslation()
   const selectedChoice = scenario.choices.find((choice) => choice.id === selected)
   const isLastScenario = state.currentScenario === SIMULATION_CONFIG.lastScenarioIndex
@@ -39,6 +47,7 @@ export function ScenarioBriefing({ state, scenario, selected, onSelect, onContin
             key={choice.id}
             className={`choice ot-focus-ring ${selected === choice.id ? 'chosen' : ''}`}
             onClick={() => onSelect(choice)}
+            disabled={waitingForPresenter}
             aria-pressed={selected === choice.id}>
             <span className="choice-key">{String.fromCharCode(65 + index)}</span>
             <span>{t(choice.labelKey)}</span>
@@ -47,7 +56,16 @@ export function ScenarioBriefing({ state, scenario, selected, onSelect, onContin
         ))}
       </div>
       {selectedChoice && <ChoiceFeedback choice={selectedChoice} />}
-      <button type="button" className="continue-btn ot-focus-ring" disabled={!selected} onClick={onContinue}>
+      {waitingForPresenter && (
+        <p className="multiplayer-waiting" role="status">
+          {t('multiplayer.waitingForPresenter')}
+        </p>
+      )}
+      <button
+        type="button"
+        className="continue-btn ot-focus-ring"
+        disabled={!selected || waitingForPresenter}
+        onClick={onContinue}>
         {isLastScenario ? t('common.seeResult') : t('common.applyDecision')} <ChevronRight size={17} />
       </button>
     </motion.div>

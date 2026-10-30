@@ -5,6 +5,28 @@ interface ApiErrorPayload {
   error?: { code?: string; message?: string }
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null
+}
+
+function normalizeRoomSnapshot(value: unknown): unknown {
+  if (!isRecord(value) || typeof value.code !== 'string') return value
+  return {
+    ...value,
+    quizVersion: value.quizVersion ?? value.quiz_version,
+    maxPlayers: value.maxPlayers ?? value.max_players,
+    scenarioOrder: value.scenarioOrder ?? value.scenario_order,
+    currentQuestionIndex: Number(value.currentQuestionIndex ?? value.current_question_index ?? 0),
+  }
+}
+
+function normalizeResponse<T>(value: T): T {
+  if (!isRecord(value)) return value
+  if ('room' in value) return { ...value, room: normalizeRoomSnapshot(value.room) } as T
+  if ('code' in value) return normalizeRoomSnapshot(value) as T
+  return value
+}
+
 export function createSupabaseHttpClient() {
   const config = readSupabasePublicConfig()
 
@@ -19,7 +41,7 @@ export function createSupabaseHttpClient() {
       })
       const payload = (await response.json()) as T & ApiErrorPayload
       if (!response.ok) throw new Error(payload.error?.code ?? 'MULTIPLAYER_REQUEST_FAILED')
-      return payload
+      return normalizeResponse(payload)
     },
   }
 }

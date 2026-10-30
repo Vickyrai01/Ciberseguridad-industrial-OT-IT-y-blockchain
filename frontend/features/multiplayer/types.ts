@@ -20,6 +20,7 @@ export interface RoomSnapshot {
   quizVersion: string
   maxPlayers: number
   scenarioOrder: number[]
+  currentQuestionIndex: number
   participants: Array<{
     id: string
     nickname: string

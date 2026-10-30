@@ -17,6 +17,7 @@ export interface MultiplayerService {
   cancelRoom(roomId: string, presenterToken: string): Promise<RoomSnapshot>
   openQuestion(participantToken: string, scenarioId: number): Promise<{ openedAt: string }>
   submitAnswer(participantToken: string, scenarioId: number, choiceId: string): Promise<AnswerResult>
+  advanceQuestion(roomId: string, presenterToken: string): Promise<RoomSnapshot>
   finishRoom(roomId: string, presenterToken: string): Promise<RoomSnapshot>
   getLeaderboard(
     roomId: string,
@@ -46,6 +47,8 @@ export const multiplayerService: MultiplayerService = {
     httpClient.request<{ openedAt: string }>(MULTIPLAYER_OPERATION.OPEN_QUESTION, { participantToken, scenarioId }),
   submitAnswer: (participantToken, scenarioId, choiceId) =>
     httpClient.request<AnswerResult>(MULTIPLAYER_OPERATION.SUBMIT_ANSWER, { participantToken, scenarioId, choiceId }),
+  advanceQuestion: (roomId, presenterToken) =>
+    httpClient.request<RoomSnapshot>(MULTIPLAYER_OPERATION.ADVANCE_QUESTION, { roomId, presenterToken }),
   finishRoom: (roomId, presenterToken) =>
     httpClient.request<RoomSnapshot>(MULTIPLAYER_OPERATION.FINISH_ROOM, { roomId, presenterToken }),
   getLeaderboard: (roomId, participantToken, presenterToken) =>

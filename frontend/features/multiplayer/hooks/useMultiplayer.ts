@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useReducer } from 'react'
 import { multiplayerService } from '../services/multiplayerService'
 import type { AnswerResult, ParticipantSession, RoomSnapshot } from '../types'
-import { MULTIPLAYER_MODE, type MultiplayerMode } from '../constants'
+import { MULTIPLAYER_MODE, ROOM_STATUS, type MultiplayerMode } from '../constants'
 
 interface State {
   mode: MultiplayerMode
@@ -27,7 +27,11 @@ function reducer(state: State, action: Action): State {
     case 'LOBBY':
       return { ...state, mode: MULTIPLAYER_MODE.LOBBY, session: action.session, room: action.session.room, error: null }
     case 'ROOM':
-      return { ...state, room: action.room }
+      return {
+        ...state,
+        room: action.room,
+        mode: action.room.status === ROOM_STATUS.FINISHED ? MULTIPLAYER_MODE.FINISHED : state.mode,
+      }
     case 'PLAYING':
       return { ...state, mode: MULTIPLAYER_MODE.PLAYING, room: action.room }
     case 'FINISHED':
@@ -149,6 +153,15 @@ export function useMultiplayer() {
       ),
     [run, state.session],
   )
+  const advanceQuestion = useCallback(
+    () =>
+      state.session?.presenterToken &&
+      void run(
+        () => multiplayerService.advanceQuestion(state.session!.room.id, state.session!.presenterToken!),
+        (room) => dispatch({ type: 'ROOM', room }),
+      ),
+    [run, state.session],
+  )
   const enter = useCallback(() => dispatch({ type: 'ENTRY' }), [])
   const reset = useCallback(() => dispatch({ type: 'RESET' }), [])
   return {
@@ -163,6 +176,7 @@ export function useMultiplayer() {
     openQuestion,
     submitAnswer,
     finishRoom,
+    advanceQuestion,
     enter,
     reset,
     refresh,

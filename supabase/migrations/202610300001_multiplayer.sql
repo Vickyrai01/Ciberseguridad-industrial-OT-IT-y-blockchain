@@ -11,7 +11,7 @@ create table public.game_rooms (
   started_at timestamptz, finished_at timestamptz, presenter_token_hash text not null,
   settings jsonb not null default '{"basePoints":800,"speedBonus":200,"speedWindowSeconds":30}'::jsonb,
   quiz_version text not null default '2026-10-01', max_players integer not null default 100 check (max_players between 1 and 500),
-  scenario_order integer[] not null check (cardinality(scenario_order) = 5)
+  scenario_order integer[] not null check (cardinality(scenario_order) = 5), current_question_index integer not null default 0 check (current_question_index between 0 and 4)
 );
 create table public.game_participants (
   id uuid primary key default gen_random_uuid(), room_id uuid not null references public.game_rooms(id) on delete cascade,
@@ -52,11 +52,15 @@ begin
   select * into r from game_rooms where id = p.room_id for update;
   base_points := (r.settings->>'basePoints')::integer; speed_bonus := (r.settings->>'speedBonus')::integer; speed_window_ms := (r.settings->>'speedWindowSeconds')::integer * 1000; total_questions := cardinality(r.scenario_order);
   if r.status <> 'IN_PROGRESS'::game_room_status then raise exception using errcode = 'P0001', message = 'ROOM_NOT_ACTIVE'; end if;
-  if not (p_scenario_id = any(r.scenario_order)) then raise exception using errcode = 'P0001', message = 'INVALID_SCENARIO'; end if;
+  if p_scenario_id <> r.scenario_order[r.current_question_index + 1] then raise exception using errcode = 'P0001', message = 'INVALID_SCENARIO'; end if;
   if exists (select 1 from game_answers where participant_id = p.id and scenario_id = p_scenario_id) then raise exception using errcode = 'P0001', message = 'ANSWER_ALREADY_SUBMITTED'; end if;
   select * into q from game_question_progress where participant_id = p.id and scenario_id = p_scenario_id for update;
   if not found or q.status <> 'OPEN'::game_question_progress_status then raise exception using errcode = 'P0001', message = 'QUESTION_NOT_OPEN'; end if;
-  correct := (p_scenario_id, p_choice) in ((1,'b'),(2,'b'),(3,'b'),(4,'b'),(5,'c'));
+  correct := (p_scenario_id = 1 and p_choice = 'b'::game_choice_id)
+    or (p_scenario_id = 2 and p_choice = 'b'::game_choice_id)
+    or (p_scenario_id = 3 and p_choice = 'b'::game_choice_id)
+    or (p_scenario_id = 4 and p_choice = 'b'::game_choice_id)
+    or (p_scenario_id = 5 and p_choice = 'c'::game_choice_id);
   elapsed := greatest(0, extract(epoch from (clock_timestamp() - q.opened_at))::integer * 1000);
   points := case when correct then base_points + round(speed_bonus * greatest(0, 1 - least(elapsed, speed_window_ms)::numeric / speed_window_ms))::integer else 0 end;
   insert into game_answers(room_id, participant_id, scenario_id, selected_option, is_correct, elapsed_ms, awarded_points) values (p.room_id,p.id,p_scenario_id,p_choice,correct,elapsed,points);

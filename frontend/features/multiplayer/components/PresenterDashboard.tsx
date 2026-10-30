@@ -1,17 +1,23 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { initialState } from '../../simulation/engine/simulationEngine'
+import { PlantPanel } from '../../simulation/components/PlantPanel'
 import { scenarios } from '../../simulation/data/scenarios'
 import type { RoomSnapshot } from '../types'
 
 interface PresenterDashboardProps {
   room: RoomSnapshot
+  error: string | null
+  loading: boolean
+  onAdvance: () => void
   onFinish: () => void
 }
 
-export function PresenterDashboard({ room, onFinish }: PresenterDashboardProps) {
+export function PresenterDashboard({ room, error, loading, onAdvance, onFinish }: PresenterDashboardProps) {
   const { t } = useTranslation()
-  const [questionIndex, setQuestionIndex] = useState(0)
+  const questionIndex = Number.isInteger(room.currentQuestionIndex) ? room.currentQuestionIndex : 0
   const totalQuestions = room.scenarioOrder.length
+  const plantState = useMemo(() => initialState(room.scenarioOrder), [room.scenarioOrder])
   const scenario = useMemo(
     () => scenarios.find(({ id }) => id === room.scenarioOrder[questionIndex]) ?? scenarios[0],
     [questionIndex, room.scenarioOrder],
@@ -20,6 +26,7 @@ export function PresenterDashboard({ room, onFinish }: PresenterDashboardProps) 
     ({ completedQuestions }) => completedQuestions > questionIndex,
   ).length
   const isLastQuestion = questionIndex === totalQuestions - 1
+  const allParticipantsAnswered = room.participants.length > 0 && answeredParticipants === room.participants.length
 
   return (
     <main className="presenter-dashboard ot-layout-screen">
@@ -34,53 +41,59 @@ export function PresenterDashboard({ room, onFinish }: PresenterDashboardProps) 
         </div>
       </header>
 
-      <section className="presenter-question" aria-live="polite">
-        <span className="eyebrow">{t(scenario.kickerKey)}</span>
-        <h2>{t(scenario.titleKey)}</h2>
-        <p className="presenter-narrative">{t(scenario.narrativeKey)}</p>
-        <p className="presenter-question-copy">{t(scenario.questionKey)}</p>
-        <div className="presenter-choices">
-          {scenario.choices.map((choice) => (
-            <div className="presenter-choice" key={choice.id}>
-              <span>{choice.id.toUpperCase()}</span>
-              <p>{t(choice.labelKey)}</p>
+      <div className="presenter-main-grid">
+        <PlantPanel state={plantState} />
+        <div className="presenter-side-panel">
+          <section className="presenter-question" aria-live="polite">
+            <span className="eyebrow">{t(scenario.kickerKey)}</span>
+            <h2>{t(scenario.titleKey)}</h2>
+            <p className="presenter-narrative">{t(scenario.narrativeKey)}</p>
+            <p className="presenter-question-copy">{t(scenario.questionKey)}</p>
+            <div className="presenter-choices">
+              {scenario.choices.map((choice) => (
+                <div className="presenter-choice" key={choice.id}>
+                  <span>{choice.id.toUpperCase()}</span>
+                  <p>{t(choice.labelKey)}</p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-      </section>
+          </section>
 
-      <aside className="presenter-progress">
-        <div>
-          <span>{t('multiplayer.connectedParticipants')}</span>
-          <strong>{room.participants.filter(({ connected }) => connected).length}</strong>
+          <aside className="presenter-progress">
+            <div>
+              <span>{t('multiplayer.connectedParticipants')}</span>
+              <strong>{room.participants.filter(({ connected }) => connected).length}</strong>
+            </div>
+            <div>
+              <span>{t('multiplayer.answersReceived')}</span>
+              <strong>
+                {answeredParticipants}/{room.participants.length}
+              </strong>
+            </div>
+          </aside>
         </div>
-        <div>
-          <span>{t('multiplayer.answersReceived')}</span>
-          <strong>
-            {answeredParticipants}/{room.participants.length}
-          </strong>
-        </div>
-      </aside>
+      </div>
 
       <footer className="presenter-dashboard-actions">
         <button
           type="button"
-          className="text-btn"
-          disabled={questionIndex === 0}
-          onClick={() => setQuestionIndex((current) => Math.max(0, current - 1))}>
-          {t('multiplayer.previousQuestion')}
-        </button>
-        <button
-          type="button"
           className="primary-btn"
-          disabled={isLastQuestion}
-          onClick={() => setQuestionIndex((current) => Math.min(totalQuestions - 1, current + 1))}>
+          disabled={loading || isLastQuestion || !allParticipantsAnswered}
+          onClick={onAdvance}>
           {t('multiplayer.nextQuestion')}
         </button>
-        <button type="button" className="text-btn" onClick={onFinish}>
+        <button type="button" className="text-btn" disabled={loading} onClick={onFinish}>
           {t('multiplayer.finish')}
         </button>
       </footer>
+      {!isLastQuestion && !allParticipantsAnswered && (
+        <p className="presenter-waiting" role="status">
+          {t('multiplayer.waitingForAnswers', { answered: answeredParticipants, total: room.participants.length })}
+        </p>
+      )}
+      {error && (
+        <p className="multiplayer-error">{t(`multiplayer.errors.${error}` as never, { defaultValue: error })}</p>
+      )}
     </main>
   )
 }

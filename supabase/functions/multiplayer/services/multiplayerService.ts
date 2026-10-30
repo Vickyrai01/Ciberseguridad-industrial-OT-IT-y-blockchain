@@ -1,5 +1,6 @@
 import {
   assertRoomCanAcceptAnswers,
+  assertRoomCanAdvance,
   assertRoomCanAcceptParticipants,
   createScenarioOrder,
   ROOM_STATUS,
@@ -11,6 +12,7 @@ import { AppError } from '../shared/errors.ts'
 import { choiceId, parseOperation, requiredString, scenarioId, validateNickname } from '../validation/requests.ts'
 import {
   countAnsweredQuestions,
+  countAnsweredForQuestion,
   countParticipants,
   findParticipantByTokenHash,
   findRoomByCode,
@@ -20,6 +22,7 @@ import {
   openQuestion,
   submitAnswer,
   updateRoomStatus,
+  advanceRoomQuestion,
 } from '../repositories/roomRepository.ts'
 import { getRoomView } from './roomViewService.ts'
 import { ERROR_CODE, HTTP_STATUS, MULTIPLAYER_CONFIG, OPERATION, type Operation } from '../shared/constants.ts'
@@ -37,6 +40,7 @@ const operationHandlers: Record<Operation, OperationHandler> = {
   [OPERATION.CANCEL_ROOM]: (body) => changeRoomStatus(body, OPERATION.CANCEL_ROOM),
   [OPERATION.OPEN_QUESTION]: openQuestionForParticipant,
   [OPERATION.SUBMIT_ANSWER]: submitAnswerForParticipant,
+  [OPERATION.ADVANCE_QUESTION]: advanceQuestion,
 }
 
 export function executeOperation(body: Record<string, unknown>): Promise<unknown> {
@@ -125,9 +129,25 @@ async function openQuestionForParticipant(body: Record<string, unknown>) {
   const room = await findRoomById(participant.room_id, true)
   const completed = await countAnsweredQuestions(participant.id)
   const id = scenarioId(body)
-  assertRoomCanAcceptAnswers(room.status, room.scenario_order, completed, id)
+  assertRoomCanAcceptAnswers(room.status, room.scenario_order, completed, id, room.current_question_index)
   await openQuestion({ participantId: participant.id, scenarioId: id, questionIndex: completed })
   return { openedAt: new Date().toISOString() }
+}
+
+async function advanceQuestion(body: Record<string, unknown>) {
+  const roomId = requiredString(body, 'roomId')
+  const presenterToken = requiredString(body, 'presenterToken')
+  const room = await findRoomById(roomId, true)
+  if ((await hashToken(presenterToken)) !== room.presenter_token_hash)
+    throw new AppError('PRESENTER_NOT_AUTHORIZED', 403)
+  assertRoomCanAdvance(room.status, room.current_question_index)
+  const scenarioId = room.scenario_order[room.current_question_index]
+  const participantCount = await countParticipants(roomId)
+  const answeredCount = await countAnsweredForQuestion(roomId, scenarioId)
+  if (answeredCount < participantCount) throw new AppError('QUESTION_NOT_COMPLETE', 409)
+  await advanceRoomQuestion(roomId, room.current_question_index)
+  await broadcastRoomUpdated(roomId)
+  return getRoomView(roomId)
 }
 
 async function submitAnswerForParticipant(body: Record<string, unknown>) {

@@ -41,6 +41,7 @@ export const MULTIPLAYER_OPERATION = {
   CANCEL_ROOM: 'cancelRoom',
   OPEN_QUESTION: 'openQuestion',
   SUBMIT_ANSWER: 'submitAnswer',
+  ADVANCE_QUESTION: 'advanceQuestion',
   FINISH_ROOM: 'finishRoom',
   GET_LEADERBOARD: 'getLeaderboard',
 } as const

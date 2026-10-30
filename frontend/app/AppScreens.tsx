@@ -56,10 +56,17 @@ export function AppScreens({ controller }: AppScreensProps) {
             onToggleSound={simulation.toggleSound}
             onFullscreen={simulation.toggleFullscreen}
             onReset={multiplayer.mode === MULTIPLAYER_MODE.PLAYING ? () => undefined : simulation.startSimulation}
+            waitingForPresenter={simulation.waitingForPresenter}
           />
         )}
       {multiplayer.mode === MULTIPLAYER_MODE.PLAYING && multiplayer.session?.presenterToken && multiplayer.room && (
-        <PresenterDashboard room={multiplayer.room} onFinish={multiplayer.finishRoom} />
+        <PresenterDashboard
+          room={multiplayer.room}
+          error={multiplayer.error}
+          loading={multiplayer.loading}
+          onAdvance={multiplayer.advanceQuestion}
+          onFinish={multiplayer.finishRoom}
+        />
       )}
       {multiplayer.mode === MULTIPLAYER_MODE.PLAYING && simulation.screen === SCREEN.RESULTS && multiplayer.room && (
         <MultiplayerLeaderboard

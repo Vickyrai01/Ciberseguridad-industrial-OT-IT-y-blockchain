@@ -5,7 +5,7 @@ export { ROOM_STATUS, type RoomStatus }
 export const TOTAL_QUESTIONS = MULTIPLAYER_CONFIG.totalQuestions
 
 export function createScenarioOrder(): number[] {
-  return [...SCENARIO_IDS].sort(() => Math.random() - 0.5)
+  return [...SCENARIO_IDS]
 }
 
 export function statusForOperation(operation: string): RoomStatus {
@@ -24,7 +24,14 @@ export function assertRoomCanAcceptAnswers(
   scenarioOrder: number[],
   completed: number,
   scenarioId: number,
+  currentQuestionIndex = completed,
 ): void {
   if (status !== ROOM_STATUS.IN_PROGRESS) throw new AppError('ROOM_NOT_ACTIVE')
-  if (scenarioOrder[completed] !== scenarioId) throw new AppError('INVALID_SCENARIO')
+  if (scenarioOrder[currentQuestionIndex] !== scenarioId || completed !== currentQuestionIndex)
+    throw new AppError('INVALID_SCENARIO')
+}
+
+export function assertRoomCanAdvance(status: string, currentQuestionIndex: number): void {
+  if (status !== ROOM_STATUS.IN_PROGRESS) throw new AppError('ROOM_NOT_ACTIVE')
+  if (currentQuestionIndex >= TOTAL_QUESTIONS - 1) throw new AppError('NO_MORE_QUESTIONS')
 }

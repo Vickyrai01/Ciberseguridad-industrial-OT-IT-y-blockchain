@@ -18,7 +18,7 @@ export async function findRoomById(roomId: string, full = false) {
     ? supabase.from('game_rooms').select('*').eq('id', roomId).single()
     : supabase
         .from('game_rooms')
-        .select('id,code,status,quiz_version,max_players,scenario_order')
+        .select('id,code,status,quiz_version,max_players,scenario_order,current_question_index')
         .eq('id', roomId)
         .single()
   const { data, error } = await query
@@ -43,6 +43,24 @@ export async function updateRoomStatus(
     .update({ status, started_at: startedAt, finished_at: finishedAt })
     .eq('id', roomId)
   if (error) throw error
+}
+
+export async function advanceRoomQuestion(roomId: string, currentQuestionIndex: number) {
+  const { error } = await supabase
+    .from('game_rooms')
+    .update({ current_question_index: currentQuestionIndex + 1 })
+    .eq('id', roomId)
+  if (error) throw error
+}
+
+export async function countAnsweredForQuestion(roomId: string, scenarioId: number): Promise<number> {
+  const { count, error } = await supabase
+    .from('game_answers')
+    .select('id', { count: 'exact', head: true })
+    .eq('room_id', roomId)
+    .eq('scenario_id', scenarioId)
+  if (error) throw error
+  return count ?? 0
 }
 
 export async function countParticipants(roomId: string): Promise<number> {
@@ -104,6 +122,19 @@ export async function listAnswerCounts(roomId: string) {
   const counts = new Map<string, number>()
   for (const answer of data ?? []) counts.set(answer.participant_id, (counts.get(answer.participant_id) ?? 0) + 1)
   return counts
+}
+
+export async function listAnswerScores(roomId: string) {
+  const { data, error } = await supabase
+    .from('game_answers')
+    .select('participant_id,awarded_points')
+    .eq('room_id', roomId)
+  if (error) throw error
+  const scores = new Map<string, number>()
+  for (const answer of data ?? []) {
+    scores.set(answer.participant_id, (scores.get(answer.participant_id) ?? 0) + answer.awarded_points)
+  }
+  return scores
 }
 
 export async function countAnsweredQuestions(participantId: string): Promise<number> {
