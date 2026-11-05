@@ -1,7 +1,13 @@
 import { supabase } from '../infrastructure/supabase.ts'
 import { AppError } from '../shared/errors.ts'
 import type { RoomStatus } from '../domain/rooms.ts'
-import { HTTP_STATUS, PARTICIPANT_STATUS, QUESTION_STATUS, type ParticipantStatus } from '../shared/constants.ts'
+import {
+  HTTP_STATUS,
+  PARTICIPANT_STATUS,
+  QUESTION_STATUS,
+  ROOM_STATUS,
+  type ParticipantStatus,
+} from '../shared/constants.ts'
 
 export async function insertRoom(input: { code: string; presenterTokenHash: string; scenarioOrder: number[] }) {
   const { data, error } = await supabase
@@ -22,35 +28,45 @@ export async function findRoomById(roomId: string, full = false) {
         .eq('id', roomId)
         .single()
   const { data, error } = await query
-  if (error || !data) throw new AppError('ROOM_NOT_FOUND', 404)
+  if (error || !data) throw new AppError('ROOM_NOT_FOUND', HTTP_STATUS.NOT_FOUND)
   return data
 }
 
 export async function findRoomByCode(code: string) {
   const { data, error } = await supabase.from('game_rooms').select('*').eq('code', code).single()
-  if (error || !data) throw new AppError('ROOM_NOT_FOUND', 404)
+  if (error || !data) throw new AppError('ROOM_NOT_FOUND', HTTP_STATUS.NOT_FOUND)
   return data
 }
 
 export async function updateRoomStatus(
   roomId: string,
+  expectedStatus: RoomStatus,
   status: RoomStatus,
   startedAt: string | null,
   finishedAt: string | null,
 ) {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('game_rooms')
     .update({ status, started_at: startedAt, finished_at: finishedAt })
     .eq('id', roomId)
+    .eq('status', expectedStatus)
+    .select('id')
+    .maybeSingle()
   if (error) throw error
+  if (!data) throw new AppError('ROOM_STATE_CHANGED', HTTP_STATUS.CONFLICT)
 }
 
 export async function advanceRoomQuestion(roomId: string, currentQuestionIndex: number) {
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('game_rooms')
     .update({ current_question_index: currentQuestionIndex + 1 })
     .eq('id', roomId)
+    .eq('status', ROOM_STATUS.IN_PROGRESS)
+    .eq('current_question_index', currentQuestionIndex)
+    .select('id')
+    .maybeSingle()
   if (error) throw error
+  if (!data) throw new AppError('ROOM_STATE_CHANGED', HTTP_STATUS.CONFLICT)
 }
 
 export async function countAnsweredForQuestion(roomId: string, scenarioId: number): Promise<number> {
@@ -192,7 +208,7 @@ export async function submitAnswer(input: {
   })
   if (error) {
     if (error.code === '28000') throw new AppError(error.message, HTTP_STATUS.UNAUTHORIZED)
-    throw new AppError(error.message, 409)
+    throw new AppError(error.message, HTTP_STATUS.CONFLICT)
   }
   return data
 }

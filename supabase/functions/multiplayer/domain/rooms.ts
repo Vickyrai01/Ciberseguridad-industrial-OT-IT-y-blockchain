@@ -1,5 +1,13 @@
 import { AppError } from '../shared/errors.ts'
-import { MULTIPLAYER_CONFIG, OPERATION, ROOM_STATUS, SCENARIO_IDS, type RoomStatus } from '../shared/constants.ts'
+import {
+  HTTP_STATUS,
+  MULTIPLAYER_CONFIG,
+  OPERATION,
+  ROOM_STATUS,
+  SCENARIO_IDS,
+  type Operation,
+  type RoomStatus,
+} from '../shared/constants.ts'
 
 export { ROOM_STATUS, type RoomStatus }
 export const TOTAL_QUESTIONS = MULTIPLAYER_CONFIG.totalQuestions
@@ -8,11 +16,24 @@ export function createScenarioOrder(): number[] {
   return [...SCENARIO_IDS]
 }
 
-export function statusForOperation(operation: string): RoomStatus {
+export function statusForOperation(operation: Operation): RoomStatus {
   if (operation === OPERATION.START_ROOM) return ROOM_STATUS.IN_PROGRESS
   if (operation === OPERATION.FINISH_ROOM) return ROOM_STATUS.FINISHED
   if (operation === OPERATION.CANCEL_ROOM) return ROOM_STATUS.CANCELLED
   throw new AppError('UNKNOWN_OPERATION')
+}
+
+export function assertRoomCanTransition(currentStatus: string, nextStatus: RoomStatus): void {
+  const allowedTransitions: Record<string, RoomStatus[]> = {
+    [ROOM_STATUS.WAITING]: [ROOM_STATUS.IN_PROGRESS, ROOM_STATUS.CANCELLED],
+    [ROOM_STATUS.IN_PROGRESS]: [ROOM_STATUS.FINISHED, ROOM_STATUS.CANCELLED],
+    [ROOM_STATUS.FINISHED]: [],
+    [ROOM_STATUS.CANCELLED]: [],
+  }
+
+  if (!allowedTransitions[currentStatus]?.includes(nextStatus)) {
+    throw new AppError('INVALID_ROOM_TRANSITION', HTTP_STATUS.CONFLICT)
+  }
 }
 
 export function assertRoomCanAcceptParticipants(status: string): void {

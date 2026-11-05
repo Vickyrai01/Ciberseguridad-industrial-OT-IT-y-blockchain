@@ -2,6 +2,7 @@ import {
   assertRoomCanAcceptAnswers,
   assertRoomCanAdvance,
   assertRoomCanAcceptParticipants,
+  assertRoomCanTransition,
   createScenarioOrder,
   ROOM_STATUS,
   statusForOperation,
@@ -155,16 +156,18 @@ async function getLeaderboard(body: Record<string, unknown>) {
   return { leaderboard: (await getRoomView(roomId, currentParticipantId)).leaderboard }
 }
 
-async function changeRoomStatus(body: Record<string, unknown>, operation: string) {
+async function changeRoomStatus(body: Record<string, unknown>, operation: Operation) {
   const roomId = requiredString(body, 'roomId')
   const presenterToken = requiredString(body, 'presenterToken')
   const room = await findRoomById(roomId, true)
   if ((await hashToken(presenterToken)) !== room.presenter_token_hash)
     throw new AppError('PRESENTER_NOT_AUTHORIZED', HTTP_STATUS.FORBIDDEN)
   const status = statusForOperation(operation)
+  assertRoomCanTransition(room.status, status)
   const now = new Date().toISOString()
   await updateRoomStatus(
     roomId,
+    room.status,
     status,
     status === ROOM_STATUS.IN_PROGRESS ? now : room.started_at,
     status === ROOM_STATUS.FINISHED || status === ROOM_STATUS.CANCELLED ? now : null,
@@ -194,7 +197,7 @@ async function advanceQuestion(body: Record<string, unknown>) {
   const scenarioId = room.scenario_order[room.current_question_index]
   const participantCount = await countParticipants(roomId)
   const answeredCount = await countAnsweredForQuestion(roomId, scenarioId)
-  if (answeredCount < participantCount) throw new AppError('QUESTION_NOT_COMPLETE', 409)
+  if (answeredCount < participantCount) throw new AppError('QUESTION_NOT_COMPLETE', HTTP_STATUS.CONFLICT)
   await advanceRoomQuestion(roomId, room.current_question_index)
   await broadcastRoomUpdated(roomId)
   return getRoomView(roomId)
