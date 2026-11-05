@@ -2,6 +2,7 @@ import { CHOICE_ID } from '../../../shared/constants/domain'
 import type { Choice, Scenario } from '../../../types'
 import { scenarioContent } from './scenarioContent'
 import { scenarioRules } from './scenarioRules'
+import { isCorrectChoice } from '../../../../shared/quiz/scenarioAnswerKey'
 
 const choiceIds = [CHOICE_ID.A, CHOICE_ID.B, CHOICE_ID.C] as const
 
@@ -11,5 +12,6 @@ export const scenarios: Scenario[] = scenarioContent.map((content) => ({
     id: choiceId,
     ...content.choices[choiceId],
     ...scenarioRules[content.id][choiceId],
+    recommended: isCorrectChoice(content.id, choiceId),
   })),
 }))

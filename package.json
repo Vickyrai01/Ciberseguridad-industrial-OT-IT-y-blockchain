@@ -13,7 +13,7 @@
   "scripts": {
     "dev": "npm --workspace frontend run dev",
     "build": "npm --workspace frontend run build",
-    "lint": "eslint frontend supabase",
+    "lint": "eslint frontend supabase shared",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "test": "npm --workspace frontend run test",

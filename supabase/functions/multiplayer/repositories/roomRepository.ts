@@ -178,11 +178,17 @@ export async function openQuestion(input: { participantId: string; scenarioId: n
   if (error) throw error
 }
 
-export async function submitAnswer(input: { tokenHash: string; scenarioId: number; choiceId: string }) {
+export async function submitAnswer(input: {
+  tokenHash: string
+  scenarioId: number
+  choiceId: string
+  isCorrect: boolean
+}) {
   const { data, error } = await supabase.rpc('submit_answer_atomic', {
     p_token_hash: input.tokenHash,
     p_scenario_id: input.scenarioId,
     p_choice: input.choiceId,
+    p_is_correct: input.isCorrect,
   })
   if (error) {
     if (error.code === '28000') throw new AppError(error.message, HTTP_STATUS.UNAUTHORIZED)

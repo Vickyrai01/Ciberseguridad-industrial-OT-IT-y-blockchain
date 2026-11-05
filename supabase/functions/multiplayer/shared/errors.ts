@@ -1,9 +1,11 @@
 import { HTTP_STATUS } from './constants.ts'
 
+type HttpStatus = (typeof HTTP_STATUS)[keyof typeof HTTP_STATUS]
+
 export class AppError extends Error {
   constructor(
     public readonly code: string,
-    public readonly status = HTTP_STATUS.BAD_REQUEST,
+    public readonly status: HttpStatus = HTTP_STATUS.BAD_REQUEST,
   ) {
     super(code)
     this.name = 'AppError'

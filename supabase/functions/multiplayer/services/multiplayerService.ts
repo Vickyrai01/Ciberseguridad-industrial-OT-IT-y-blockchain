@@ -35,6 +35,7 @@ import {
   PARTICIPANT_STATUS,
   type Operation,
 } from '../shared/constants.ts'
+import { isCorrectChoice } from '../../../../shared/quiz/scenarioAnswerKey.ts'
 
 type OperationHandler = (body: Record<string, unknown>) => Promise<unknown>
 
@@ -159,7 +160,7 @@ async function changeRoomStatus(body: Record<string, unknown>, operation: string
   const presenterToken = requiredString(body, 'presenterToken')
   const room = await findRoomById(roomId, true)
   if ((await hashToken(presenterToken)) !== room.presenter_token_hash)
-    throw new AppError('PRESENTER_NOT_AUTHORIZED', 403)
+    throw new AppError('PRESENTER_NOT_AUTHORIZED', HTTP_STATUS.FORBIDDEN)
   const status = statusForOperation(operation)
   const now = new Date().toISOString()
   await updateRoomStatus(
@@ -188,7 +189,7 @@ async function advanceQuestion(body: Record<string, unknown>) {
   const presenterToken = requiredString(body, 'presenterToken')
   const room = await findRoomById(roomId, true)
   if ((await hashToken(presenterToken)) !== room.presenter_token_hash)
-    throw new AppError('PRESENTER_NOT_AUTHORIZED', 403)
+    throw new AppError('PRESENTER_NOT_AUTHORIZED', HTTP_STATUS.FORBIDDEN)
   assertRoomCanAdvance(room.status, room.current_question_index)
   const scenarioId = room.scenario_order[room.current_question_index]
   const participantCount = await countParticipants(roomId)
@@ -202,10 +203,13 @@ async function advanceQuestion(body: Record<string, unknown>) {
 async function submitAnswerForParticipant(body: Record<string, unknown>) {
   const participantToken = requiredString(body, 'participantToken')
   const participant = await findParticipantByTokenHash(await hashToken(participantToken))
+  const submittedScenarioId = scenarioId(body)
+  const submittedChoiceId = choiceId(body)
   const result = await submitAnswer({
     tokenHash: await hashToken(participantToken),
-    scenarioId: scenarioId(body),
-    choiceId: choiceId(body),
+    scenarioId: submittedScenarioId,
+    choiceId: submittedChoiceId,
+    isCorrect: isCorrectChoice(submittedScenarioId, submittedChoiceId),
   })
   await broadcastRoomUpdated(participant.room_id)
   return result
