@@ -14,7 +14,7 @@ export function useAppController() {
   const activeScenarioId = scenario?.id
 
   useEffect(() => {
-    resume()
+    void resume()
     if (new URLSearchParams(window.location.search).has('room')) enter()
   }, [enter, resume])
 

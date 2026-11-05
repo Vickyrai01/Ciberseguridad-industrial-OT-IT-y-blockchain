@@ -38,6 +38,26 @@ import {
 
 type OperationHandler = (body: Record<string, unknown>) => Promise<unknown>
 
+async function authorizeRoomAccess(body: Record<string, unknown>, roomId: string): Promise<string | undefined> {
+  const presenterToken = typeof body.presenterToken === 'string' ? body.presenterToken.trim() : ''
+  if (presenterToken) {
+    const room = await findRoomById(roomId, true)
+    if ((await hashToken(presenterToken)) !== room.presenter_token_hash)
+      throw new AppError(ERROR_CODE.PRESENTER_NOT_AUTHORIZED, HTTP_STATUS.UNAUTHORIZED)
+    return undefined
+  }
+
+  const participantToken = typeof body.participantToken === 'string' ? body.participantToken.trim() : ''
+  if (participantToken) {
+    const participant = await findParticipantByTokenHash(await hashToken(participantToken))
+    if (participant.room_id !== roomId)
+      throw new AppError(ERROR_CODE.PARTICIPANT_NOT_AUTHORIZED, HTTP_STATUS.UNAUTHORIZED)
+    return participant.id
+  }
+
+  throw new AppError(ERROR_CODE.PARTICIPANT_NOT_AUTHORIZED, HTTP_STATUS.UNAUTHORIZED)
+}
+
 const operationHandlers: Record<Operation, OperationHandler> = {
   [OPERATION.CREATE_ROOM]: () => createRoom(),
   [OPERATION.JOIN_ROOM]: joinRoom,
@@ -123,11 +143,15 @@ async function resumeParticipant(body: Record<string, unknown>) {
 }
 
 async function getRoom(body: Record<string, unknown>) {
-  return getRoomView(requiredString(body, 'roomId'))
+  const roomId = requiredString(body, 'roomId')
+  const currentParticipantId = await authorizeRoomAccess(body, roomId)
+  return getRoomView(roomId, currentParticipantId)
 }
 
 async function getLeaderboard(body: Record<string, unknown>) {
-  return { leaderboard: (await getRoomView(requiredString(body, 'roomId'))).leaderboard }
+  const roomId = requiredString(body, 'roomId')
+  const currentParticipantId = await authorizeRoomAccess(body, roomId)
+  return { leaderboard: (await getRoomView(roomId, currentParticipantId)).leaderboard }
 }
 
 async function changeRoomStatus(body: Record<string, unknown>, operation: string) {

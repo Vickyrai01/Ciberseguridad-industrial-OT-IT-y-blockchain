@@ -21,7 +21,13 @@ export function ResultsStats({ state, correctDecisions, outcome }: ResultsStatsP
         tone={outcome === SIMULATION_OUTCOME.CRITICAL ? 'red' : 'green'}
         meterValue={state.security}
       />
-      <MetricCard label={t('common.production')} value={state.production} suffix="%" tone="cyan" meterValue={state.production} />
+      <MetricCard
+        label={t('common.production')}
+        value={state.production}
+        suffix="%"
+        tone="cyan"
+        meterValue={state.production}
+      />
       <MetricCard
         label={t('common.systemsCompromised')}
         value={state.compromisedSystems}
@@ -29,7 +35,11 @@ export function ResultsStats({ state, correctDecisions, outcome }: ResultsStatsP
         tone="orange"
         meterValue={state.compromisedSystems}
       />
-      <MetricCard label={t('common.decisions')} value={correctDecisions} suffix={`/ ${SIMULATION_CONFIG.scenarioCount}`} />
+      <MetricCard
+        label={t('common.decisions')}
+        value={correctDecisions}
+        suffix={`/ ${SIMULATION_CONFIG.scenarioCount}`}
+      />
     </div>
   )
 }
