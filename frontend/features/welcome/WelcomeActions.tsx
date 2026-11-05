@@ -1,6 +1,6 @@
 import { ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { PrimaryButton } from '../../shared/components/ui/PrimaryButton'
+import { Button } from '../../shared/components/ui/Button'
 
 interface WelcomeActionsProps {
   onStart: () => void
@@ -13,15 +13,15 @@ export function WelcomeActions({ onStart, onJoin, onCreate }: WelcomeActionsProp
 
   return (
     <div className="welcome-actions">
-      <PrimaryButton onClick={onStart}>
+      <Button onClick={onStart}>
         {t('common.start')} <ChevronRight size={18} />
-      </PrimaryButton>
-      <button type="button" className="secondary-btn" onClick={onJoin}>
+      </Button>
+      <Button variant="secondary" onClick={onJoin}>
         {t('multiplayer.join')}
-      </button>
-      <button type="button" className="text-btn" onClick={onCreate}>
+      </Button>
+      <Button variant="text" onClick={onCreate}>
         {t('multiplayer.create')}
-      </button>
+      </Button>
     </div>
   )
 }

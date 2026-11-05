@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { SIMULATION_CONFIG } from '../../../shared/constants/domain'
 import type { Scenario } from '../../../types'
+import { Eyebrow } from '../../../shared/components/ui/Eyebrow'
 
 export function ScenarioProgress({ scenario }: { scenario: Scenario }) {
   const { t } = useTranslation()
@@ -9,7 +10,7 @@ export function ScenarioProgress({ scenario }: { scenario: Scenario }) {
   return (
     <div className="scenario-progress">
       <div>
-        <span className="eyebrow">{t('common.threatBriefing')}</span>
+        <Eyebrow>{t('common.threatBriefing')}</Eyebrow>
         <strong>
           {String(scenario.id).padStart(2, '0')}{' '}
           <small>/ {String(SIMULATION_CONFIG.scenarioCount).padStart(2, '0')}</small>

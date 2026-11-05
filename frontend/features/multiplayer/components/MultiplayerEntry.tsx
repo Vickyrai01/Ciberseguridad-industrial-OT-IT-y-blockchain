@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { MULTIPLAYER_CONFIG } from '../constants'
-import { PrimaryButton } from '../../../shared/components/ui/PrimaryButton'
+import { Button } from '../../../shared/components/ui/Button'
+import { MultiplayerError } from './MultiplayerError'
 import { MultiplayerPanel } from './MultiplayerPanel'
+import { Eyebrow } from '../../../shared/components/ui/Eyebrow'
 
 interface MultiplayerEntryProps {
   error: string | null
@@ -19,7 +21,7 @@ export function MultiplayerEntry({ error, loading, onBack, onJoin }: Multiplayer
   return (
     <MultiplayerPanel variant="entry">
       <div className="multiplayer-entry-heading">
-        <span className="eyebrow">{t('common.liveSimulation')}</span>
+        <Eyebrow>{t('common.liveSimulation')}</Eyebrow>
         <h1>{t('multiplayer.title')}</h1>
         <p className="muted">{t('multiplayer.subtitle')}</p>
       </div>
@@ -42,7 +44,7 @@ export function MultiplayerEntry({ error, loading, onBack, onJoin }: Multiplayer
             placeholder={t('multiplayer.nicknamePlaceholder')}
           />
         </label>
-        <PrimaryButton
+        <Button
           disabled={
             code.trim().length < MULTIPLAYER_CONFIG.roomCodeMinLength ||
             nickname.trim().length < MULTIPLAYER_CONFIG.minNicknameLength
@@ -51,14 +53,12 @@ export function MultiplayerEntry({ error, loading, onBack, onJoin }: Multiplayer
           loadingLabel={t('multiplayer.connecting')}
           onClick={() => onJoin(code, nickname)}>
           {t('multiplayer.join')}
-        </PrimaryButton>
-        <button type="button" className="text-btn" disabled={loading} onClick={onBack}>
+        </Button>
+        <Button variant="text" disabled={loading} onClick={onBack}>
           {t('common.back')}
-        </button>
+        </Button>
       </div>
-      {error && (
-        <p className="multiplayer-error">{t(`multiplayer.errors.${error}` as never, { defaultValue: error })}</p>
-      )}
+      <MultiplayerError error={error} />
     </MultiplayerPanel>
   )
 }

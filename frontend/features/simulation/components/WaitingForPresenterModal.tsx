@@ -1,5 +1,6 @@
 import { Radio, ShieldCheck } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { Eyebrow } from '../../../shared/components/ui/Eyebrow'
 
 export function WaitingForPresenterModal() {
   const { t } = useTranslation()
@@ -18,7 +19,7 @@ export function WaitingForPresenterModal() {
         <div className="waiting-presenter-icon" aria-hidden="true">
           <ShieldCheck size={28} />
         </div>
-        <p className="eyebrow">{t('multiplayer.presenterSync')}</p>
+        <Eyebrow>{t('multiplayer.presenterSync')}</Eyebrow>
         <h2>{t('multiplayer.waitingForPresenterTitle')}</h2>
         <p>{t('multiplayer.waitingForPresenterCopy')}</p>
         <div className="waiting-presenter-progress" aria-hidden="true">

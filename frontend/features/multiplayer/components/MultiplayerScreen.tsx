@@ -4,6 +4,7 @@ import { MULTIPLAYER_MODE, type MultiplayerViewMode } from '../constants'
 import { MultiplayerEntry } from './MultiplayerEntry'
 import { MultiplayerPanel } from './MultiplayerPanel'
 import { MultiplayerRoom } from './MultiplayerRoom'
+import { Button } from '../../../shared/components/ui/Button'
 
 export interface MultiplayerScreenProps {
   mode: MultiplayerViewMode
@@ -25,9 +26,9 @@ export function MultiplayerScreen(props: MultiplayerScreenProps) {
       <MultiplayerPanel>
         <h1>{t('multiplayer.unavailable')}</h1>
         <p>{t('multiplayer.configureHint')}</p>
-        <button type="button" className="text-btn" onClick={props.onBack}>
+        <Button variant="text" onClick={props.onBack}>
           {t('common.back')}
-        </button>
+        </Button>
       </MultiplayerPanel>
     )
 

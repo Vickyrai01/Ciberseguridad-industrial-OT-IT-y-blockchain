@@ -1,14 +1,14 @@
 import { LoaderCircle } from 'lucide-react'
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
 
-export interface LoadingButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode
   loading?: boolean
   loadingLabel?: ReactNode
-  variant?: 'primary' | 'secondary'
+  variant?: 'primary' | 'secondary' | 'text'
 }
 
-export function LoadingButton({
+export function Button({
   children,
   className = '',
   disabled,
@@ -17,7 +17,7 @@ export function LoadingButton({
   type = 'button',
   variant = 'primary',
   ...props
-}: LoadingButtonProps) {
+}: ButtonProps) {
   const buttonClassName = `${variant}-btn action-btn${loading ? ' action-btn-loading' : ''}${className ? ` ${className}` : ''}`
 
   return (

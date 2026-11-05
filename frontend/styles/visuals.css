@@ -758,27 +758,23 @@ button:focus-visible {
   text-align: left;
   margin-bottom: 20px;
 }
-.stat,
-.result-stat {
+.stat {
   border: 1px solid #294852;
   background: #0d2028;
   padding: 13px;
 }
-.stat-label,
-.result-stat span {
+.stat-label {
   font: 9px 'DM Mono';
   letter-spacing: 0.1em;
   color: #76939a;
 }
-.stat-value,
-.result-stat strong {
+.stat-value {
   display: block;
   font: 700 27px 'DM Mono';
   margin-top: 7px;
   color: #dcece8;
 }
-.stat-value small,
-.result-stat strong small {
+.stat-value small {
   font-size: 11px;
   color: #779197;
   font-weight: 400;

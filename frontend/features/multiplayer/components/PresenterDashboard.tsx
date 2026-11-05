@@ -4,7 +4,10 @@ import { initialState } from '../../simulation/engine/simulationEngine'
 import { PlantPanel } from '../../simulation/components/PlantPanel'
 import { scenarios } from '../../simulation/data/scenarios'
 import type { RoomSnapshot } from '../types'
-import { PrimaryButton } from '../../../shared/components/ui/PrimaryButton'
+import { Button } from '../../../shared/components/ui/Button'
+import { Eyebrow } from '../../../shared/components/ui/Eyebrow'
+import { MultiplayerError } from './MultiplayerError'
+import { PresenterMetric } from './PresenterMetric'
 
 interface PresenterDashboardProps {
   room: RoomSnapshot
@@ -39,20 +42,17 @@ export function PresenterDashboard({ room, error, loading, onAdvance, onFinish }
     <main className="presenter-dashboard ot-layout-screen">
       <header className="presenter-dashboard-header">
         <div>
-          <span className="eyebrow">{t('multiplayer.presenterMode')}</span>
+          <Eyebrow>{t('multiplayer.presenterMode')}</Eyebrow>
           <h1>{t('multiplayer.questionLabel', { current: questionIndex + 1, total: totalQuestions })}</h1>
         </div>
-        <div className="presenter-room-code">
-          <span>{t('multiplayer.roomCode')}</span>
-          <strong>{room.code}</strong>
-        </div>
+        <PresenterMetric className="presenter-room-code" label={t('multiplayer.roomCode')} value={room.code} />
       </header>
 
       <div className="presenter-main-grid">
         <PlantPanel state={plantState} />
         <div className="presenter-side-panel">
           <section className="presenter-question" aria-live="polite">
-            <span className="eyebrow">{t(scenario.kickerKey)}</span>
+            <Eyebrow>{t(scenario.kickerKey)}</Eyebrow>
             <h2>{t(scenario.titleKey)}</h2>
             <p className="presenter-narrative">{t(scenario.narrativeKey)}</p>
             <p className="presenter-question-copy">{t(scenario.questionKey)}</p>
@@ -70,7 +70,7 @@ export function PresenterDashboard({ room, error, loading, onAdvance, onFinish }
               ))}
               {answerRevealed && correctChoice && (
                 <div className="presenter-answer-review" role="status">
-                  <span className="eyebrow">{t('multiplayer.explanation')}</span>
+                  <Eyebrow>{t('multiplayer.explanation')}</Eyebrow>
                   <p>{t(scenario.insightKey)}</p>
                 </div>
               )}
@@ -78,47 +78,44 @@ export function PresenterDashboard({ room, error, loading, onAdvance, onFinish }
           </section>
 
           <aside className="presenter-progress">
-            <div>
-              <span>{t('multiplayer.connectedParticipants')}</span>
-              <strong>{room.participants.filter(({ connected }) => connected).length}</strong>
-            </div>
-            <div>
-              <span>{t('multiplayer.answersReceived')}</span>
-              <strong>
-                {answeredParticipants}/{room.participants.length}
-              </strong>
-            </div>
+            <PresenterMetric
+              label={t('multiplayer.connectedParticipants')}
+              value={room.participants.filter(({ connected }) => connected).length}
+            />
+            <PresenterMetric
+              label={t('multiplayer.answersReceived')}
+              value={`${answeredParticipants}/${room.participants.length}`}
+            />
           </aside>
         </div>
       </div>
 
       <footer className="presenter-dashboard-actions">
-        <button
+        <Button
+          variant="secondary"
           type="button"
           className="presenter-reveal-button"
           disabled={!allParticipantsAnswered || answerRevealed || loading}
           onClick={() => setAnswerRevealed(true)}>
           {answerRevealed ? t('multiplayer.answerRevealed') : t('multiplayer.revealAnswer')}
-        </button>
-        <PrimaryButton
+        </Button>
+        <Button
           disabled={isLastQuestion || !allParticipantsAnswered || !answerRevealed}
           loading={loading}
           loadingLabel={t('multiplayer.connecting')}
           onClick={onAdvance}>
           {t('multiplayer.nextQuestion')}
-        </PrimaryButton>
-        <button type="button" className="text-btn" disabled={loading} onClick={onFinish}>
+        </Button>
+        <Button variant="text" disabled={loading} onClick={onFinish}>
           {t('multiplayer.finish')}
-        </button>
+        </Button>
       </footer>
       {!isLastQuestion && !allParticipantsAnswered && (
         <p className="presenter-waiting" role="status">
           {t('multiplayer.waitingForAnswers', { answered: answeredParticipants, total: room.participants.length })}
         </p>
       )}
-      {error && (
-        <p className="multiplayer-error">{t(`multiplayer.errors.${error}` as never, { defaultValue: error })}</p>
-      )}
+      <MultiplayerError error={error} />
     </main>
   )
 }

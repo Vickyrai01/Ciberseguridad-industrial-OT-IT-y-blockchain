@@ -4,9 +4,11 @@ import QRCode from 'qrcode'
 import { useTranslation } from 'react-i18next'
 import type { ParticipantSession, RoomSnapshot } from '../types'
 import { MULTIPLAYER_MODE, ROOM_STATUS, type MultiplayerViewMode } from '../constants'
-import { PrimaryButton } from '../../../shared/components/ui/PrimaryButton'
+import { Button } from '../../../shared/components/ui/Button'
+import { MultiplayerError } from './MultiplayerError'
 import { MultiplayerLeaderboard } from './MultiplayerLeaderboard'
 import { MultiplayerPanel } from './MultiplayerPanel'
+import { Eyebrow } from '../../../shared/components/ui/Eyebrow'
 
 interface MultiplayerRoomProps {
   error: string | null
@@ -43,16 +45,16 @@ export function MultiplayerRoom({ error, loading, mode, onBack, onStart, room, s
     <MultiplayerPanel>
       <div className="multiplayer-heading">
         <div>
-          <span className="eyebrow">
+          <Eyebrow>
             {mode === MULTIPLAYER_MODE.FINISHED ? t('multiplayer.finished') : t('multiplayer.waitingRoom')}
-          </span>
+          </Eyebrow>
           <h1>{room?.code}</h1>
         </div>
         {qr && <img className="multiplayer-qr" src={qr} alt={t('multiplayer.qrAlt')} />}
       </div>
       <div className="multiplayer-invite" aria-label={t('multiplayer.invite')}>
         <div className="multiplayer-invite-heading">
-          <span className="eyebrow">{t('multiplayer.accessChannel')}</span>
+          <Eyebrow>{t('multiplayer.accessChannel')}</Eyebrow>
           <span className="multiplayer-invite-hint">{t('multiplayer.inviteHint')}</span>
         </div>
         <div className="multiplayer-invite-url">
@@ -88,13 +90,13 @@ export function MultiplayerRoom({ error, loading, mode, onBack, onStart, room, s
       <MultiplayerLeaderboard entries={room?.leaderboard ?? []} currentParticipantId={session?.participantId} />
       <div className="multiplayer-actions">
         {session?.presenterToken && mode === MULTIPLAYER_MODE.LOBBY && (
-          <PrimaryButton
+          <Button
             disabled={(room?.participants.length ?? 0) < 1}
             loading={loading}
             loadingLabel={t('multiplayer.starting')}
             onClick={onStart}>
             {t('multiplayer.start')}
-          </PrimaryButton>
+          </Button>
         )}
         {session && !session.presenterToken && mode === MULTIPLAYER_MODE.LOBBY && (
           <p className="multiplayer-room-status" role="status">
@@ -104,11 +106,11 @@ export function MultiplayerRoom({ error, loading, mode, onBack, onStart, room, s
           </p>
         )}
         {session?.presenterToken && mode === MULTIPLAYER_MODE.FINISHED && <p>{t('multiplayer.podiumReady')}</p>}
-        <button type="button" className="text-btn" onClick={onBack}>
+        <Button variant="text" onClick={onBack}>
           {t('common.back')}
-        </button>
+        </Button>
       </div>
-      {error && <p className="multiplayer-error">{error}</p>}
+      <MultiplayerError error={error} />
     </MultiplayerPanel>
   )
 }

@@ -1,13 +1,12 @@
 import { useTranslation } from 'react-i18next'
+import { Eyebrow } from '../../shared/components/ui/Eyebrow'
 
 export function WelcomeBrand() {
   const { t } = useTranslation()
 
   return (
     <div className="brand-lockup">
-      <span className="eyebrow">
-        <span className="pulse-dot" /> {t('common.liveSimulation')}
-      </span>
+      <Eyebrow pulse>{t('common.liveSimulation')}</Eyebrow>
       <h1>
         OT <span>UNDER</span> ATTACK
       </h1>
