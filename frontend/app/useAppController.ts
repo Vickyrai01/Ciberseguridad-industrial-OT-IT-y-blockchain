@@ -12,6 +12,7 @@ export function useAppController() {
   })
   const { screen, scenario, startSimulation, advanceToQuestion, applyPendingAnswer } = simulation
   const activeScenarioId = scenario?.id
+  const currentQuestionIndex = room?.currentQuestionIndex
 
   useEffect(() => {
     void resume()
@@ -25,16 +26,16 @@ export function useAppController() {
   }, [mode, room?.currentQuestionIndex, scenarioOrder, screen, session?.presenterToken, startSimulation])
 
   useEffect(() => {
-    if (mode === MULTIPLAYER_MODE.PLAYING && !session?.presenterToken && room) {
-      advanceToQuestion(room.currentQuestionIndex)
+    if (mode === MULTIPLAYER_MODE.PLAYING && !session?.presenterToken && currentQuestionIndex !== undefined) {
+      advanceToQuestion(currentQuestionIndex)
     }
-  }, [advanceToQuestion, mode, room?.currentQuestionIndex, room, session?.presenterToken])
+  }, [advanceToQuestion, currentQuestionIndex, mode, session?.presenterToken])
 
   useEffect(() => {
     if (!session?.presenterToken && room?.status === ROOM_STATUS.FINISHED) {
       applyPendingAnswer()
     }
-  }, [applyPendingAnswer, mode, room?.status, session?.presenterToken, room])
+  }, [applyPendingAnswer, room?.status, session?.presenterToken])
 
   useEffect(() => {
     if (mode === MULTIPLAYER_MODE.PLAYING && !session?.presenterToken && activeScenarioId !== undefined) {

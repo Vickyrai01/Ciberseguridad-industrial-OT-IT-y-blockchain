@@ -1,13 +1,29 @@
 import { AnimatePresence } from 'framer-motion'
-import { MultiplayerScreen } from '../features/multiplayer/components/MultiplayerScreen'
-import { MultiplayerLeaderboard } from '../features/multiplayer/components/MultiplayerLeaderboard'
-import { PresenterDashboard } from '../features/multiplayer/components/PresenterDashboard'
-import { ResultsScreen } from '../features/results/ResultsScreen'
+import { lazy, Suspense } from 'react'
 import { SimulationScreen } from '../features/simulation/SimulationScreen'
 import { WelcomeScreen } from '../features/welcome/WelcomeScreen'
 import { SCREEN } from '../shared/constants/domain'
 import type { AppController } from './useAppController'
 import { MULTIPLAYER_MODE, MULTIPLAYER_VIEW_MODES } from '../features/multiplayer/constants'
+
+const MultiplayerScreen = lazy(() =>
+  import('../features/multiplayer/components/MultiplayerScreen').then(({ MultiplayerScreen }) => ({
+    default: MultiplayerScreen,
+  })),
+)
+const MultiplayerLeaderboard = lazy(() =>
+  import('../features/multiplayer/components/MultiplayerLeaderboard').then(({ MultiplayerLeaderboard }) => ({
+    default: MultiplayerLeaderboard,
+  })),
+)
+const PresenterDashboard = lazy(() =>
+  import('../features/multiplayer/components/PresenterDashboard').then(({ PresenterDashboard }) => ({
+    default: PresenterDashboard,
+  })),
+)
+const ResultsScreen = lazy(() =>
+  import('../features/results/ResultsScreen').then(({ ResultsScreen }) => ({ default: ResultsScreen })),
+)
 
 interface AppScreensProps {
   controller: AppController
@@ -16,73 +32,75 @@ interface AppScreensProps {
 export function AppScreens({ controller }: AppScreensProps) {
   const { multiplayer, simulation } = controller
   return (
-    <AnimatePresence mode="wait">
-      {simulation.screen === SCREEN.WELCOME && multiplayer.mode === MULTIPLAYER_MODE.IDLE && (
-        <WelcomeScreen
-          onStart={() => simulation.startSimulation()}
-          onJoin={multiplayer.enter}
-          onCreate={multiplayer.createRoom}
-        />
-      )}
-      {MULTIPLAYER_VIEW_MODES.includes(multiplayer.mode as (typeof MULTIPLAYER_VIEW_MODES)[number]) && (
-        <MultiplayerScreen
-          mode={multiplayer.mode as (typeof MULTIPLAYER_VIEW_MODES)[number]}
-          configured={multiplayer.configured}
-          session={multiplayer.session}
-          room={multiplayer.room}
-          error={multiplayer.error}
-          loading={multiplayer.loading}
-          onJoin={multiplayer.joinRoom}
-          onStart={multiplayer.session?.presenterToken ? multiplayer.startRoom : multiplayer.startPlayer}
-          onBack={multiplayer.reset}
-        />
-      )}
-      {simulation.screen === SCREEN.SIMULATION &&
-        simulation.scenario &&
-        (multiplayer.mode === MULTIPLAYER_MODE.IDLE ||
-          (multiplayer.mode === MULTIPLAYER_MODE.PLAYING && !multiplayer.session?.presenterToken)) && (
-          <SimulationScreen
-            state={simulation.state}
-            scenario={simulation.scenario}
-            selected={simulation.selected}
-            sound={simulation.sound}
-            onSelect={simulation.selectChoice}
-            onContinue={simulation.continueSimulation}
-            onToggleSound={simulation.toggleSound}
-            onFullscreen={simulation.toggleFullscreen}
-            onReset={
-              multiplayer.mode === MULTIPLAYER_MODE.PLAYING ? () => undefined : () => simulation.startSimulation()
-            }
-            waitingForPresenter={simulation.waitingForPresenter}
-            submitting={simulation.submitting}
-            error={simulation.error}
+    <Suspense fallback={<div className="ot-layout-screen" aria-busy="true" />}>
+      <AnimatePresence mode="wait">
+        {simulation.screen === SCREEN.WELCOME && multiplayer.mode === MULTIPLAYER_MODE.IDLE && (
+          <WelcomeScreen
+            onStart={() => simulation.startSimulation()}
+            onJoin={multiplayer.enter}
+            onCreate={multiplayer.createRoom}
           />
         )}
-      {multiplayer.mode === MULTIPLAYER_MODE.PLAYING && multiplayer.session?.presenterToken && multiplayer.room && (
-        <PresenterDashboard
-          room={multiplayer.room}
-          error={multiplayer.error}
-          loading={multiplayer.loading}
-          onAdvance={multiplayer.advanceQuestion}
-          onFinish={multiplayer.finishRoom}
-        />
-      )}
-      {multiplayer.mode === MULTIPLAYER_MODE.PLAYING && simulation.screen === SCREEN.RESULTS && multiplayer.room && (
-        <MultiplayerLeaderboard
-          entries={multiplayer.room.leaderboard}
-          currentParticipantId={multiplayer.session?.participantId}
-          floating
-        />
-      )}
-      {simulation.screen === SCREEN.RESULTS && (
-        <ResultsScreen
-          state={simulation.state}
-          outcome={simulation.outcome}
-          showHistory={simulation.showHistory}
-          onToggleHistory={simulation.toggleHistory}
-          onReplay={() => simulation.startSimulation()}
-        />
-      )}
-    </AnimatePresence>
+        {MULTIPLAYER_VIEW_MODES.includes(multiplayer.mode as (typeof MULTIPLAYER_VIEW_MODES)[number]) && (
+          <MultiplayerScreen
+            mode={multiplayer.mode as (typeof MULTIPLAYER_VIEW_MODES)[number]}
+            configured={multiplayer.configured}
+            session={multiplayer.session}
+            room={multiplayer.room}
+            error={multiplayer.error}
+            loading={multiplayer.loading}
+            onJoin={multiplayer.joinRoom}
+            onStart={multiplayer.session?.presenterToken ? multiplayer.startRoom : multiplayer.startPlayer}
+            onBack={multiplayer.reset}
+          />
+        )}
+        {simulation.screen === SCREEN.SIMULATION &&
+          simulation.scenario &&
+          (multiplayer.mode === MULTIPLAYER_MODE.IDLE ||
+            (multiplayer.mode === MULTIPLAYER_MODE.PLAYING && !multiplayer.session?.presenterToken)) && (
+            <SimulationScreen
+              state={simulation.state}
+              scenario={simulation.scenario}
+              selected={simulation.selected}
+              sound={simulation.sound}
+              onSelect={simulation.selectChoice}
+              onContinue={simulation.continueSimulation}
+              onToggleSound={simulation.toggleSound}
+              onFullscreen={simulation.toggleFullscreen}
+              onReset={
+                multiplayer.mode === MULTIPLAYER_MODE.PLAYING ? () => undefined : () => simulation.startSimulation()
+              }
+              waitingForPresenter={simulation.waitingForPresenter}
+              submitting={simulation.submitting}
+              error={simulation.error}
+            />
+          )}
+        {multiplayer.mode === MULTIPLAYER_MODE.PLAYING && multiplayer.session?.presenterToken && multiplayer.room && (
+          <PresenterDashboard
+            room={multiplayer.room}
+            error={multiplayer.error}
+            loading={multiplayer.loading}
+            onAdvance={multiplayer.advanceQuestion}
+            onFinish={multiplayer.finishRoom}
+          />
+        )}
+        {multiplayer.mode === MULTIPLAYER_MODE.PLAYING && simulation.screen === SCREEN.RESULTS && multiplayer.room && (
+          <MultiplayerLeaderboard
+            entries={multiplayer.room.leaderboard}
+            currentParticipantId={multiplayer.session?.participantId}
+            floating
+          />
+        )}
+        {simulation.screen === SCREEN.RESULTS && (
+          <ResultsScreen
+            state={simulation.state}
+            outcome={simulation.outcome}
+            showHistory={simulation.showHistory}
+            onToggleHistory={simulation.toggleHistory}
+            onReplay={() => simulation.startSimulation()}
+          />
+        )}
+      </AnimatePresence>
+    </Suspense>
   )
 }
