@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import type { ParticipantSession, RoomSnapshot } from '../types'
-import { MULTIPLAYER_MODE, type MultiplayerViewMode } from '../constants'
+import { MULTIPLAYER_MODE, type MultiplayerConnectionStatus, type MultiplayerViewMode } from '../constants'
 import { MultiplayerEntry } from './MultiplayerEntry'
 import { MultiplayerPanel } from './MultiplayerPanel'
 import { MultiplayerRoom } from './MultiplayerRoom'
@@ -13,6 +13,7 @@ export interface MultiplayerScreenProps {
   room: RoomSnapshot | null
   error: string | null
   loading: boolean
+  connectionStatus: MultiplayerConnectionStatus
   onJoin: (code: string, nickname: string) => void
   onStart: () => void
   onBack: () => void
@@ -39,6 +40,7 @@ export function MultiplayerScreen(props: MultiplayerScreenProps) {
     <MultiplayerRoom
       error={props.error}
       loading={props.loading}
+      connectionStatus={props.connectionStatus}
       mode={props.mode}
       onBack={props.onBack}
       onStart={props.onStart}

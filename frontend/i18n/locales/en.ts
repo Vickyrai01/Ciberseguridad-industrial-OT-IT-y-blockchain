@@ -87,6 +87,11 @@ const en = {
     enterGame: 'ENTER MATCH',
     connecting: 'CONNECTING…',
     submitting: 'SUBMITTING…',
+    connection: {
+      connected: 'REALTIME CONNECTION ACTIVE',
+      connecting: 'RECONNECTING…',
+      disconnected: 'CONNECTION LOST · RETRYING',
+    },
     creating: 'CREATING ROOM…',
     starting: 'STARTING MATCH…',
     waitingForPresenterStart: 'WAITING FOR THE PRESENTER TO START THE MATCH',

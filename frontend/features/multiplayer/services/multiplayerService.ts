@@ -1,6 +1,7 @@
 import type { AnswerResult, ParticipantSession, RoomSnapshot } from '../types'
 import { createSupabaseHttpClient } from './adapters/supabaseHttpClient'
 import { createSupabaseRealtimeClient } from './adapters/supabaseRealtimeClient'
+import type { RealtimeConnectionStatus } from './adapters/supabaseRealtimeClient'
 import { multiplayerSessionStorage } from './storage/multiplayerSessionStorage'
 import { MULTIPLAYER_OPERATION } from '../constants'
 import type { ChoiceId as MultiplayerChoiceId } from '../../../../shared/multiplayer/contracts'
@@ -37,7 +38,11 @@ export interface MultiplayerService {
   saveSession(session: ParticipantSession): void
   loadSession(): ParticipantSession | null
   clearSession(): void
-  subscribeToRoom(roomId: string, onRoomUpdated: () => void): () => void
+  subscribeToRoom(
+    roomId: string,
+    onRoomUpdated: () => void,
+    onStatusChanged?: (status: RealtimeConnectionStatus) => void,
+  ): () => void
 }
 
 export const multiplayerService: MultiplayerService = {

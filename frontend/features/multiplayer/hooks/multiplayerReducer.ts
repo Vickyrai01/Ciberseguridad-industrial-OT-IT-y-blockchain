@@ -1,6 +1,12 @@
 import { multiplayerService } from '../services/multiplayerService'
 import type { ParticipantSession, RoomSnapshot } from '../types'
-import { MULTIPLAYER_MODE, ROOM_STATUS, type MultiplayerMode } from '../constants'
+import {
+  MULTIPLAYER_CONNECTION_STATUS,
+  MULTIPLAYER_MODE,
+  ROOM_STATUS,
+  type MultiplayerConnectionStatus,
+  type MultiplayerMode,
+} from '../constants'
 
 export interface MultiplayerState {
   mode: MultiplayerMode
@@ -8,6 +14,7 @@ export interface MultiplayerState {
   room: RoomSnapshot | null
   error: string | null
   loading: boolean
+  connectionStatus: MultiplayerConnectionStatus
 }
 
 export type MultiplayerAction =
@@ -18,6 +25,7 @@ export type MultiplayerAction =
   | { type: 'FINISHED'; room: RoomSnapshot }
   | { type: 'LOADING'; value: boolean }
   | { type: 'ERROR'; message: string }
+  | { type: 'CONNECTION'; status: MultiplayerConnectionStatus }
   | { type: 'RESET' }
 
 export const initialMultiplayerState: MultiplayerState = {
@@ -26,6 +34,7 @@ export const initialMultiplayerState: MultiplayerState = {
   room: null,
   error: null,
   loading: false,
+  connectionStatus: MULTIPLAYER_CONNECTION_STATUS.DISCONNECTED,
 }
 
 export function multiplayerReducer(state: MultiplayerState, action: MultiplayerAction): MultiplayerState {
@@ -33,7 +42,14 @@ export function multiplayerReducer(state: MultiplayerState, action: MultiplayerA
     case 'ENTRY':
       return { ...state, mode: MULTIPLAYER_MODE.ENTRY, error: null }
     case 'LOBBY':
-      return { ...state, mode: MULTIPLAYER_MODE.LOBBY, session: action.session, room: action.session.room, error: null }
+      return {
+        ...state,
+        mode: MULTIPLAYER_MODE.LOBBY,
+        session: action.session,
+        room: action.session.room,
+        error: null,
+        connectionStatus: MULTIPLAYER_CONNECTION_STATUS.CONNECTING,
+      }
     case 'ROOM':
       return {
         ...state,
@@ -53,6 +69,8 @@ export function multiplayerReducer(state: MultiplayerState, action: MultiplayerA
         error: action.message,
         loading: false,
       }
+    case 'CONNECTION':
+      return { ...state, connectionStatus: action.status }
     case 'RESET':
       multiplayerService.clearSession()
       return initialMultiplayerState

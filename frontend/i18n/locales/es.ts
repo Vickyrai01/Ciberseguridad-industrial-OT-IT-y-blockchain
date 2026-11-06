@@ -85,6 +85,11 @@ const es = {
     enterGame: 'ENTRAR A LA PARTIDA',
     connecting: 'CONECTANDO…',
     submitting: 'ENVIANDO…',
+    connection: {
+      connected: 'CONEXIÓN EN TIEMPO REAL ACTIVA',
+      connecting: 'RECONECTANDO…',
+      disconnected: 'CONEXIÓN PERDIDA · REINTENTANDO',
+    },
     creating: 'CREANDO SALA…',
     starting: 'INICIANDO PARTIDA…',
     waitingForPresenterStart: 'ESPERANDO QUE EL PRESENTADOR INICIE LA PARTIDA',

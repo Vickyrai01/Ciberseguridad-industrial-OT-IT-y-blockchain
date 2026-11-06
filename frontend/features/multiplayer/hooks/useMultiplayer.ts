@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useReducer } from 'react'
+import { MULTIPLAYER_CONNECTION_STATUS } from '../constants'
 import { multiplayerService } from '../services/multiplayerService'
 import { initialMultiplayerState, multiplayerReducer } from './multiplayerReducer'
 import { useMultiplayerParticipantActions } from './useMultiplayerParticipantActions'
@@ -25,10 +26,32 @@ export function useMultiplayer() {
 
   useEffect(() => {
     if (!state.session) return
-    const unsubscribe = multiplayerService.subscribeToRoom(state.session.room.id, () => {
-      void refresh()
-    })
+    const unsubscribe = multiplayerService.subscribeToRoom(
+      state.session.room.id,
+      () => void refresh(),
+      (status) => {
+        const connectionStatus =
+          status === 'SUBSCRIBED' ? MULTIPLAYER_CONNECTION_STATUS.CONNECTED : MULTIPLAYER_CONNECTION_STATUS.DISCONNECTED
+        dispatch({ type: 'CONNECTION', status: connectionStatus })
+        if (status === 'SUBSCRIBED') void refresh()
+      },
+    )
     return unsubscribe
+  }, [refresh, state.session])
+
+  useEffect(() => {
+    if (!state.session) return
+    const handleOnline = () => {
+      dispatch({ type: 'CONNECTION', status: MULTIPLAYER_CONNECTION_STATUS.CONNECTING })
+      void refresh()
+    }
+    const handleOffline = () => dispatch({ type: 'CONNECTION', status: MULTIPLAYER_CONNECTION_STATUS.DISCONNECTED })
+    window.addEventListener('online', handleOnline)
+    window.addEventListener('offline', handleOffline)
+    return () => {
+      window.removeEventListener('online', handleOnline)
+      window.removeEventListener('offline', handleOffline)
+    }
   }, [refresh, state.session])
 
   useEffect(() => {

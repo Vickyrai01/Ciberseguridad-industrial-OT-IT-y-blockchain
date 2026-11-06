@@ -35,3 +35,11 @@ import {
 
 export { MULTIPLAYER_OPERATION, PARTICIPANT_STATUS, ROOM_STATUS }
 export type { MultiplayerOperation, ParticipantStatus, RoomStatus }
+
+export const MULTIPLAYER_CONNECTION_STATUS = {
+  CONNECTING: 'connecting',
+  CONNECTED: 'connected',
+  DISCONNECTED: 'disconnected',
+} as const
+export type MultiplayerConnectionStatus =
+  (typeof MULTIPLAYER_CONNECTION_STATUS)[keyof typeof MULTIPLAYER_CONNECTION_STATUS]

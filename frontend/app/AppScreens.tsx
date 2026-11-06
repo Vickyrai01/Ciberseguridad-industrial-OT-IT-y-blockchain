@@ -49,6 +49,7 @@ export function AppScreens({ controller }: AppScreensProps) {
             room={multiplayer.room}
             error={multiplayer.error}
             loading={multiplayer.loading}
+            connectionStatus={multiplayer.connectionStatus}
             onJoin={multiplayer.joinRoom}
             onStart={multiplayer.session?.presenterToken ? multiplayer.startRoom : multiplayer.startPlayer}
             onBack={multiplayer.reset}
