@@ -9,7 +9,10 @@ El modo individual no depende de Supabase. El modo multijugador usa una Edge Fun
 3. Aplicar `supabase db push`.
 4. Desplegar la función con `supabase functions deploy multiplayer --no-verify-jwt`.
 5. Confirmar que la función tenga `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY` (Supabase las proporciona automáticamente; nunca copiarlas al frontend).
-6. Copiar `frontend/.env.example` como `frontend/.env.local`, completar las dos variables públicas y ejecutar `npm run dev` desde la raíz.
+
+La función acepta cualquier origen si `MULTIPLAYER_ALLOWED_ORIGINS` no está configurada. En un despliegue real conviene definirla con una lista separada por comas, por ejemplo `https://usuario.github.io,http://localhost:5173`, para restringir el acceso CORS al frontend esperado.
+
+La limpieza de salas expiradas debe ejecutarse periódicamente con `select public.cleanup_expired_rooms();`. La migración actualizada marca también `finished_at` y devuelve únicamente la cantidad de salas modificadas en esa ejecución. 6. Copiar `frontend/.env.example` como `frontend/.env.local`, completar las dos variables públicas y ejecutar `npm run dev` desde la raíz.
 
 La función usa tokens aleatorios de corta duración lógica guardados únicamente como hashes en PostgreSQL. El código de sala no es una credencial administrativa. Las respuestas se puntúan en `submit_answer_atomic`, dentro de una transacción PostgreSQL, con una restricción única por participante y escenario.
 

@@ -19,11 +19,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v1
+        with:
+          deno-version: v2.x
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      - run: deno check --config supabase/functions/multiplayer/deno.json supabase/functions/multiplayer/index.ts
       - run: npm run format:check
       - run: npm run lint
       - run: npm run test

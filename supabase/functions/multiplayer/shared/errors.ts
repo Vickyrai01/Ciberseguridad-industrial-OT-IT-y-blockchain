@@ -14,5 +14,5 @@ export class AppError extends Error {
 
 export function asAppError(error: unknown): AppError {
   if (error instanceof AppError) return error
-  return new AppError(error instanceof Error ? error.message : 'INTERNAL_ERROR', HTTP_STATUS.INTERNAL_ERROR)
+  return new AppError('INTERNAL_ERROR', HTTP_STATUS.INTERNAL_ERROR)
 }
