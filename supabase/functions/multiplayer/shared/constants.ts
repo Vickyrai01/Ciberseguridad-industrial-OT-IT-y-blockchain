@@ -1,39 +1,22 @@
-export const API_VERSION = 'v1' as const
+import {
+  API_VERSION,
+  CHOICE_ID,
+  CHOICE_IDS,
+  MULTIPLAYER_OPERATION,
+  PARTICIPANT_STATUS,
+  ROOM_STATUS,
+  SCENARIO_IDS,
+  type MultiplayerOperation,
+  type ParticipantStatus,
+  type RoomStatus,
+} from '../../../../shared/multiplayer/contracts.ts'
 
-export const OPERATION = {
-  CREATE_ROOM: 'createRoom',
-  JOIN_ROOM: 'joinRoom',
-  LEAVE_ROOM: 'leaveRoom',
-  RESUME_PARTICIPANT: 'resumeParticipant',
-  GET_ROOM: 'getRoom',
-  GET_LEADERBOARD: 'getLeaderboard',
-  START_ROOM: 'startRoom',
-  FINISH_ROOM: 'finishRoom',
-  CANCEL_ROOM: 'cancelRoom',
-  OPEN_QUESTION: 'openQuestion',
-  SUBMIT_ANSWER: 'submitAnswer',
-  ADVANCE_QUESTION: 'advanceQuestion',
-} as const
-export type Operation = (typeof OPERATION)[keyof typeof OPERATION]
+export { API_VERSION, CHOICE_ID, CHOICE_IDS, MULTIPLAYER_OPERATION, PARTICIPANT_STATUS, ROOM_STATUS, SCENARIO_IDS }
+export type { MultiplayerOperation, ParticipantStatus, RoomStatus }
 
-export const ROOM_STATUS = {
-  WAITING: 'WAITING',
-  IN_PROGRESS: 'IN_PROGRESS',
-  FINISHED: 'FINISHED',
-  CANCELLED: 'CANCELLED',
-} as const
-export type RoomStatus = (typeof ROOM_STATUS)[keyof typeof ROOM_STATUS]
-export const PARTICIPANT_STATUS = {
-  WAITING: 'WAITING',
-  PLAYING: 'PLAYING',
-  FINISHED: 'FINISHED',
-  DISCONNECTED: 'DISCONNECTED',
-} as const
-export type ParticipantStatus = (typeof PARTICIPANT_STATUS)[keyof typeof PARTICIPANT_STATUS]
+export const OPERATION = MULTIPLAYER_OPERATION
+export type Operation = MultiplayerOperation
 export const QUESTION_STATUS = { OPEN: 'OPEN', ANSWERED: 'ANSWERED' } as const
-export const CHOICE_ID = { A: 'a', B: 'b', C: 'c' } as const
-export const CHOICE_IDS = Object.values(CHOICE_ID)
-export const SCENARIO_IDS = [1, 2, 3, 4, 5] as const
 
 export const MULTIPLAYER_CONFIG = {
   totalQuestions: SCENARIO_IDS.length,
@@ -55,6 +38,7 @@ export const HTTP_STATUS = {
   CONFLICT: 409,
   INTERNAL_ERROR: 500,
 } as const
+
 export const ERROR_CODE = {
   UNKNOWN_OPERATION: 'UNKNOWN_OPERATION',
   UNSUPPORTED_API_VERSION: 'UNSUPPORTED_API_VERSION',

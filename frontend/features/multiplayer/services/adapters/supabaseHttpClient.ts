@@ -1,4 +1,9 @@
-import { MULTIPLAYER_CONFIG, type MultiplayerOperation } from '../../constants'
+import { MULTIPLAYER_CONFIG } from '../../constants'
+import type {
+  MultiplayerOperation,
+  MultiplayerRequestBodyByOperation,
+  MultiplayerResponseByOperation,
+} from '../../../../../shared/multiplayer/contracts'
 import { MULTIPLAYER_API_ERROR, MultiplayerApiError } from '../apiErrors'
 import { readSupabasePublicConfig } from '../supabaseConfig'
 
@@ -43,12 +48,12 @@ export function createSupabaseHttpClient() {
 
   return {
     isConfigured: () => config !== null,
-    request: async <T>(
-      operation: MultiplayerOperation,
-      body: Record<string, unknown> = {},
-      parser: (value: unknown) => T,
+    request: async <Operation extends MultiplayerOperation>(
+      operation: Operation,
+      body: MultiplayerRequestBodyByOperation[Operation],
+      parser: (value: unknown) => MultiplayerResponseByOperation[Operation],
       keepalive = false,
-    ): Promise<T> => {
+    ): Promise<MultiplayerResponseByOperation[Operation]> => {
       if (!config) throw new MultiplayerApiError('MULTIPLAYER_NOT_CONFIGURED')
       const controller = new AbortController()
       const timeoutId = window.setTimeout(() => controller.abort(), MULTIPLAYER_CONFIG.requestTimeoutMs)

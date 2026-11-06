@@ -3,6 +3,7 @@ import { createSupabaseHttpClient } from './adapters/supabaseHttpClient'
 import { createSupabaseRealtimeClient } from './adapters/supabaseRealtimeClient'
 import { multiplayerSessionStorage } from './storage/multiplayerSessionStorage'
 import { MULTIPLAYER_OPERATION } from '../constants'
+import type { ChoiceId as MultiplayerChoiceId } from '../../../../shared/multiplayer/contracts'
 import {
   parseAnswerResult,
   parseLeaderboard,
@@ -25,7 +26,7 @@ export interface MultiplayerService {
   startRoom(roomId: string, presenterToken: string): Promise<RoomSnapshot>
   cancelRoom(roomId: string, presenterToken: string): Promise<RoomSnapshot>
   openQuestion(participantToken: string, scenarioId: number): Promise<{ openedAt: string }>
-  submitAnswer(participantToken: string, scenarioId: number, choiceId: string): Promise<AnswerResult>
+  submitAnswer(participantToken: string, scenarioId: number, choiceId: MultiplayerChoiceId): Promise<AnswerResult>
   advanceQuestion(roomId: string, presenterToken: string): Promise<RoomSnapshot>
   finishRoom(roomId: string, presenterToken: string): Promise<RoomSnapshot>
   getLeaderboard(

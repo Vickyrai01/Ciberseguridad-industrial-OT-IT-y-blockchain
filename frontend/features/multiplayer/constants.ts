@@ -16,38 +16,6 @@ export const MULTIPLAYER_VIEW_MODES = [
 ] as const
 export type MultiplayerViewMode = (typeof MULTIPLAYER_VIEW_MODES)[number]
 
-export const ROOM_STATUS = {
-  WAITING: 'WAITING',
-  IN_PROGRESS: 'IN_PROGRESS',
-  FINISHED: 'FINISHED',
-  CANCELLED: 'CANCELLED',
-} as const
-export type RoomStatus = (typeof ROOM_STATUS)[keyof typeof ROOM_STATUS]
-
-export const PARTICIPANT_STATUS = {
-  WAITING: 'WAITING',
-  PLAYING: 'PLAYING',
-  FINISHED: 'FINISHED',
-  DISCONNECTED: 'DISCONNECTED',
-} as const
-export type ParticipantStatus = (typeof PARTICIPANT_STATUS)[keyof typeof PARTICIPANT_STATUS]
-
-export const MULTIPLAYER_OPERATION = {
-  CREATE_ROOM: 'createRoom',
-  JOIN_ROOM: 'joinRoom',
-  LEAVE_ROOM: 'leaveRoom',
-  RESUME_PARTICIPANT: 'resumeParticipant',
-  GET_ROOM: 'getRoom',
-  START_ROOM: 'startRoom',
-  CANCEL_ROOM: 'cancelRoom',
-  OPEN_QUESTION: 'openQuestion',
-  SUBMIT_ANSWER: 'submitAnswer',
-  ADVANCE_QUESTION: 'advanceQuestion',
-  FINISH_ROOM: 'finishRoom',
-  GET_LEADERBOARD: 'getLeaderboard',
-} as const
-export type MultiplayerOperation = (typeof MULTIPLAYER_OPERATION)[keyof typeof MULTIPLAYER_OPERATION]
-
 export const MULTIPLAYER_CONFIG = {
   apiVersion: 'v1',
   roomCodeMinLength: 4,
@@ -56,3 +24,14 @@ export const MULTIPLAYER_CONFIG = {
   maxNicknameLength: 20,
   requestTimeoutMs: 10000,
 } as const
+import {
+  MULTIPLAYER_OPERATION,
+  PARTICIPANT_STATUS,
+  ROOM_STATUS,
+  type MultiplayerOperation,
+  type ParticipantStatus,
+  type RoomStatus,
+} from '../../../shared/multiplayer/contracts'
+
+export { MULTIPLAYER_OPERATION, PARTICIPANT_STATUS, ROOM_STATUS }
+export type { MultiplayerOperation, ParticipantStatus, RoomStatus }
