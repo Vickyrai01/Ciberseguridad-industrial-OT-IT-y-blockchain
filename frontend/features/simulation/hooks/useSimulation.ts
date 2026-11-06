@@ -25,6 +25,8 @@ interface SimulationViewState {
   showHistory: boolean
   pendingAnswer: PendingAnswer | null
   waitingForPresenter: boolean
+  submitting: boolean
+  error: string | null
 }
 
 type SimulationAction =
@@ -32,6 +34,8 @@ type SimulationAction =
   | { type: 'SELECT_CHOICE'; choiceId: Choice['id'] }
   | { type: 'APPLY_STATE'; state: GameState }
   | { type: 'WAIT_FOR_PRESENTER'; answer: PendingAnswer }
+  | { type: 'SUBMIT_START' }
+  | { type: 'SUBMIT_ERROR'; message: string }
   | { type: 'APPLY_PENDING'; scenario: Scenario }
   | { type: 'CLEAR_PENDING' }
   | { type: 'TOGGLE_SOUND' }
@@ -46,6 +50,8 @@ const createInitialViewState = (): SimulationViewState => ({
   showHistory: false,
   pendingAnswer: null,
   waitingForPresenter: false,
+  submitting: false,
+  error: null,
 })
 
 function simulationReducer(state: SimulationViewState, action: SimulationAction): SimulationViewState {
@@ -63,9 +69,11 @@ function simulationReducer(state: SimulationViewState, action: SimulationAction)
         showHistory: false,
         pendingAnswer: null,
         waitingForPresenter: false,
+        submitting: false,
+        error: null,
       }
     case 'SELECT_CHOICE':
-      return { ...state, selected: action.choiceId }
+      return { ...state, selected: action.choiceId, error: null }
     case 'APPLY_STATE':
       return {
         ...state,
@@ -74,9 +82,15 @@ function simulationReducer(state: SimulationViewState, action: SimulationAction)
         screen: action.state.simulationFinished ? SCREEN.RESULTS : SCREEN.SIMULATION,
         pendingAnswer: null,
         waitingForPresenter: false,
+        submitting: false,
+        error: null,
       }
     case 'WAIT_FOR_PRESENTER':
-      return { ...state, pendingAnswer: action.answer, waitingForPresenter: true }
+      return { ...state, pendingAnswer: action.answer, waitingForPresenter: true, submitting: false, error: null }
+    case 'SUBMIT_START':
+      return { ...state, submitting: true, error: null }
+    case 'SUBMIT_ERROR':
+      return { ...state, submitting: false, error: action.message }
     case 'APPLY_PENDING': {
       if (!state.pendingAnswer) return state
       const choice = action.scenario.choices.find(({ id }) => id === state.pendingAnswer?.choiceId)
@@ -88,11 +102,13 @@ function simulationReducer(state: SimulationViewState, action: SimulationAction)
         selected: null,
         pendingAnswer: null,
         waitingForPresenter: false,
+        submitting: false,
+        error: null,
         screen: nextState.simulationFinished ? SCREEN.RESULTS : SCREEN.SIMULATION,
       }
     }
     case 'CLEAR_PENDING':
-      return { ...state, pendingAnswer: null, waitingForPresenter: false }
+      return { ...state, pendingAnswer: null, waitingForPresenter: false, submitting: false }
     case 'TOGGLE_SOUND':
       return { ...state, sound: !state.sound }
     case 'TOGGLE_HISTORY':
@@ -132,8 +148,17 @@ export function useSimulation(options: SimulationOptions = {}) {
     const choice = scenario.choices.find((item) => item.id === view.selected)
     if (!choice) return
     if (onSubmitAnswer) {
-      await onSubmitAnswer(scenario.id, choice.id)
-      dispatch({ type: 'WAIT_FOR_PRESENTER', answer: { scenarioId: scenario.id, choiceId: choice.id } })
+      dispatch({ type: 'SUBMIT_START' })
+      try {
+        await onSubmitAnswer(scenario.id, choice.id)
+        dispatch({ type: 'WAIT_FOR_PRESENTER', answer: { scenarioId: scenario.id, choiceId: choice.id } })
+      } catch (error) {
+        dispatch({
+          type: 'SUBMIT_ERROR',
+          message: error instanceof Error ? error.message : 'MULTIPLAYER_REQUEST_FAILED',
+        })
+        return
+      }
     } else {
       dispatch({ type: 'APPLY_STATE', state: applyChoice(view.state, scenario, choice, choice.eventKeys) })
     }
@@ -170,6 +195,8 @@ export function useSimulation(options: SimulationOptions = {}) {
     sound: view.sound,
     showHistory: view.showHistory,
     waitingForPresenter: view.waitingForPresenter,
+    submitting: view.submitting,
+    error: view.error,
     outcome: finalOutcome(view.state),
     startSimulation,
     selectChoice,

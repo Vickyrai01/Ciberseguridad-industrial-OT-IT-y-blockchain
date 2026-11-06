@@ -1,8 +1,9 @@
 import { useCallback } from 'react'
 import type { MultiplayerAction } from './multiplayerReducer'
+import { getMultiplayerErrorCode } from '../services/apiErrors'
 
 export function getMultiplayerErrorMessage(error: unknown, fallback = 'MULTIPLAYER_REQUEST_FAILED'): string {
-  return error instanceof Error ? error.message : fallback
+  return error instanceof Error ? getMultiplayerErrorCode(error) : fallback
 }
 
 export function isInvalidSessionError(message: string): boolean {

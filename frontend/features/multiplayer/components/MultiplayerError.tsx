@@ -5,5 +5,9 @@ export function MultiplayerError({ error }: { error: string | null }) {
 
   if (!error) return null
 
-  return <p className="multiplayer-error">{t(`multiplayer.errors.${error}` as never, { defaultValue: error })}</p>
+  return (
+    <p className="multiplayer-error" role="alert">
+      {t(`multiplayer.errors.${error}` as never, { defaultValue: error })}
+    </p>
+  )
 }

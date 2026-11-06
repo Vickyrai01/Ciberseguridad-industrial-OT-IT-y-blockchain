@@ -21,6 +21,8 @@ interface SimulationScreenProps {
   onFullscreen: () => void
   onReset: () => void
   waitingForPresenter: boolean
+  submitting: boolean
+  error: string | null
 }
 
 export function SimulationScreen({
@@ -34,6 +36,8 @@ export function SimulationScreen({
   onFullscreen,
   onReset,
   waitingForPresenter,
+  submitting,
+  error,
 }: SimulationScreenProps) {
   return (
     <motion.main
@@ -52,6 +56,8 @@ export function SimulationScreen({
             onSelect={onSelect}
             onContinue={onContinue}
             waitingForPresenter={waitingForPresenter}
+            submitting={submitting}
+            error={error}
           />
           <ConceptChip conceptKey={scenario.conceptKey} />
         </aside>

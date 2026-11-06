@@ -46,6 +46,7 @@ export const MULTIPLAYER_OPERATION = {
   FINISH_ROOM: 'finishRoom',
   GET_LEADERBOARD: 'getLeaderboard',
 } as const
+export type MultiplayerOperation = (typeof MULTIPLAYER_OPERATION)[keyof typeof MULTIPLAYER_OPERATION]
 
 export const MULTIPLAYER_CONFIG = {
   apiVersion: 'v1',
@@ -53,4 +54,5 @@ export const MULTIPLAYER_CONFIG = {
   roomCodeMaxLength: 7,
   minNicknameLength: 2,
   maxNicknameLength: 20,
+  requestTimeoutMs: 10000,
 } as const

@@ -54,6 +54,8 @@ export function AppScreens({ controller }: AppScreensProps) {
               multiplayer.mode === MULTIPLAYER_MODE.PLAYING ? () => undefined : () => simulation.startSimulation()
             }
             waitingForPresenter={simulation.waitingForPresenter}
+            submitting={simulation.submitting}
+            error={simulation.error}
           />
         )}
       {multiplayer.mode === MULTIPLAYER_MODE.PLAYING && multiplayer.session?.presenterToken && multiplayer.room && (

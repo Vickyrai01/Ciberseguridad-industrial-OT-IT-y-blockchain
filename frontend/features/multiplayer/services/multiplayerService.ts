@@ -3,6 +3,14 @@ import { createSupabaseHttpClient } from './adapters/supabaseHttpClient'
 import { createSupabaseRealtimeClient } from './adapters/supabaseRealtimeClient'
 import { multiplayerSessionStorage } from './storage/multiplayerSessionStorage'
 import { MULTIPLAYER_OPERATION } from '../constants'
+import {
+  parseAnswerResult,
+  parseLeaderboard,
+  parseOpenedQuestion,
+  parseParticipantSession,
+  parseRoomSnapshot,
+  parseVoid,
+} from './apiContracts'
 
 const httpClient = createSupabaseHttpClient()
 const realtimeClient = createSupabaseRealtimeClient()
@@ -33,33 +41,41 @@ export interface MultiplayerService {
 
 export const multiplayerService: MultiplayerService = {
   isConfigured: httpClient.isConfigured,
-  createRoom: () => httpClient.request<ParticipantSession>(MULTIPLAYER_OPERATION.CREATE_ROOM),
+  createRoom: () => httpClient.request(MULTIPLAYER_OPERATION.CREATE_ROOM, {}, parseParticipantSession),
   joinRoom: (code, nickname) =>
-    httpClient.request<ParticipantSession>(MULTIPLAYER_OPERATION.JOIN_ROOM, { code, nickname }),
+    httpClient.request(MULTIPLAYER_OPERATION.JOIN_ROOM, { code, nickname }, parseParticipantSession),
   leaveRoom: (participantToken) =>
-    httpClient.request<void>(MULTIPLAYER_OPERATION.LEAVE_ROOM, { participantToken }, true),
+    httpClient.request(MULTIPLAYER_OPERATION.LEAVE_ROOM, { participantToken }, parseVoid, true),
   resumeParticipant: (participantToken) =>
-    httpClient.request<ParticipantSession>(MULTIPLAYER_OPERATION.RESUME_PARTICIPANT, { participantToken }),
+    httpClient.request(MULTIPLAYER_OPERATION.RESUME_PARTICIPANT, { participantToken }, parseParticipantSession),
   getRoom: (roomId, participantToken, presenterToken) =>
-    httpClient.request<RoomSnapshot>(MULTIPLAYER_OPERATION.GET_ROOM, { roomId, participantToken, presenterToken }),
+    httpClient.request(MULTIPLAYER_OPERATION.GET_ROOM, { roomId, participantToken, presenterToken }, parseRoomSnapshot),
   startRoom: (roomId, presenterToken) =>
-    httpClient.request<RoomSnapshot>(MULTIPLAYER_OPERATION.START_ROOM, { roomId, presenterToken }),
+    httpClient.request(MULTIPLAYER_OPERATION.START_ROOM, { roomId, presenterToken }, parseRoomSnapshot),
   cancelRoom: (roomId, presenterToken) =>
-    httpClient.request<RoomSnapshot>(MULTIPLAYER_OPERATION.CANCEL_ROOM, { roomId, presenterToken }),
+    httpClient.request(MULTIPLAYER_OPERATION.CANCEL_ROOM, { roomId, presenterToken }, parseRoomSnapshot),
   openQuestion: (participantToken, scenarioId) =>
-    httpClient.request<{ openedAt: string }>(MULTIPLAYER_OPERATION.OPEN_QUESTION, { participantToken, scenarioId }),
+    httpClient.request(MULTIPLAYER_OPERATION.OPEN_QUESTION, { participantToken, scenarioId }, parseOpenedQuestion),
   submitAnswer: (participantToken, scenarioId, choiceId) =>
-    httpClient.request<AnswerResult>(MULTIPLAYER_OPERATION.SUBMIT_ANSWER, { participantToken, scenarioId, choiceId }),
+    httpClient.request(
+      MULTIPLAYER_OPERATION.SUBMIT_ANSWER,
+      { participantToken, scenarioId, choiceId },
+      parseAnswerResult,
+    ),
   advanceQuestion: (roomId, presenterToken) =>
-    httpClient.request<RoomSnapshot>(MULTIPLAYER_OPERATION.ADVANCE_QUESTION, { roomId, presenterToken }),
+    httpClient.request(MULTIPLAYER_OPERATION.ADVANCE_QUESTION, { roomId, presenterToken }, parseRoomSnapshot),
   finishRoom: (roomId, presenterToken) =>
-    httpClient.request<RoomSnapshot>(MULTIPLAYER_OPERATION.FINISH_ROOM, { roomId, presenterToken }),
+    httpClient.request(MULTIPLAYER_OPERATION.FINISH_ROOM, { roomId, presenterToken }, parseRoomSnapshot),
   getLeaderboard: (roomId, participantToken, presenterToken) =>
-    httpClient.request<Pick<RoomSnapshot, 'leaderboard'>>(MULTIPLAYER_OPERATION.GET_LEADERBOARD, {
-      roomId,
-      participantToken,
-      presenterToken,
-    }),
+    httpClient.request(
+      MULTIPLAYER_OPERATION.GET_LEADERBOARD,
+      {
+        roomId,
+        participantToken,
+        presenterToken,
+      },
+      parseLeaderboard,
+    ),
   saveSession: multiplayerSessionStorage.save,
   loadSession: multiplayerSessionStorage.load,
   clearSession: multiplayerSessionStorage.clear,
