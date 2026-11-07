@@ -3,17 +3,6 @@
   color: #e8f1ef;
   background: #061017;
   font-synthesis: none;
-  --bg: #061017;
-  --panel: #0c1b23;
-  --line: #24404a;
-  --muted: #76909a;
-  --green: #67e0b0;
-  --cyan: #6dd9e5;
-  --yellow: #e4b354;
-  --red: #f36c61;
-  --orange: #f49a6c;
-  --font-body: 'Space Grotesk', sans-serif;
-  --font-mono: 'DM Mono', monospace;
 }
 * {
   box-sizing: border-box;
@@ -68,14 +57,6 @@ button:focus-visible {
 .muted {
   color: var(--muted) !important;
 }
-.welcome {
-  min-height: 100vh;
-  position: relative;
-  padding: 7vh 7vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
 .welcome-grid {
   position: absolute;
   inset: 0;
@@ -115,12 +96,6 @@ button:focus-visible {
   opacity: 0.7;
   filter: drop-shadow(0 0 40px #43bac02e);
 }
-.welcome-copy {
-  position: relative;
-  z-index: 1;
-  max-width: 430px;
-  margin: 50px 0 26px;
-}
 .time-mark {
   font: 500 12px 'DM Mono';
   color: var(--yellow);
@@ -139,13 +114,6 @@ button:focus-visible {
 .welcome-copy .muted {
   font-size: 0.88rem;
   line-height: 1.6;
-}
-.welcome-actions {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  position: relative;
-  z-index: 1;
 }
 .primary-btn,
 .secondary-btn,
@@ -200,17 +168,6 @@ button:focus-visible {
 .text-btn.active,
 .text-btn:hover {
   color: var(--green);
-}
-.welcome-meta {
-  position: absolute;
-  bottom: 36px;
-  left: 7vw;
-  right: 7vw;
-  display: flex;
-  gap: 28px;
-  color: #69838a;
-  font: 10px 'DM Mono';
-  letter-spacing: 0.12em;
 }
 .welcome-meta span:last-child {
   margin-left: auto;
@@ -285,14 +242,6 @@ button:focus-visible {
   min-height: 100vh;
   background: linear-gradient(115deg, #08151c, #071017 50%, #0d1e23);
 }
-.sim-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(360px, 0.65fr);
-  gap: 2.5vw;
-  padding: 26px 3vw 18px;
-  max-width: 1600px;
-  margin: auto;
-}
 .section-tag {
   font: 10px 'DM Mono';
   letter-spacing: 0.13em;
@@ -304,7 +253,6 @@ button:focus-visible {
   color: #5e7a81;
 }
 .plant-frame {
-  height: 420px;
   border: 1px solid #284b55;
   background: linear-gradient(140deg, #0b1b22, #0a151b);
   position: relative;
@@ -875,29 +823,8 @@ button:focus-visible {
     right: -12vw;
     top: 12%;
   }
-  .welcome {
-    padding: 10vh 8vw;
-  }
-  .welcome-copy {
-    margin-top: 40vh;
-  }
-  .welcome-meta {
-    position: relative;
-    left: auto;
-    right: auto;
-    bottom: auto;
-    flex-wrap: wrap;
-    margin-top: 40px;
-  }
   .welcome-meta span:last-child {
     margin-left: 0;
-  }
-  .sim-grid {
-    grid-template-columns: 1fr;
-    padding-top: 18px;
-  }
-  .plant-frame {
-    height: 380px;
   }
   .control-column {
     max-width: 700px;
@@ -915,12 +842,6 @@ button:focus-visible {
   .top-brand small {
     display: none;
   }
-  .sim-grid {
-    padding: 18px 14px;
-  }
-  .plant-frame {
-    height: 250px;
-  }
   .plant-caption {
     font-size: 8px;
     gap: 8px;
@@ -937,46 +858,20 @@ button:focus-visible {
   .results-actions {
     flex-direction: column;
   }
-  .welcome-actions {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 8px;
-  }
   .brand-lockup h1 {
     font-size: 3.5rem;
   }
 }
 .multiplayer-page {
-  min-height: 100dvh;
-  height: 100dvh;
-  display: grid;
-  place-items: center;
-  padding: 2rem;
-  box-sizing: border-box;
-  overflow-y: auto;
   background: radial-gradient(circle at 50% 20%, rgba(24, 96, 104, 0.22), transparent 45%);
   font-family: var(--font-body);
 }
-.multiplayer-page-entry {
-  padding: clamp(1rem, 4vw, 3rem);
-}
 .multiplayer-panel {
-  width: min(760px, 100%);
-  max-height: calc(100dvh - 4rem);
-  box-sizing: border-box;
-  overflow: hidden;
-  padding: clamp(1.4rem, 4vw, 3rem);
   border: 1px solid rgba(102, 211, 201, 0.3);
   background: rgba(5, 20, 25, 0.9);
   box-shadow:
     0 0 50px rgba(0, 0, 0, 0.35),
     inset 0 0 0 1px rgba(109, 217, 229, 0.04);
-}
-.multiplayer-panel-entry {
-  width: min(560px, 100%);
-  max-height: calc(100dvh - 4rem);
-  overflow-y: auto;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
 }
 .multiplayer-panel h1 {
   margin: 0.35rem 0 1rem;
@@ -1537,13 +1432,6 @@ button:focus-visible {
   animation: ot-presenter-sync-scan var(--motion-loop-presenter-sync) ease-in-out infinite alternate;
 }
 @media (max-width: 600px) {
-  .multiplayer-page {
-    padding: 1rem;
-  }
-  .multiplayer-panel,
-  .multiplayer-panel-entry {
-    max-height: calc(100dvh - 2rem);
-  }
   .multiplayer-heading {
     display: block;
   }

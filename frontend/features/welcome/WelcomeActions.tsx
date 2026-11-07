@@ -12,7 +12,7 @@ export function WelcomeActions({ onStart, onJoin, onCreate }: WelcomeActionsProp
   const { t } = useTranslation()
 
   return (
-    <div className="welcome-actions">
+    <div className="welcome-actions relative z-[1] flex items-center gap-6 max-[520px]:flex-col max-[520px]:items-start max-[520px]:gap-2">
       <Button onClick={onStart}>
         {t('common.start')} <ChevronRight size={18} />
       </Button>

@@ -12,7 +12,7 @@ export function PlantPanel({ state }: { state: GameState }) {
         <Eyebrow pulse>{t('common.plantTwin')}</Eyebrow>{' '}
         <span className="tag-right">{t('common.simulatedEducational')}</span>
       </div>
-      <div className="plant-frame ot-panel-surface">
+      <div className="plant-frame ot-panel-surface h-[420px] max-[900px]:h-[380px] max-[520px]:h-[250px]">
         <Plant state={state} />
       </div>
       <div className="plant-caption">

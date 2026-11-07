@@ -1,0 +1,13 @@
+:root {
+  --bg: #061017;
+  --panel: #0c1b23;
+  --line: #24404a;
+  --muted: #76909a;
+  --green: #67e0b0;
+  --cyan: #6dd9e5;
+  --yellow: #e4b354;
+  --red: #f36c61;
+  --orange: #f49a6c;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}

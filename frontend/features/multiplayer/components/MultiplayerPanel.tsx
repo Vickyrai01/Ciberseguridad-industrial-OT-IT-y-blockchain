@@ -10,10 +10,13 @@ interface MultiplayerPanelProps {
 export function MultiplayerPanel({ children, variant = 'default' }: MultiplayerPanelProps) {
   return (
     <motion.main
-      className={`multiplayer-page multiplayer-page-${variant} ot-layout-screen`}
+      className={`multiplayer-page multiplayer-page-${variant} multiplayer-page-layout ot-layout-screen`}
       {...pageMotion}
       transition={pageTransition}>
-      <section className={`multiplayer-panel multiplayer-panel-${variant}`}>{children}</section>
+      <section
+        className={`multiplayer-panel multiplayer-panel-${variant} multiplayer-panel-layout multiplayer-panel-layout-${variant}`}>
+        {children}
+      </section>
     </motion.main>
   )
 }

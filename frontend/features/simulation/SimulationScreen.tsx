@@ -45,7 +45,7 @@ export function SimulationScreen({
       {...pageMotion}
       transition={pageTransition}>
       <Topbar state={state} sound={sound} onToggleSound={onToggleSound} onFullscreen={onFullscreen} onReset={onReset} />
-      <div className="sim-grid">
+      <div className="sim-grid mx-auto grid max-w-[1600px] grid-cols-[minmax(0,1.35fr)_minmax(360px,0.65fr)] gap-[2.5vw] px-[3vw] pb-[18px] pt-[26px] max-[900px]:grid-cols-1 max-[900px]:pt-[18px] max-[520px]:px-[14px] max-[520px]:py-[18px]">
         <PlantPanel state={state} />
         <aside className="control-column">
           <ScenarioProgress scenario={scenario} />
