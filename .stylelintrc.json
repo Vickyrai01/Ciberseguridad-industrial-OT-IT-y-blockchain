@@ -1,0 +1,35 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "ignoreFiles": ["**/dist/**", "**/node_modules/**"],
+  "rules": {
+    "at-rule-no-unknown": [
+      true,
+      {
+        "ignoreAtRules": ["apply", "layer", "responsive", "screen", "tailwind", "variants"]
+      }
+    ],
+    "at-rule-prelude-no-invalid": null,
+    "alpha-value-notation": null,
+    "color-function-alias-notation": null,
+    "color-function-notation": null,
+    "color-hex-length": null,
+    "custom-property-pattern": null,
+    "block-no-empty": true,
+    "declaration-no-important": null,
+    "declaration-block-no-duplicate-properties": true,
+    "font-family-no-missing-generic-family-keyword": null,
+    "media-feature-range-notation": null,
+    "no-descending-specificity": null,
+    "no-duplicate-selectors": true,
+    "no-empty-source": true,
+    "property-no-unknown": [
+      true,
+      {
+        "ignoreProperties": ["backdrop-filter", "mask-image", "scrollbar-color", "scrollbar-gutter", "scrollbar-width"]
+      }
+    ],
+    "rule-empty-line-before": null,
+    "selector-class-pattern": null,
+    "shorthand-property-no-redundant-values": null
+  }
+}

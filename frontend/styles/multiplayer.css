@@ -65,12 +65,6 @@
   font: 500 14px var(--font-mono);
 }
 
-.secondary-btn {
-  border: 1px solid rgba(102, 211, 201, 0.55);
-  color: #baf8ec;
-  padding: 0.75rem 1rem;
-}
-
 .multiplayer-entry-form > .text-btn {
   justify-self: start;
   padding-inline: 0;
@@ -83,9 +77,15 @@
   gap: 2rem;
 }
 
-.multiplayer-invite-hint,
-.multiplayer-copied {
+.multiplayer-invite-hint {
   color: var(--text-muted-strong);
+  font: 500 9px var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.multiplayer-copied {
+  color: var(--green);
   font: 500 9px var(--font-mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -132,10 +132,6 @@
 .multiplayer-copy-btn:disabled {
   cursor: not-allowed;
   opacity: 0.45;
-}
-
-.multiplayer-copied {
-  color: var(--green);
 }
 
 .multiplayer-qr {

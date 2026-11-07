@@ -180,11 +180,11 @@
 }
 .connection.alert {
   stroke: var(--yellow);
-  filter: var(--plant-glow-filter, url(#glow));
+  filter: var(--plant-glow-filter, url('#glow'));
 }
 .connection.compromised {
   stroke: var(--red);
-  filter: var(--plant-glow-filter, url(#glow));
+  filter: var(--plant-glow-filter, url('#glow'));
 }
 .connection.isolated {
   stroke: #728089;
@@ -197,7 +197,7 @@
 }
 .node circle {
   fill: var(--green);
-  filter: var(--plant-glow-filter, url(#glow));
+  filter: var(--plant-glow-filter, url('#glow'));
 }
 .node text {
   fill: #83a4a6;
@@ -289,14 +289,14 @@
 }
 .sensor-probe-tip {
   fill: var(--cyan);
-  filter: var(--plant-glow-filter, url(#glow));
+  filter: var(--plant-glow-filter, url('#glow'));
   animation: ot-sensor-pulse var(--motion-loop-sensor) ease-in-out infinite;
 }
 .sensor-node {
   fill: #10232b;
   stroke: var(--cyan);
   stroke-width: 2;
-  filter: var(--plant-glow-filter, url(#glow));
+  filter: var(--plant-glow-filter, url('#glow'));
 }
 .sensor-label {
   fill: #8cb4b6;
