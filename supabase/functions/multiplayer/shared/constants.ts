@@ -8,6 +8,7 @@ import {
   PARTICIPANT_STATUS,
   ROOM_STATUS,
   SCENARIO_IDS,
+  type ChoiceId,
   type MultiplayerOperation,
   type ParticipantStatus,
   type RoomStatus,
@@ -25,6 +26,7 @@ export {
   SCENARIO_IDS,
 }
 export type { MultiplayerOperation, ParticipantStatus, RoomStatus }
+export type { ChoiceId }
 
 export const OPERATION = MULTIPLAYER_OPERATION
 export type Operation = MultiplayerOperation

@@ -1,10 +1,11 @@
 import { AppError } from '../shared/errors.ts'
 import {
-  CHOICE_IDS,
+  CHOICE_ID,
   ERROR_CODE,
   MULTIPLAYER_CONFIG,
   OPERATION,
   SCENARIO_IDS,
+  type ChoiceId,
   type Operation,
 } from '../shared/constants.ts'
 
@@ -38,8 +39,8 @@ export function validateNickname(value: string): { nickname: string; normalized:
   return { nickname, normalized: nickname.toLocaleLowerCase() }
 }
 
-export function choiceId(body: Record<string, unknown>): string {
+export function choiceId(body: Record<string, unknown>): ChoiceId {
   const value = requiredString(body, 'choiceId').toLowerCase()
-  if (!CHOICE_IDS.includes(value as (typeof CHOICE_IDS)[number])) throw new AppError('INVALID_CHOICE')
-  return value
+  if (value === CHOICE_ID.A || value === CHOICE_ID.B || value === CHOICE_ID.C) return value
+  throw new AppError('INVALID_CHOICE')
 }

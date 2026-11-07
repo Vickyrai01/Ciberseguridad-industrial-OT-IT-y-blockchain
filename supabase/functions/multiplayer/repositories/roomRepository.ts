@@ -1,6 +1,7 @@
 import { supabase } from '../infrastructure/supabase.ts'
 import { AppError } from '../shared/errors.ts'
 import type { RoomStatus } from '../domain/rooms.ts'
+import type { Tables } from '../../../types.ts'
 import {
   ERROR_CODE,
   HTTP_STATUS,
@@ -8,6 +9,7 @@ import {
   QUESTION_STATUS,
   ROOM_STATUS,
   MULTIPLAYER_CONFIG,
+  type ChoiceId,
   type ParticipantStatus,
 } from '../shared/constants.ts'
 
@@ -27,6 +29,12 @@ function requireParticipantReference(data: unknown): { id: string; room_id: stri
   return { id: data.id, room_id: data.room_id }
 }
 
+type RoomRecord = Tables<'game_rooms'>
+type RoomSummary = Pick<
+  RoomRecord,
+  'id' | 'code' | 'status' | 'quiz_version' | 'max_players' | 'scenario_order' | 'current_question_index'
+>
+
 export async function insertRoom(input: { code: string; presenterTokenHash: string; scenarioOrder: number[] }) {
   const { data, error } = await supabase
     .from('game_rooms')
@@ -37,15 +45,20 @@ export async function insertRoom(input: { code: string; presenterTokenHash: stri
   return requireId(data)
 }
 
-export async function findRoomById(roomId: string, full = false) {
-  const query = full
-    ? supabase.from('game_rooms').select('*').eq('id', roomId).single()
-    : supabase
-        .from('game_rooms')
-        .select('id,code,status,quiz_version,max_players,scenario_order,current_question_index')
-        .eq('id', roomId)
-        .single()
-  const { data, error } = await query
+export function findRoomById(roomId: string, full: true): Promise<RoomRecord>
+export function findRoomById(roomId: string, full?: false): Promise<RoomSummary>
+export async function findRoomById(roomId: string, full = false): Promise<RoomRecord | RoomSummary> {
+  if (full) {
+    const { data, error } = await supabase.from('game_rooms').select('*').eq('id', roomId).single()
+    if (error || !data) throw new AppError(ERROR_CODE.ROOM_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
+    return data
+  }
+
+  const { data, error } = await supabase
+    .from('game_rooms')
+    .select('id,code,status,quiz_version,max_players,scenario_order,current_question_index')
+    .eq('id', roomId)
+    .single()
   if (error || !data) throw new AppError(ERROR_CODE.ROOM_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
   return data
 }
@@ -226,7 +239,7 @@ export async function openQuestion(input: { participantId: string; scenarioId: n
 export async function submitAnswer(input: {
   tokenHash: string
   scenarioId: number
-  choiceId: string
+  choiceId: ChoiceId
   isCorrect: boolean
 }) {
   const { data, error } = await supabase.rpc('submit_answer_atomic', {
