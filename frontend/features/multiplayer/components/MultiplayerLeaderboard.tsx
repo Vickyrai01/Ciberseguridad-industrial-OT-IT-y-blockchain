@@ -15,20 +15,20 @@ export function MultiplayerLeaderboard({
   const { t } = useTranslation()
 
   return (
-    <section className={`multiplayer-leaderboard${floating ? ' floating' : ''}`} aria-live="polite">
-      <div className="leaderboard-title">
+    <section className={`multiplayer-leaderboard leaderboard-layout${floating ? ' floating' : ''}`} aria-live="polite">
+      <div className="leaderboard-title leaderboard-title-layout">
         <span>{t('multiplayer.leaderboard')}</span>
         <span>{t('multiplayer.live')}</span>
       </div>
       {entries.length === 0 ? (
         <p className="leaderboard-empty">{t('multiplayer.noScores')}</p>
       ) : (
-        <div className="leaderboard-list" role="list">
+        <div className="leaderboard-list leaderboard-list-layout" role="list">
           {entries.map((entry) => {
             const isCurrentParticipant = entry.participantId === currentParticipantId || entry.isCurrentParticipant
             return (
               <div
-                className={`leaderboard-row${isCurrentParticipant ? ' current' : ''}`}
+                className={`leaderboard-row leaderboard-row-layout${isCurrentParticipant ? ' current' : ''}`}
                 key={entry.participantId}
                 role="listitem">
                 <span className="leaderboard-position">#{entry.position}</span>

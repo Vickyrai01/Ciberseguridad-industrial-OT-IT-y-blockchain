@@ -12,7 +12,7 @@ export function ResultsActions({ showHistory, onToggleHistory, onReplay }: Resul
   const { t } = useTranslation()
 
   return (
-    <div className="results-actions">
+    <div className="results-actions results-actions-layout">
       <Button onClick={onReplay}>
         <RotateCcw size={16} /> {t('common.replay')}
       </Button>

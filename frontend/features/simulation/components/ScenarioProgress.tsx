@@ -8,7 +8,7 @@ export function ScenarioProgress({ scenario }: { scenario: Scenario }) {
   const progress = (scenario.id / SIMULATION_CONFIG.scenarioCount) * 100
 
   return (
-    <div className="scenario-progress">
+    <div className="scenario-progress scenario-progress-layout">
       <div>
         <Eyebrow>{t('common.threatBriefing')}</Eyebrow>
         <strong>
@@ -16,8 +16,8 @@ export function ScenarioProgress({ scenario }: { scenario: Scenario }) {
           <small>/ {String(SIMULATION_CONFIG.scenarioCount).padStart(2, '0')}</small>
         </strong>
       </div>
-      <div className="progress-track">
-        <span style={{ width: `${progress}%` }} />
+      <div className="progress-track progress-track-layout">
+        <span className="progress-fill-layout" style={{ width: `${progress}%` }} />
       </div>
     </div>
   )

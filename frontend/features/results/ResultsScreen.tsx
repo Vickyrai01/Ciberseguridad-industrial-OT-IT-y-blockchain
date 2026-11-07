@@ -24,9 +24,9 @@ export function ResultsScreen({ state, outcome, showHistory, onToggleHistory, on
   const rankKey = getRankKey(correctDecisions)
 
   return (
-    <motion.main className={`results ${outcome}`} {...pageMotion} transition={pageTransition}>
+    <motion.main className={`results results-layout ${outcome}`} {...pageMotion} transition={pageTransition}>
       <div className="results-orbit" />
-      <div className="results-content">
+      <div className="results-content results-content-layout">
         <ResultsHeader outcome={outcome} />
         <ResultsStats state={state} correctDecisions={correctDecisions} outcome={outcome} />
         <ResultsSummary rank={rankKey} />

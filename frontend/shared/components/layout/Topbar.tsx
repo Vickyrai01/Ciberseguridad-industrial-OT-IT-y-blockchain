@@ -14,26 +14,26 @@ interface TopbarProps {
 export function Topbar({ state, sound, onToggleSound, onFullscreen, onReset }: TopbarProps) {
   const { t } = useTranslation()
   return (
-    <header className="topbar ot-panel-surface">
-      <div className="top-brand">
+    <header className="topbar topbar-layout ot-panel-surface">
+      <div className="top-brand top-brand-layout">
         <span className="mark">OT</span>
         <span>
           <b>OT UNDER ATTACK</b>
           <small>{t('common.simulator')}</small>
         </span>
       </div>
-      <div className="status-line">
+      <div className="status-line status-line-layout">
         <span className="live">
           <i className="pulse-dot" /> {t('common.live')}
         </span>
         <span>04:0{state.currentScenario + 1}:12</span>
         <span>{t('common.node')}</span>
       </div>
-      <div className="top-actions">
+      <div className="top-actions top-actions-layout">
         <LanguageSwitcher />
         <button
           type="button"
-          className="ot-focus-ring"
+          className="top-action-button ot-focus-ring"
           title={t('common.sound')}
           aria-label={t('common.sound')}
           onClick={onToggleSound}>
@@ -41,7 +41,7 @@ export function Topbar({ state, sound, onToggleSound, onFullscreen, onReset }: T
         </button>
         <button
           type="button"
-          className="ot-focus-ring"
+          className="top-action-button ot-focus-ring"
           title={t('common.fullscreen')}
           aria-label={t('common.fullscreen')}
           onClick={onFullscreen}>
@@ -49,7 +49,7 @@ export function Topbar({ state, sound, onToggleSound, onFullscreen, onReset }: T
         </button>
         <button
           type="button"
-          className="ot-focus-ring"
+          className="top-action-button ot-focus-ring"
           title={t('common.restart')}
           aria-label={t('common.restart')}
           onClick={onReset}>

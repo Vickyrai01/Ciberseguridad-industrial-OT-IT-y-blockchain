@@ -17,6 +17,86 @@
   .multiplayer-panel-layout-entry {
     @apply max-w-[560px] overflow-y-auto p-[clamp(1.5rem,4vw,2.5rem)];
   }
+
+  .topbar-layout {
+    @apply flex h-16 items-center justify-between px-[3vw];
+  }
+
+  .top-brand-layout {
+    @apply flex items-center gap-2.5;
+  }
+
+  .status-line-layout {
+    @apply flex gap-7 font-mono text-[10px];
+  }
+
+  .top-actions-layout {
+    @apply flex gap-1;
+  }
+
+  .top-action-button {
+    @apply border border-transparent bg-transparent p-2 text-ot-muted;
+  }
+
+  .scenario-progress-layout {
+    @apply mb-[17px] flex items-end justify-between;
+  }
+
+  .progress-track-layout {
+    @apply mb-2 h-[3px] w-[44%] bg-[#203841];
+  }
+
+  .progress-fill-layout {
+    @apply block h-full bg-ot-green;
+  }
+
+  .results-layout {
+    @apply relative grid min-h-screen place-items-center overflow-hidden px-[7vw] py-[7vh];
+  }
+
+  .results-content-layout {
+    @apply relative z-[1] mx-auto w-full max-w-[950px] text-center;
+  }
+
+  .results-actions-layout {
+    @apply mt-8 flex justify-center gap-4;
+  }
+
+  .multiplayer-invite-layout {
+    @apply my-6 grid gap-[0.65rem];
+  }
+
+  .multiplayer-invite-heading-layout {
+    @apply flex items-baseline justify-between gap-4;
+  }
+
+  .multiplayer-invite-url-layout {
+    @apply flex min-w-0 items-center;
+  }
+
+  .multiplayer-roster-layout {
+    @apply my-8 max-h-[clamp(6rem,20vh,12rem)] overflow-y-auto;
+  }
+
+  .roster-row-layout {
+    @apply flex items-center gap-3 py-3;
+  }
+
+  .leaderboard-layout {
+    @apply mt-5 max-h-[clamp(6rem,20vh,12rem)] overflow-y-auto p-3;
+  }
+
+  .leaderboard-title-layout {
+    @apply flex justify-between gap-4;
+  }
+
+  .leaderboard-list-layout {
+    @apply mt-[0.65rem] grid gap-[0.35rem];
+  }
+
+  .leaderboard-row-layout {
+    @apply grid grid-cols-[2.5rem_minmax(0,1fr)_3rem_4rem] items-center gap-2 px-2 py-[0.45rem];
+  }
 }
 
 @layer utilities {

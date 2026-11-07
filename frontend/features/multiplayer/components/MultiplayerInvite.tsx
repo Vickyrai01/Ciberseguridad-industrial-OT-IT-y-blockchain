@@ -27,12 +27,12 @@ export function MultiplayerInvite({ inviteUrl }: MultiplayerInviteProps) {
   }
 
   return (
-    <div className="multiplayer-invite" aria-label={t('multiplayer.invite')}>
-      <div className="multiplayer-invite-heading">
+    <div className="multiplayer-invite multiplayer-invite-layout" aria-label={t('multiplayer.invite')}>
+      <div className="multiplayer-invite-heading multiplayer-invite-heading-layout">
         <Eyebrow>{t('multiplayer.accessChannel')}</Eyebrow>
         <span className="multiplayer-invite-hint">{t('multiplayer.inviteHint')}</span>
       </div>
-      <div className="multiplayer-invite-url">
+      <div className="multiplayer-invite-url multiplayer-invite-url-layout">
         <code>{inviteUrl}</code>
         <button
           type="button"
