@@ -20,11 +20,8 @@
 .presenter-progress {
   align-content: start;
   flex: 0 0 auto;
-  display: grid;
-  gap: 0.35rem;
   border: 1px solid rgba(102, 211, 201, 0.25);
   background: rgba(3, 18, 24, 0.72);
-  padding: 1rem;
 }
 
 .presenter-room-code span,

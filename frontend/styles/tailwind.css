@@ -102,6 +102,10 @@
     @apply mb-8 grid gap-3;
   }
 
+  .presenter-room-code-layout {
+    @apply grid gap-[0.35rem] p-4;
+  }
+
   .multiplayer-form-layout {
     @apply grid max-w-[32rem] gap-4;
   }

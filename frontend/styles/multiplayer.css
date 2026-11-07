@@ -20,12 +20,6 @@
   font-weight: 700;
 }
 
-.multiplayer-entry-heading {
-  display: grid;
-  gap: 0.75rem;
-  margin-bottom: 2rem;
-}
-
 .multiplayer-entry-heading h1 {
   max-width: 10ch;
   margin: 0;
@@ -37,20 +31,7 @@
   line-height: 1.5;
 }
 
-.multiplayer-form {
-  display: grid;
-  gap: 1rem;
-  max-width: 32rem;
-}
-
-.multiplayer-entry-form {
-  max-width: none;
-  gap: 1.1rem;
-}
-
 .multiplayer-form label {
-  display: grid;
-  gap: 0.35rem;
   color: #9fc4c1;
   font: 500 10px var(--font-mono);
   letter-spacing: 0.12em;
@@ -61,7 +42,6 @@
   border: 1px solid rgba(102, 211, 201, 0.35);
   background: #07151a;
   color: #eafffa;
-  padding: 0.8rem 1rem;
   font: 500 14px var(--font-mono);
 }
 
@@ -148,7 +128,6 @@
 .multiplayer-leaderboard {
   border: 1px solid rgba(102, 211, 201, 0.25);
   background: rgba(3, 18, 24, 0.72);
-  padding: 0.8rem;
   scrollbar-gutter: stable;
 }
 
@@ -161,9 +140,6 @@
 }
 
 .leaderboard-title {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
   color: var(--cyan-strong);
   font: 500 10px var(--font-mono);
   letter-spacing: 0.14em;

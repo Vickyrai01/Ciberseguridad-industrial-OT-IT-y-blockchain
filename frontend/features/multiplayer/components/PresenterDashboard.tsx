@@ -45,7 +45,11 @@ export function PresenterDashboard({ room, error, loading, onAdvance, onFinish }
           <Eyebrow>{t('multiplayer.presenterMode')}</Eyebrow>
           <h1>{t('multiplayer.questionLabel', { current: questionIndex + 1, total: totalQuestions })}</h1>
         </div>
-        <PresenterMetric className="presenter-room-code" label={t('multiplayer.roomCode')} value={room.code} />
+        <PresenterMetric
+          className="presenter-room-code presenter-room-code-layout"
+          label={t('multiplayer.roomCode')}
+          value={room.code}
+        />
       </header>
 
       <div className="presenter-main-grid presenter-main-grid-layout">
