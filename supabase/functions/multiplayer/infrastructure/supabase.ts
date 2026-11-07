@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import type { Database } from '../../../types.ts'
 
 function requiredEnv(name: string): string {
   const value = Deno.env.get(name)?.trim()
@@ -6,7 +7,7 @@ function requiredEnv(name: string): string {
   return value
 }
 
-export const supabase = createClient(requiredEnv('SUPABASE_URL'), requiredEnv('SUPABASE_SERVICE_ROLE_KEY'))
+export const supabase = createClient<Database>(requiredEnv('SUPABASE_URL'), requiredEnv('SUPABASE_SERVICE_ROLE_KEY'))
 
 export async function broadcastRoomUpdated(roomId: string): Promise<void> {
   const channel = supabase.channel(`room:${roomId}`)
