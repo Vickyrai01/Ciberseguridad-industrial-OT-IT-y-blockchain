@@ -4,9 +4,7 @@
   gap: 4px;
   margin-right: 8px;
   color: var(--text-i18n-muted);
-  font:
-    10px 'DM Mono',
-    monospace;
+  font: 10px var(--font-mono);
   letter-spacing: 0.08em;
 }
 

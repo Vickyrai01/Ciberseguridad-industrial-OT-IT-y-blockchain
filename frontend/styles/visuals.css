@@ -24,7 +24,7 @@
 .brand-lockup p {
   margin: 0;
   color: var(--cyan);
-  font: 500 clamp(0.8rem, 1.5vw, 1.2rem) 'DM Mono';
+  font: 500 clamp(0.8rem, 1.5vw, 1.2rem) var(--font-mono);
   letter-spacing: 0.2em;
   text-transform: uppercase;
 }
@@ -38,7 +38,7 @@
   filter: drop-shadow(0 0 40px #43bac02e);
 }
 .time-mark {
-  font: 500 12px 'DM Mono';
+  font: 500 12px var(--font-mono);
   color: var(--yellow);
   letter-spacing: 0.13em;
   margin-bottom: 15px;
@@ -102,7 +102,7 @@
   border: 0;
   background: transparent;
   color: #90aaaf;
-  font: 500 11px 'DM Mono';
+  font: 500 11px var(--font-mono);
   letter-spacing: 0.1em;
   padding: 10px;
 }
@@ -119,7 +119,7 @@
 }
 .top-brand .mark {
   color: var(--green);
-  font: 700 16px 'DM Mono';
+  font: 700 16px var(--font-mono);
   border: 1px solid var(--green);
   padding: 5px;
 }
@@ -130,12 +130,12 @@
 }
 .top-brand small {
   color: #66818a;
-  font: 8px 'DM Mono';
+  font: 8px var(--font-mono);
   letter-spacing: 0.1em;
   display: block;
 }
 .status-line {
-  font: 10px 'DM Mono';
+  font: 10px var(--font-mono);
   color: #78949c;
 }
 .status-line .live {
@@ -150,7 +150,7 @@
   background: linear-gradient(115deg, #08151c, #071017 50%, #0d1e23);
 }
 .section-tag {
-  font: 10px 'DM Mono';
+  font: 10px var(--font-mono);
   letter-spacing: 0.13em;
   color: #aec1c0;
   margin: 0 0 12px;
@@ -201,12 +201,12 @@
 }
 .node text {
   fill: #83a4a6;
-  font: 7px 'DM Mono';
+  font: 7px var(--font-mono);
   letter-spacing: 0.06em;
 }
 .node .node-label {
   fill: #d6e3df;
-  font: 600 8px 'Space Grotesk';
+  font: 600 8px var(--font-body);
   letter-spacing: 0.01em;
 }
 .node .node-sub {
@@ -232,7 +232,7 @@
 }
 .process text {
   fill: #90aeb0;
-  font: 8px 'DM Mono';
+  font: 8px var(--font-mono);
   letter-spacing: 0.08em;
 }
 .process .sensor-read {
@@ -241,7 +241,7 @@
 }
 .process-tag {
   fill: #76979b;
-  font: 7px 'DM Mono';
+  font: 7px var(--font-mono);
   letter-spacing: 0.08em;
 }
 .process-pipe {
@@ -300,7 +300,7 @@
 }
 .sensor-label {
   fill: #8cb4b6;
-  font: 7px 'DM Mono';
+  font: 7px var(--font-mono);
   letter-spacing: 0.08em;
 }
 .liquid-fill {
@@ -324,7 +324,7 @@
   gap: 20px;
   padding: 11px 0;
   color: #6e8a90;
-  font: 9px 'DM Mono';
+  font: 9px var(--font-mono);
   letter-spacing: 0.05em;
 }
 .legend-dot {
@@ -346,7 +346,7 @@
 }
 .scenario-progress strong {
   display: block;
-  font: 700 34px 'DM Mono';
+  font: 700 34px var(--font-mono);
   color: var(--green);
   margin-top: 4px;
 }
@@ -365,7 +365,7 @@
   box-shadow: 0 10px 40px #0004;
 }
 .brief-kicker {
-  font: 10px 'DM Mono';
+  font: 10px var(--font-mono);
   color: var(--yellow);
   letter-spacing: 0.13em;
 }
@@ -386,7 +386,7 @@
   margin: 0 0 17px;
 }
 .question span {
-  font: 9px 'DM Mono';
+  font: 9px var(--font-mono);
   color: var(--cyan);
   letter-spacing: 0.15em;
 }
@@ -423,7 +423,7 @@
   box-shadow: inset 3px 0 var(--green);
 }
 .choice-key {
-  font: 500 11px 'DM Mono';
+  font: 500 11px var(--font-mono);
   color: var(--cyan);
   border: 1px solid var(--border-choice);
   width: 21px;
@@ -455,7 +455,7 @@
   color: var(--yellow);
 }
 .feedback strong {
-  font: 10px 'DM Mono';
+  font: 10px var(--font-mono);
   letter-spacing: 0.09em;
 }
 .feedback p {
@@ -485,7 +485,7 @@
 .concept-chip {
   padding: 13px 2px;
   color: #6d888e;
-  font: 10px 'DM Mono';
+  font: 10px var(--font-mono);
   display: flex;
   gap: 9px;
   align-items: center;
@@ -517,7 +517,7 @@
   align-items: center;
   gap: 16px;
   color: var(--cyan);
-  font: 10px 'DM Mono';
+  font: 10px var(--font-mono);
   letter-spacing: 0.1em;
 }
 .console-head small {
@@ -532,7 +532,7 @@
   padding: 10px 0;
   overflow: hidden;
   color: #75a7a1;
-  font: 10px 'DM Mono';
+  font: 10px var(--font-mono);
   line-height: 1.9;
 }
 .console-arrow {
@@ -592,13 +592,13 @@
   padding: 13px;
 }
 .stat-label {
-  font: 9px 'DM Mono';
+  font: 9px var(--font-mono);
   letter-spacing: 0.1em;
   color: #76939a;
 }
 .stat-value {
   display: block;
-  font: 700 27px 'DM Mono';
+  font: 700 27px var(--font-mono);
   margin-top: 7px;
   color: #dcece8;
 }
@@ -635,7 +635,7 @@
   gap: 8px;
 }
 .rank-card span {
-  font: 9px 'DM Mono';
+  font: 9px var(--font-mono);
   color: var(--cyan);
   letter-spacing: 0.14em;
 }
@@ -668,7 +668,7 @@
 }
 .history-row > span {
   color: var(--green);
-  font: 11px 'DM Mono';
+  font: 11px var(--font-mono);
 }
 .history-row div {
   display: grid;
@@ -686,7 +686,7 @@
 }
 .closing {
   color: #678389;
-  font: 10px 'DM Mono';
+  font: 10px var(--font-mono);
   max-width: 600px;
   margin: 30px auto 0;
   line-height: 1.6;

@@ -1,5 +1,5 @@
 :root {
-  font-family: 'Space Grotesk', sans-serif;
+  font-family: var(--font-body);
   color: var(--text-primary);
   background: var(--bg);
   font-synthesis: none;
@@ -56,9 +56,7 @@ button:focus-visible {
 }
 
 .eyebrow {
-  font:
-    500 10px 'DM Mono',
-    monospace;
+  font: 500 10px var(--font-mono);
   letter-spacing: 0.18em;
   color: var(--cyan);
 }
