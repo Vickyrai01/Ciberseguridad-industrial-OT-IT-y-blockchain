@@ -30,6 +30,8 @@ jobs:
       - run: deno check --config supabase/functions/multiplayer/deno.json supabase/functions/multiplayer/index.ts
       - run: npm run format:check
       - run: npm run lint
+      - name: Lint CSS
+        run: npm run lint:css
       - run: npm run test
 
   build:

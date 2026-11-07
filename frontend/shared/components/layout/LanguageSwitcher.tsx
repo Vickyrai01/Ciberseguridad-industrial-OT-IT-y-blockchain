@@ -11,7 +11,7 @@ export function LanguageSwitcher() {
   }
 
   return (
-    <div className="language-switcher" aria-label={instance.t('common.languageSelector')}>
+    <div className="language-switcher" role="group" aria-label={instance.t('common.languageSelector')}>
       <button
         type="button"
         className={currentLanguage === LANGUAGE.ES ? 'active' : ''}

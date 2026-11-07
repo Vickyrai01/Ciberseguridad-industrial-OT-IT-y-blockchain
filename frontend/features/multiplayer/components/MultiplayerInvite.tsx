@@ -27,7 +27,7 @@ export function MultiplayerInvite({ inviteUrl }: MultiplayerInviteProps) {
   }
 
   return (
-    <div className="multiplayer-invite multiplayer-invite-layout" aria-label={t('multiplayer.invite')}>
+    <div className="multiplayer-invite multiplayer-invite-layout" role="region" aria-label={t('multiplayer.invite')}>
       <div className="multiplayer-invite-heading multiplayer-invite-heading-layout">
         <Eyebrow>{t('multiplayer.accessChannel')}</Eyebrow>
         <span className="multiplayer-invite-hint">{t('multiplayer.inviteHint')}</span>
