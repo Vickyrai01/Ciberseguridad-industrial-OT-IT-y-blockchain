@@ -39,8 +39,8 @@ export function PresenterDashboard({ room, error, loading, onAdvance, onFinish }
   }, [questionIndex, scenario.id])
 
   return (
-    <main className="presenter-dashboard ot-layout-screen">
-      <header className="presenter-dashboard-header">
+    <main className="presenter-dashboard presenter-dashboard-layout ot-layout-screen">
+      <header className="presenter-dashboard-header presenter-header-layout">
         <div>
           <Eyebrow>{t('multiplayer.presenterMode')}</Eyebrow>
           <h1>{t('multiplayer.questionLabel', { current: questionIndex + 1, total: totalQuestions })}</h1>
@@ -48,20 +48,22 @@ export function PresenterDashboard({ room, error, loading, onAdvance, onFinish }
         <PresenterMetric className="presenter-room-code" label={t('multiplayer.roomCode')} value={room.code} />
       </header>
 
-      <div className="presenter-main-grid">
-        <PlantPanel state={plantState} />
-        <div className="presenter-side-panel">
-          <section className="presenter-question" aria-live="polite">
+      <div className="presenter-main-grid presenter-main-grid-layout">
+        <div className="presenter-plant-column-layout">
+          <PlantPanel state={plantState} />
+        </div>
+        <div className="presenter-side-panel presenter-side-panel-layout">
+          <section className="presenter-question presenter-question-layout" aria-live="polite">
             <Eyebrow>{t(scenario.kickerKey)}</Eyebrow>
             <h2>{t(scenario.titleKey)}</h2>
             <p className="presenter-narrative">{t(scenario.narrativeKey)}</p>
             <p className="presenter-question-copy">{t(scenario.questionKey)}</p>
-            <div className="presenter-choices">
+            <div className="presenter-choices presenter-choices-layout">
               {scenario.choices.map((choice) => (
                 <div
-                  className={`presenter-choice${answerRevealed && choice.recommended ? ' correct' : ''}`}
+                  className={`presenter-choice presenter-choice-layout${answerRevealed && choice.recommended ? ' correct' : ''}`}
                   key={choice.id}>
-                  <span>{choice.id.toUpperCase()}</span>
+                  <span className="presenter-choice-key-layout">{choice.id.toUpperCase()}</span>
                   <p>{t(choice.labelKey)}</p>
                   {answerRevealed && choice.recommended && (
                     <strong className="presenter-choice-badge">{t('multiplayer.correctAnswer')}</strong>
@@ -77,12 +79,14 @@ export function PresenterDashboard({ room, error, loading, onAdvance, onFinish }
             </div>
           </section>
 
-          <aside className="presenter-progress">
+          <aside className="presenter-progress presenter-progress-layout">
             <PresenterMetric
+              className="presenter-progress-row-layout"
               label={t('multiplayer.connectedParticipants')}
               value={room.participants.filter(({ connected }) => connected).length}
             />
             <PresenterMetric
+              className="presenter-progress-row-layout"
               label={t('multiplayer.answersReceived')}
               value={`${answeredParticipants}/${room.participants.length}`}
             />
@@ -90,7 +94,7 @@ export function PresenterDashboard({ room, error, loading, onAdvance, onFinish }
         </div>
       </div>
 
-      <footer className="presenter-dashboard-actions">
+      <footer className="presenter-dashboard-actions presenter-actions-layout">
         <Button
           variant="secondary"
           type="button"
@@ -111,7 +115,7 @@ export function PresenterDashboard({ room, error, loading, onAdvance, onFinish }
         </Button>
       </footer>
       {!isLastQuestion && !allParticipantsAnswered && (
-        <p className="presenter-waiting" role="status">
+        <p className="presenter-waiting presenter-waiting-layout" role="status">
           {t('multiplayer.waitingForAnswers', { answered: answeredParticipants, total: room.participants.length })}
         </p>
       )}

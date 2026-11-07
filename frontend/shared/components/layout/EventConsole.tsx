@@ -14,15 +14,15 @@ export function EventConsole({ events }: { events: EventLogEntry[] }) {
     if (consoleRef.current) consoleRef.current.scrollTop = consoleRef.current.scrollHeight
   }, [events.length])
   return (
-    <section className="console" aria-label={t('common.decisionLog')}>
-      <div className="console-head">
+    <section className="console console-layout" aria-label={t('common.decisionLog')}>
+      <div className="console-head console-head-layout">
         <span>
           <span className="pulse-dot" /> {t('common.decisionLog')}
         </span>
         <small>{t('common.localScroll')}</small>
         <Activity size={15} />
       </div>
-      <div className="console-scroll" ref={consoleRef} role="log" aria-live="polite">
+      <div className="console-scroll console-scroll-layout" ref={consoleRef} role="log" aria-live="polite">
         {formattedEvents.map((event) => (
           <motion.div
             className={`event-line ${eventToneClass(event.tone)}`}

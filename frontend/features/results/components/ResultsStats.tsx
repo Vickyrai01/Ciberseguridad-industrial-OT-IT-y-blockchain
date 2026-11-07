@@ -13,7 +13,7 @@ export function ResultsStats({ state, correctDecisions, outcome }: ResultsStatsP
   const { t } = useTranslation()
 
   return (
-    <div className="result-stats">
+    <div className="result-stats result-stats-layout">
       <MetricCard
         label={t('common.security')}
         value={state.security}

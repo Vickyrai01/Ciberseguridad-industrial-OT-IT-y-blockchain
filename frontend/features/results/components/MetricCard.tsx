@@ -10,17 +10,17 @@ interface MetricCardProps {
 
 export function MetricCard({ label, value, suffix, tone = '', meterValue }: MetricCardProps) {
   return (
-    <div className="stat">
+    <div className="stat metric-card-layout">
       <div className="stat-label">
         {label}
         {tone && <span className={`tiny-dot ${tone}`} />}
       </div>
-      <div className="stat-value">
+      <div className="stat-value metric-value-layout">
         {value}
         <small>{suffix}</small>
       </div>
       {meterValue !== undefined && (
-        <div className="meter">
+        <div className="meter metric-meter-layout">
           <span className={tone} style={{ width: `${meterValue}%` }} />
         </div>
       )}

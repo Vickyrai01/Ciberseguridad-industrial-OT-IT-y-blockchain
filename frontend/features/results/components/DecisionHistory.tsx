@@ -5,16 +5,16 @@ import type { GameState } from '../../../types'
 export function DecisionHistory({ state }: { state: GameState }) {
   const { t } = useTranslation()
   return (
-    <div className="history">
+    <div className="history history-layout">
       {state.scenarioOrder.map((scenarioId, index) => {
         const scenario = scenarios.find((item) => item.id === scenarioId)
         if (!scenario) return null
         const decision = state.decisionsHistory.find((item) => item.scenarioId === scenario.id)
         const selected = scenario.choices.find((choice) => choice.id === decision?.choiceId)
         return (
-          <div className="history-row" key={scenario.id}>
+          <div className="history-row history-row-layout" key={scenario.id}>
             <span>0{index + 1}</span>
-            <div>
+            <div className="history-content-layout">
               <strong>{t(scenario.titleKey)}</strong>
               <small>
                 {t('common.selected')}: {selected ? t(selected.labelKey) : t('common.notAvailable')}

@@ -20,24 +20,26 @@ export function MultiplayerEntry({ error, loading, onBack, onJoin }: Multiplayer
 
   return (
     <MultiplayerPanel variant="entry">
-      <div className="multiplayer-entry-heading">
+      <div className="multiplayer-entry-heading multiplayer-entry-heading-layout">
         <Eyebrow>{t('common.liveSimulation')}</Eyebrow>
         <h1>{t('multiplayer.title')}</h1>
         <p className="muted">{t('multiplayer.subtitle')}</p>
       </div>
-      <div className="multiplayer-form multiplayer-entry-form">
-        <label>
+      <div className="multiplayer-form multiplayer-entry-form multiplayer-form-layout multiplayer-form-entry-layout">
+        <label className="multiplayer-form-label-layout">
           {t('multiplayer.roomCode')}
           <input
+            className="multiplayer-form-input-layout"
             value={code}
             maxLength={MULTIPLAYER_CONFIG.roomCodeMaxLength}
             onChange={(event) => setCode(event.target.value.toUpperCase())}
             placeholder="OT-7K42"
           />
         </label>
-        <label>
+        <label className="multiplayer-form-label-layout">
           {t('multiplayer.nickname')}
           <input
+            className="multiplayer-form-input-layout"
             value={nickname}
             maxLength={MULTIPLAYER_CONFIG.maxNicknameLength}
             onChange={(event) => setNickname(event.target.value)}

@@ -5,12 +5,12 @@ export function WelcomeBrand() {
   const { t } = useTranslation()
 
   return (
-    <div className="brand-lockup">
+    <div className="brand-lockup brand-lockup-layout">
       <Eyebrow pulse>{t('common.liveSimulation')}</Eyebrow>
-      <h1>
+      <h1 className="brand-title-layout">
         OT <span>UNDER</span> ATTACK
       </h1>
-      <p>{t('common.simulator')}</p>
+      <p className="brand-subtitle-layout">{t('common.simulator')}</p>
     </div>
   )
 }
