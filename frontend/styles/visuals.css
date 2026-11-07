@@ -1,7 +1,7 @@
 :root {
   font-family: 'Space Grotesk', sans-serif;
-  color: #e8f1ef;
-  background: #061017;
+  color: var(--text-primary);
+  background: var(--bg);
   font-synthesis: none;
 }
 * {
@@ -186,9 +186,7 @@ button:focus-visible {
 }
 .topbar {
   border-bottom: 1px solid var(--line);
-  background: #08161d;
-}
-.top-brand {
+  background: var(--surface-topbar);
 }
 .top-brand .mark {
   color: var(--green);
@@ -213,10 +211,6 @@ button:focus-visible {
 }
 .status-line .live {
   color: var(--green);
-}
-.top-actions {
-}
-.top-actions button {
 }
 .top-actions button:hover {
   border-color: var(--line);
@@ -421,8 +415,6 @@ button:focus-visible {
 .control-column {
   min-width: 0;
 }
-.scenario-progress {
-}
 .scenario-progress strong {
   display: block;
   font: 700 34px 'DM Mono';
@@ -432,8 +424,6 @@ button:focus-visible {
 .scenario-progress strong small {
   font-size: 13px;
   color: #607a80;
-}
-.progress-track {
 }
 .progress-track span {
   background: var(--green);
@@ -486,7 +476,7 @@ button:focus-visible {
   align-items: center;
   gap: 12px;
   text-align: left;
-  background: #10242c;
+  background: var(--surface-choice);
   border: 1px solid #23444d;
   padding: 11px 12px;
   color: #b4c9c8;
@@ -506,7 +496,7 @@ button:focus-visible {
 .choice-key {
   font: 500 11px 'DM Mono';
   color: var(--cyan);
-  border: 1px solid #3d7079;
+  border: 1px solid var(--border-choice);
   width: 21px;
   height: 21px;
   display: grid;
@@ -627,10 +617,6 @@ button:focus-visible {
 .critical .console {
   border-color: var(--red);
 }
-.results {
-}
-.results-content {
-}
 .results h1 {
   font-size: clamp(2.5rem, 6vw, 6rem);
   line-height: 0.95;
@@ -672,7 +658,7 @@ button:focus-visible {
   margin-bottom: 20px;
 }
 .stat {
-  border: 1px solid #294852;
+  border: 1px solid var(--border-panel);
   background: #0d2028;
   padding: 13px;
 }
@@ -729,10 +715,8 @@ button:focus-visible {
   color: var(--green);
 }
 .rank-card small {
-  color: #9bb5b2;
+  color: var(--text-copy);
   line-height: 1.5;
-}
-.results-actions {
 }
 .secondary-btn {
   background: #10262d;
@@ -745,7 +729,7 @@ button:focus-visible {
   max-width: 720px;
   text-align: left;
   margin: 22px auto 0;
-  border-top: 1px solid #294852;
+  border-top: 1px solid var(--border-panel);
 }
 .history-row {
   display: flex;
@@ -837,7 +821,7 @@ button:focus-visible {
 }
 .multiplayer-panel h1 {
   margin: 0.35rem 0 1rem;
-  color: #d8fff8;
+  color: var(--text-heading);
   font-size: clamp(1.9rem, 5vw, 3.8rem);
   letter-spacing: -0.045em;
   line-height: 0.95;
@@ -896,13 +880,9 @@ button:focus-visible {
   justify-content: space-between;
   gap: 2rem;
 }
-.multiplayer-invite {
-}
-.multiplayer-invite-heading {
-}
 .multiplayer-invite-hint,
 .multiplayer-copied {
-  color: #71959b;
+  color: var(--text-muted-strong);
   font: 500 9px var(--font-mono);
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -917,7 +897,7 @@ button:focus-visible {
   flex: 1;
   overflow: hidden;
   padding: 0.85rem 1rem;
-  color: #d8fff8;
+  color: var(--text-heading);
   font: 500 12px var(--font-mono);
   line-height: 1.4;
   text-overflow: ellipsis;
@@ -974,15 +954,13 @@ button:focus-visible {
   display: flex;
   justify-content: space-between;
   gap: 1rem;
-  color: #67d9e1;
+  color: var(--cyan-strong);
   font: 500 10px var(--font-mono);
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
-.leaderboard-list {
-}
 .leaderboard-row {
-  color: #c5d6d8;
+  color: var(--text-content);
   font-size: 0.82rem;
 }
 .leaderboard-row.current {
@@ -991,7 +969,7 @@ button:focus-visible {
 }
 .leaderboard-position,
 .leaderboard-progress {
-  color: #71959b;
+  color: var(--text-muted-strong);
   font-size: 0.72rem;
 }
 .leaderboard-name {
@@ -1000,12 +978,12 @@ button:focus-visible {
   white-space: nowrap;
 }
 .leaderboard-score {
-  color: #f7b955;
+  color: var(--score);
   text-align: right;
 }
 .leaderboard-empty {
   margin: 0.7rem 0 0;
-  color: #71959b;
+  color: var(--text-muted-strong);
   font-size: 0.8rem;
 }
 .roster-title,
@@ -1014,7 +992,7 @@ button:focus-visible {
 }
 .roster-row span:last-child {
   margin-left: auto;
-  color: #82aaa7;
+  color: var(--text-status);
   font-size: 0.75rem;
 }
 .status-dot {
@@ -1024,8 +1002,8 @@ button:focus-visible {
   background: #8b5555;
 }
 .status-dot.online {
-  background: #6ce2a1;
-  box-shadow: 0 0 12px #6ce2a1;
+  background: var(--green-status);
+  box-shadow: 0 0 12px var(--green-status);
 }
 .multiplayer-actions {
   display: flex;
@@ -1058,8 +1036,6 @@ button:focus-visible {
 .presenter-dashboard {
   font-family: var(--font-body);
 }
-.presenter-dashboard-header {
-}
 .presenter-dashboard h1,
 .presenter-dashboard h2 {
   margin: 0.5rem 0 0;
@@ -1082,13 +1058,13 @@ button:focus-visible {
 }
 .presenter-room-code span,
 .presenter-progress span {
-  color: #82aaa7;
+  color: var(--text-status);
   font: 500 10px var(--font-mono);
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 .presenter-room-code strong {
-  color: #f7b955;
+  color: var(--score);
   font: 700 clamp(1.4rem, 2.5vw, 1.8rem) var(--font-mono);
   letter-spacing: 0.1em;
 }
@@ -1097,10 +1073,6 @@ button:focus-visible {
   background: linear-gradient(145deg, rgba(14, 34, 42, 0.96), rgba(7, 20, 27, 0.96));
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
 }
-.presenter-main-grid {
-}
-.presenter-main-grid .plant-column {
-}
 .presenter-main-grid .plant-frame {
   flex: 1 1 auto;
   height: auto;
@@ -1108,7 +1080,7 @@ button:focus-visible {
 }
 .presenter-side-panel {
   scrollbar-width: thin;
-  scrollbar-color: #294f58 #08161d;
+  scrollbar-color: var(--scrollbar-thumb) var(--surface-topbar);
 }
 .presenter-question h2 {
   margin-top: 0.65rem;
@@ -1120,25 +1092,23 @@ button:focus-visible {
 .presenter-question-copy {
   max-width: 70ch;
   font-size: 0.92rem;
-  color: #c5d6d8;
+  color: var(--text-content);
   line-height: 1.65;
 }
 .presenter-question-copy {
   margin-top: 1.1rem;
   padding-left: 0.75rem;
   border-left: 2px solid var(--cyan);
-  color: #67d9e1;
+  color: var(--cyan-strong);
   font-weight: 600;
-}
-.presenter-choices {
 }
 .presenter-choice {
   border: 1px solid rgba(35, 68, 77, 0.95);
-  background: #10242c;
+  background: var(--surface-choice);
   color: #b4c9c8;
 }
 .presenter-choice > span {
-  border: 1px solid #3d7079;
+  border: 1px solid var(--border-choice);
   color: var(--cyan);
   font: 500 0.72rem var(--font-mono);
 }
@@ -1182,13 +1152,9 @@ button:focus-visible {
   border: 1px solid rgba(102, 211, 201, 0.25);
   background: rgba(3, 18, 24, 0.72);
 }
-.presenter-progress div {
-}
 .presenter-progress strong {
-  color: #f7b955;
+  color: var(--score);
   font: 700 1.4rem var(--font-mono);
-}
-.presenter-dashboard-actions {
 }
 .presenter-reveal-button {
   border: 1px solid rgba(103, 224, 176, 0.55);
@@ -1275,14 +1241,14 @@ button:focus-visible {
 }
 .waiting-presenter-modal h2 {
   margin: 0.7rem 0 0.8rem;
-  color: #e8f1ef;
+  color: var(--text-primary);
   font-size: clamp(1.45rem, 4vw, 2rem);
   letter-spacing: -0.035em;
 }
 .waiting-presenter-modal > p:not(.eyebrow) {
   max-width: 32ch;
   margin: 0 auto;
-  color: #9bb5b2;
+  color: var(--text-copy);
   font-size: 0.95rem;
   line-height: 1.55;
 }

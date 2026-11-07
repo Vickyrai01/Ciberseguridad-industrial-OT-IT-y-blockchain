@@ -8,6 +8,22 @@
   --yellow: #e4b354;
   --red: #f36c61;
   --orange: #f49a6c;
+  --text-primary: #e8f1ef;
+  --text-heading: #d8fff8;
+  --text-content: #c5d6d8;
+  --text-copy: #9bb5b2;
+  --text-muted-strong: #71959b;
+  --text-status: #82aaa7;
+  --surface-topbar: #08161d;
+  --surface-choice: #10242c;
+  --border-choice: #3d7079;
+  --border-panel: #294852;
+  --cyan-strong: #67d9e1;
+  --green-status: #6ce2a1;
+  --score: #f7b955;
+  --console-bg: #0a1a20;
+  --console-line: #3b7d82;
+  --scrollbar-thumb: #294f58;
   --font-body: 'Space Grotesk', sans-serif;
   --font-mono: 'DM Mono', monospace;
 }
