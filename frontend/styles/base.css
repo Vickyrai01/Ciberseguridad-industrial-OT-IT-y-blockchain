@@ -1,0 +1,68 @@
+:root {
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--text-primary);
+  background: var(--bg);
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--bg);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 3px;
+}
+
+.app-shell {
+  min-height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(circle at 58% 22%, #112630 0, #071219 36%, #050c11 100%);
+  position: relative;
+}
+
+.scanlines {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, #9fd4d2 4px);
+  mix-blend-mode: screen;
+  z-index: 5;
+}
+
+.pulse-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 99px;
+  background: var(--green);
+  box-shadow:
+    0 0 0 4px #67e0b020,
+    0 0 12px var(--green);
+  margin-right: 8px;
+}
+
+.eyebrow {
+  font:
+    500 10px 'DM Mono',
+    monospace;
+  letter-spacing: 0.18em;
+  color: var(--cyan);
+}
+
+.muted {
+  color: var(--muted) !important;
+}

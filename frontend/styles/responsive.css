@@ -1,0 +1,118 @@
+@media (max-width: 900px) {
+  .hero-plant {
+    opacity: 0.28;
+    width: 90vw;
+    right: -12vw;
+    top: 12%;
+  }
+
+  .welcome-meta span:last-child {
+    margin-left: 0;
+  }
+
+  .control-column {
+    max-width: 700px;
+    width: 100%;
+    margin: auto;
+  }
+
+  .status-line {
+    display: none;
+  }
+}
+
+@media (max-width: 520px) {
+  .topbar {
+    padding: 0 14px;
+  }
+
+  .top-brand small {
+    display: none;
+  }
+
+  .plant-caption {
+    font-size: 8px;
+    gap: 8px;
+  }
+
+  .briefing {
+    padding: 17px;
+  }
+
+  .results {
+    padding: 24px 14px;
+  }
+
+  .result-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .results-actions {
+    flex-direction: column;
+  }
+
+  .brand-lockup h1 {
+    font-size: 3.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .multiplayer-heading {
+    display: block;
+  }
+
+  .multiplayer-invite-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .multiplayer-qr {
+    margin-top: 1rem;
+  }
+
+  .multiplayer-leaderboard.floating {
+    right: 1rem;
+    bottom: 1rem;
+    width: calc(100vw - 2rem);
+  }
+
+  .presenter-dashboard {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    min-height: 100vh;
+    padding: 1rem;
+  }
+
+  .presenter-main-grid {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .presenter-side-panel {
+    height: auto;
+    padding-top: 0;
+  }
+
+  .presenter-main-grid .plant-frame {
+    height: 24rem;
+  }
+
+  .presenter-dashboard-header {
+    display: block;
+  }
+
+  .presenter-room-code {
+    margin-top: 1rem;
+  }
+
+  .presenter-dashboard-actions {
+    justify-content: stretch;
+  }
+
+  .presenter-dashboard-actions button {
+    flex: 1 1 100%;
+  }
+}

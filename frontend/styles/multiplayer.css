@@ -1,0 +1,264 @@
+.multiplayer-page {
+  background: radial-gradient(circle at 50% 20%, rgba(24, 96, 104, 0.22), transparent 45%);
+  font-family: var(--font-body);
+}
+
+.multiplayer-panel {
+  border: 1px solid rgba(102, 211, 201, 0.3);
+  background: rgba(5, 20, 25, 0.9);
+  box-shadow:
+    0 0 50px rgba(0, 0, 0, 0.35),
+    inset 0 0 0 1px rgba(109, 217, 229, 0.04);
+}
+
+.multiplayer-panel h1 {
+  margin: 0.35rem 0 1rem;
+  color: var(--text-heading);
+  font-size: clamp(1.9rem, 5vw, 3.8rem);
+  letter-spacing: -0.045em;
+  line-height: 0.95;
+  font-weight: 700;
+}
+
+.multiplayer-entry-heading {
+  display: grid;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.multiplayer-entry-heading h1 {
+  max-width: 10ch;
+  margin: 0;
+}
+
+.multiplayer-entry-heading p {
+  max-width: 42ch;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.multiplayer-form {
+  display: grid;
+  gap: 1rem;
+  max-width: 32rem;
+}
+
+.multiplayer-entry-form {
+  max-width: none;
+  gap: 1.1rem;
+}
+
+.multiplayer-form label {
+  display: grid;
+  gap: 0.35rem;
+  color: #9fc4c1;
+  font: 500 10px var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.multiplayer-form input {
+  border: 1px solid rgba(102, 211, 201, 0.35);
+  background: #07151a;
+  color: #eafffa;
+  padding: 0.8rem 1rem;
+  font: 500 14px var(--font-mono);
+}
+
+.secondary-btn {
+  border: 1px solid rgba(102, 211, 201, 0.55);
+  color: #baf8ec;
+  padding: 0.75rem 1rem;
+}
+
+.multiplayer-entry-form > .text-btn {
+  justify-self: start;
+  padding-inline: 0;
+}
+
+.multiplayer-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.multiplayer-invite-hint,
+.multiplayer-copied {
+  color: var(--text-muted-strong);
+  font: 500 9px var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.multiplayer-invite-url {
+  border: 1px solid rgba(102, 211, 201, 0.35);
+  background: rgba(3, 18, 24, 0.86);
+  box-shadow: inset 0 0 18px rgba(34, 113, 124, 0.08);
+}
+
+.multiplayer-invite-url code {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+  padding: 0.85rem 1rem;
+  color: var(--text-heading);
+  font: 500 12px var(--font-mono);
+  line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.multiplayer-copy-btn {
+  display: grid;
+  flex: 0 0 42px;
+  place-items: center;
+  align-self: stretch;
+  border: 0;
+  border-left: 1px solid rgba(102, 211, 201, 0.22);
+  background: rgba(102, 211, 201, 0.08);
+  color: var(--cyan);
+  transition:
+    background var(--motion-fast),
+    color var(--motion-fast);
+}
+
+.multiplayer-copy-btn:hover:not(:disabled),
+.multiplayer-copy-btn:focus-visible {
+  background: rgba(102, 211, 201, 0.18);
+  color: var(--green);
+}
+
+.multiplayer-copy-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.multiplayer-copied {
+  color: var(--green);
+}
+
+.multiplayer-qr {
+  width: min(180px, 35vw);
+  padding: 0.4rem;
+  background: white;
+}
+
+.multiplayer-roster {
+  border-top: 1px solid rgba(102, 211, 201, 0.25);
+  scrollbar-gutter: stable;
+}
+
+.multiplayer-leaderboard {
+  border: 1px solid rgba(102, 211, 201, 0.25);
+  background: rgba(3, 18, 24, 0.72);
+  padding: 0.8rem;
+  scrollbar-gutter: stable;
+}
+
+.multiplayer-leaderboard.floating {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 5;
+  width: min(22rem, calc(100vw - 3rem));
+}
+
+.leaderboard-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--cyan-strong);
+  font: 500 10px var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.leaderboard-row {
+  color: var(--text-content);
+  font-size: 0.82rem;
+}
+
+.leaderboard-row.current {
+  background: rgba(102, 211, 201, 0.12);
+  color: #fff;
+}
+
+.leaderboard-position,
+.leaderboard-progress {
+  color: var(--text-muted-strong);
+  font-size: 0.72rem;
+}
+
+.leaderboard-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leaderboard-score {
+  color: var(--score);
+  text-align: right;
+}
+
+.leaderboard-empty {
+  margin: 0.7rem 0 0;
+  color: var(--text-muted-strong);
+  font-size: 0.8rem;
+}
+
+.roster-title,
+.roster-row {
+  border-bottom: 1px solid rgba(102, 211, 201, 0.13);
+}
+
+.roster-row span:last-child {
+  margin-left: auto;
+  color: var(--text-status);
+  font-size: 0.75rem;
+}
+
+.status-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 50%;
+  background: #8b5555;
+}
+
+.status-dot.online {
+  background: var(--green-status);
+  box-shadow: 0 0 12px var(--green-status);
+}
+
+.multiplayer-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: clamp(1rem, 2vh, 2rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(102, 211, 201, 0.18);
+}
+
+.multiplayer-actions .primary-btn {
+  flex: 0 0 auto;
+}
+
+.multiplayer-actions .text-btn {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.multiplayer-room-status {
+  margin: 0;
+  color: var(--yellow);
+  font: 500 10px var(--font-mono);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.multiplayer-error {
+  color: #ff9a8f;
+}
