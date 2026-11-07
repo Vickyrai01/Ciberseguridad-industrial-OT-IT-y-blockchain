@@ -1,3 +1,5 @@
+import { MULTIPLAYER_SHARED_CONFIG } from '../../../shared/multiplayer/contracts'
+
 export const MULTIPLAYER_MODE = {
   IDLE: 'idle',
   ENTRY: 'entry',
@@ -16,14 +18,12 @@ export const MULTIPLAYER_VIEW_MODES = [
 ] as const
 export type MultiplayerViewMode = (typeof MULTIPLAYER_VIEW_MODES)[number]
 
+export { MULTIPLAYER_SHARED_CONFIG }
+
 export const MULTIPLAYER_CONFIG = {
-  apiVersion: 'v1',
-  roomCodeMinLength: 4,
-  roomCodeMaxLength: 7,
-  minNicknameLength: 2,
-  maxNicknameLength: 20,
-  requestTimeoutMs: 10000,
-  heartbeatIntervalMs: 20000,
+  ...MULTIPLAYER_SHARED_CONFIG,
+  roomCodeMinLength: MULTIPLAYER_SHARED_CONFIG.roomCodeLength,
+  roomCodeMaxLength: MULTIPLAYER_SHARED_CONFIG.roomCodePrefix.length + MULTIPLAYER_SHARED_CONFIG.roomCodeLength,
 } as const
 import {
   MULTIPLAYER_OPERATION,
@@ -44,3 +44,8 @@ export const MULTIPLAYER_CONNECTION_STATUS = {
 } as const
 export type MultiplayerConnectionStatus =
   (typeof MULTIPLAYER_CONNECTION_STATUS)[keyof typeof MULTIPLAYER_CONNECTION_STATUS]
+
+export const REALTIME_SUBSCRIPTION_STATUS = {
+  SUBSCRIBED: 'SUBSCRIBED',
+  DISCONNECTED: 'DISCONNECTED',
+} as const

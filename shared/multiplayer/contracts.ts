@@ -40,6 +40,36 @@ export type ChoiceId = (typeof CHOICE_IDS)[number]
 export const SCENARIO_IDS = [1, 2, 3, 4, 5] as const
 export type ScenarioId = (typeof SCENARIO_IDS)[number]
 
+export const MULTIPLAYER_SHARED_CONFIG = {
+  apiVersion: API_VERSION,
+  minNicknameLength: 2,
+  maxNicknameLength: 20,
+  roomCodeLength: 4,
+  roomCodePrefix: 'OT-',
+  requestTimeoutMs: 10_000,
+  sessionFreshnessMs: 60_000,
+  heartbeatIntervalMs: 20_000,
+  inviteCopiedDurationMs: 1_800,
+} as const
+
+export const MULTIPLAYER_ERROR_CODE = {
+  INTERNAL_ERROR: 'INTERNAL_ERROR',
+  UNKNOWN_OPERATION: 'UNKNOWN_OPERATION',
+  UNSUPPORTED_API_VERSION: 'UNSUPPORTED_API_VERSION',
+  ROOM_NOT_FOUND: 'ROOM_NOT_FOUND',
+  ROOM_NOT_ACTIVE: 'ROOM_NOT_ACTIVE',
+  ROOM_FULL: 'ROOM_FULL',
+  ROOM_CREATE_FAILED: 'ROOM_CREATE_FAILED',
+  INVALID_SCENARIO: 'INVALID_SCENARIO',
+  INVALID_CHOICE: 'INVALID_CHOICE',
+  INVALID_NICKNAME: 'INVALID_NICKNAME',
+  PARTICIPANT_NOT_AUTHORIZED: 'PARTICIPANT_NOT_AUTHORIZED',
+  PRESENTER_NOT_AUTHORIZED: 'PRESENTER_NOT_AUTHORIZED',
+  QUESTION_NOT_COMPLETE: 'QUESTION_NOT_COMPLETE',
+  NO_MORE_QUESTIONS: 'NO_MORE_QUESTIONS',
+} as const
+export type MultiplayerErrorCode = (typeof MULTIPLAYER_ERROR_CODE)[keyof typeof MULTIPLAYER_ERROR_CODE]
+
 export interface LeaderboardEntry {
   position: number
   participantId: string

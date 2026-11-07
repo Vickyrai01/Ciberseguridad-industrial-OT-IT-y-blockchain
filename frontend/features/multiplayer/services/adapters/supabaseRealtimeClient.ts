@@ -1,7 +1,13 @@
 import { createClient, type RealtimeChannel, type SupabaseClient } from '@supabase/supabase-js'
 import { readSupabasePublicConfig } from '../supabaseConfig'
 
-export type RealtimeConnectionStatus = 'SUBSCRIBED' | 'CHANNEL_ERROR' | 'TIMED_OUT' | 'CLOSED'
+export const REALTIME_CONNECTION_STATUS = {
+  SUBSCRIBED: 'SUBSCRIBED',
+  CHANNEL_ERROR: 'CHANNEL_ERROR',
+  TIMED_OUT: 'TIMED_OUT',
+  CLOSED: 'CLOSED',
+} as const
+export type RealtimeConnectionStatus = (typeof REALTIME_CONNECTION_STATUS)[keyof typeof REALTIME_CONNECTION_STATUS]
 
 export function createSupabaseRealtimeClient() {
   const config = readSupabasePublicConfig()
@@ -18,7 +24,12 @@ export function createSupabaseRealtimeClient() {
         config: { broadcast: { ack: false }, presence: { key: roomId } },
       })
       void channel.on('broadcast', { event: 'room.updated' }, onRoomUpdated).subscribe((status) => {
-        if (status === 'SUBSCRIBED' || status === 'CHANNEL_ERROR' || status === 'TIMED_OUT' || status === 'CLOSED')
+        if (
+          status === REALTIME_CONNECTION_STATUS.SUBSCRIBED ||
+          status === REALTIME_CONNECTION_STATUS.CHANNEL_ERROR ||
+          status === REALTIME_CONNECTION_STATUS.TIMED_OUT ||
+          status === REALTIME_CONNECTION_STATUS.CLOSED
+        )
           onStatusChanged?.(status)
       })
       return () => {

@@ -2,6 +2,7 @@ import { supabase } from '../infrastructure/supabase.ts'
 import { AppError } from '../shared/errors.ts'
 import type { RoomStatus } from '../domain/rooms.ts'
 import {
+  ERROR_CODE,
   HTTP_STATUS,
   PARTICIPANT_STATUS,
   QUESTION_STATUS,
@@ -10,6 +11,22 @@ import {
   type ParticipantStatus,
 } from '../shared/constants.ts'
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null
+}
+
+function requireId(data: unknown): { id: string } {
+  if (!isRecord(data) || typeof data.id !== 'string')
+    throw new AppError(ERROR_CODE.INTERNAL_ERROR, HTTP_STATUS.INTERNAL_ERROR)
+  return { id: data.id }
+}
+
+function requireParticipantReference(data: unknown): { id: string; room_id: string } {
+  if (!isRecord(data) || typeof data.id !== 'string' || typeof data.room_id !== 'string')
+    throw new AppError(ERROR_CODE.INTERNAL_ERROR, HTTP_STATUS.INTERNAL_ERROR)
+  return { id: data.id, room_id: data.room_id }
+}
+
 export async function insertRoom(input: { code: string; presenterTokenHash: string; scenarioOrder: number[] }) {
   const { data, error } = await supabase
     .from('game_rooms')
@@ -17,7 +34,7 @@ export async function insertRoom(input: { code: string; presenterTokenHash: stri
     .select('id')
     .single()
   if (error) throw error
-  return data as { id: string }
+  return requireId(data)
 }
 
 export async function findRoomById(roomId: string, full = false) {
@@ -29,13 +46,13 @@ export async function findRoomById(roomId: string, full = false) {
         .eq('id', roomId)
         .single()
   const { data, error } = await query
-  if (error || !data) throw new AppError('ROOM_NOT_FOUND', HTTP_STATUS.NOT_FOUND)
+  if (error || !data) throw new AppError(ERROR_CODE.ROOM_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
   return data
 }
 
 export async function findRoomByCode(code: string) {
   const { data, error } = await supabase.from('game_rooms').select('*').eq('code', code).single()
-  if (error || !data) throw new AppError('ROOM_NOT_FOUND', HTTP_STATUS.NOT_FOUND)
+  if (error || !data) throw new AppError(ERROR_CODE.ROOM_NOT_FOUND, HTTP_STATUS.NOT_FOUND)
   return data
 }
 
@@ -112,7 +129,7 @@ export async function insertParticipant(input: {
     if (error.code === '23505') throw new AppError('NICKNAME_TAKEN')
     throw error
   }
-  return data as { id: string }
+  return requireId(data)
 }
 
 export async function markParticipantDisconnected(participantId: string) {
@@ -141,14 +158,14 @@ export async function touchParticipant(participantId: string) {
 }
 
 export async function findParticipantByTokenHash(tokenHash: string | undefined) {
-  if (!tokenHash) throw new AppError('PARTICIPANT_NOT_AUTHORIZED', HTTP_STATUS.UNAUTHORIZED)
+  if (!tokenHash) throw new AppError(ERROR_CODE.PARTICIPANT_NOT_AUTHORIZED, HTTP_STATUS.UNAUTHORIZED)
   const { data, error } = await supabase
     .from('game_participants')
     .select('id,room_id')
     .eq('participant_token_hash', tokenHash)
     .single()
-  if (error || !data) throw new AppError('PARTICIPANT_NOT_AUTHORIZED', HTTP_STATUS.UNAUTHORIZED)
-  return data as { id: string; room_id: string }
+  if (error || !data) throw new AppError(ERROR_CODE.PARTICIPANT_NOT_AUTHORIZED, HTTP_STATUS.UNAUTHORIZED)
+  return requireParticipantReference(data)
 }
 
 export async function listParticipants(roomId: string) {

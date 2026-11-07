@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Check, Copy } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { MULTIPLAYER_CONFIG } from '../constants'
 import { Eyebrow } from '../../../shared/components/ui/Eyebrow'
 
 interface MultiplayerInviteProps {
@@ -20,7 +21,7 @@ export function MultiplayerInvite({ inviteUrl }: MultiplayerInviteProps) {
     try {
       await navigator.clipboard.writeText(inviteUrl)
       setCopied(true)
-      window.setTimeout(() => setCopied(false), 1800)
+      window.setTimeout(() => setCopied(false), MULTIPLAYER_CONFIG.inviteCopiedDurationMs)
     } catch {
       setCopied(false)
     }

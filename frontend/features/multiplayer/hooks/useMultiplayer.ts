@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer } from 'react'
-import { MULTIPLAYER_CONFIG, MULTIPLAYER_CONNECTION_STATUS } from '../constants'
+import { MULTIPLAYER_CONFIG, MULTIPLAYER_CONNECTION_STATUS, REALTIME_SUBSCRIPTION_STATUS } from '../constants'
 import { multiplayerService } from '../services/multiplayerService'
 import { initialMultiplayerState, multiplayerReducer } from './multiplayerReducer'
 import { useMultiplayerParticipantActions } from './useMultiplayerParticipantActions'
@@ -31,9 +31,11 @@ export function useMultiplayer() {
       () => void refresh(),
       (status) => {
         const connectionStatus =
-          status === 'SUBSCRIBED' ? MULTIPLAYER_CONNECTION_STATUS.CONNECTED : MULTIPLAYER_CONNECTION_STATUS.DISCONNECTED
+          status === REALTIME_SUBSCRIPTION_STATUS.SUBSCRIBED
+            ? MULTIPLAYER_CONNECTION_STATUS.CONNECTED
+            : MULTIPLAYER_CONNECTION_STATUS.DISCONNECTED
         dispatch({ type: 'CONNECTION', status: connectionStatus })
-        if (status === 'SUBSCRIBED') void refresh()
+        if (status === REALTIME_SUBSCRIPTION_STATUS.SUBSCRIBED) void refresh()
       },
     )
     return unsubscribe
