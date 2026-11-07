@@ -3,7 +3,7 @@
   align-items: center;
   gap: 4px;
   margin-right: 8px;
-  color: #52727a;
+  color: var(--text-i18n-muted);
   font:
     10px 'DM Mono',
     monospace;
@@ -14,7 +14,7 @@
   border: 0;
   padding: 5px 3px;
   background: transparent;
-  color: #52727a;
+  color: var(--text-i18n-muted);
   font: inherit;
 }
 

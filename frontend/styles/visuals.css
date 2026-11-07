@@ -246,7 +246,7 @@
 }
 .process-pipe {
   fill: none;
-  stroke: #66858a;
+  stroke: var(--text-plant-muted);
   stroke-width: 8;
   stroke-linecap: square;
   stroke-linejoin: round;
@@ -267,7 +267,7 @@
   stroke-width: 2;
 }
 .pump-shaft {
-  stroke: #66858a;
+  stroke: var(--text-plant-muted);
   stroke-width: 4;
 }
 .pump-symbol {
@@ -408,7 +408,7 @@
   background: var(--surface-choice);
   border: 1px solid #23444d;
   padding: 11px 12px;
-  color: #b4c9c8;
+  color: var(--text-choice);
   font-size: 12px;
   transition: 0.2s;
 }
