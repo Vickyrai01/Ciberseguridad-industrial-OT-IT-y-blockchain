@@ -23,6 +23,7 @@ export const MULTIPLAYER_CONFIG = {
   minNicknameLength: 2,
   maxNicknameLength: 20,
   requestTimeoutMs: 10000,
+  heartbeatIntervalMs: 20000,
 } as const
 import {
   MULTIPLAYER_OPERATION,

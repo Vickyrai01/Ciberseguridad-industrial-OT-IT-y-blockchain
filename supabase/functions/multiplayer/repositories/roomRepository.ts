@@ -6,6 +6,7 @@ import {
   PARTICIPANT_STATUS,
   QUESTION_STATUS,
   ROOM_STATUS,
+  MULTIPLAYER_CONFIG,
   type ParticipantStatus,
 } from '../shared/constants.ts'
 
@@ -80,11 +81,13 @@ export async function countAnsweredForQuestion(roomId: string, scenarioId: numbe
 }
 
 export async function countParticipants(roomId: string): Promise<number> {
+  const activeSince = new Date(Date.now() - MULTIPLAYER_CONFIG.sessionFreshnessMs).toISOString()
   const { count, error } = await supabase
     .from('game_participants')
     .select('id', { count: 'exact', head: true })
     .eq('room_id', roomId)
     .neq('status', PARTICIPANT_STATUS.DISCONNECTED)
+    .gt('last_seen_at', activeSince)
   if (error) throw error
   return count ?? 0
 }
@@ -125,6 +128,15 @@ export async function markParticipantConnected(participantId: string, status: Pa
     .from('game_participants')
     .update({ status, last_seen_at: new Date().toISOString() })
     .eq('id', participantId)
+  if (error) throw error
+}
+
+export async function touchParticipant(participantId: string) {
+  const { error } = await supabase
+    .from('game_participants')
+    .update({ last_seen_at: new Date().toISOString() })
+    .eq('id', participantId)
+    .neq('status', PARTICIPANT_STATUS.DISCONNECTED)
   if (error) throw error
 }
 

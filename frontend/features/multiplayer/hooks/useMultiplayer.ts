@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useReducer } from 'react'
-import { MULTIPLAYER_CONNECTION_STATUS } from '../constants'
+import { MULTIPLAYER_CONFIG, MULTIPLAYER_CONNECTION_STATUS } from '../constants'
 import { multiplayerService } from '../services/multiplayerService'
 import { initialMultiplayerState, multiplayerReducer } from './multiplayerReducer'
 import { useMultiplayerParticipantActions } from './useMultiplayerParticipantActions'
@@ -40,17 +40,32 @@ export function useMultiplayer() {
   }, [refresh, state.session])
 
   useEffect(() => {
+    if (!state.session || state.session.presenterToken) return
+    const heartbeat = window.setInterval(() => {
+      if (navigator.onLine) void refresh()
+    }, MULTIPLAYER_CONFIG.heartbeatIntervalMs)
+    return () => window.clearInterval(heartbeat)
+  }, [refresh, state.session])
+
+  useEffect(() => {
     if (!state.session) return
     const handleOnline = () => {
       dispatch({ type: 'CONNECTION', status: MULTIPLAYER_CONNECTION_STATUS.CONNECTING })
       void refresh()
     }
     const handleOffline = () => dispatch({ type: 'CONNECTION', status: MULTIPLAYER_CONNECTION_STATUS.DISCONNECTED })
+    const handleVisibilityChange = () => {
+      if (document.visibilityState !== 'visible') return
+      dispatch({ type: 'CONNECTION', status: MULTIPLAYER_CONNECTION_STATUS.CONNECTING })
+      void refresh()
+    }
     window.addEventListener('online', handleOnline)
     window.addEventListener('offline', handleOffline)
+    document.addEventListener('visibilitychange', handleVisibilityChange)
     return () => {
       window.removeEventListener('online', handleOnline)
       window.removeEventListener('offline', handleOffline)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [refresh, state.session])
 

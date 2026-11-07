@@ -27,6 +27,7 @@ export const MULTIPLAYER_CONFIG = {
   roomCodePrefix: 'OT-',
   roomCodeAlphabet: 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789',
   sessionFreshnessMs: 60_000,
+  sessionHeartbeatMs: 20_000,
   createRoomAttempts: 5,
 } as const
 

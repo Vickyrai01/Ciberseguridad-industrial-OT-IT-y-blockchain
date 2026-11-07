@@ -5,8 +5,11 @@ import { MULTIPLAYER_CONFIG, PARTICIPANT_STATUS } from '../shared/constants.ts'
 export async function getRoomView(roomId: string, currentParticipantId?: string) {
   const room = await findRoomById(roomId)
   const participants = await listParticipants(roomId)
+  const activeSince = Date.now() - MULTIPLAYER_CONFIG.sessionFreshnessMs
   const connectedParticipants = participants.filter(
-    (participant) => participant.status !== PARTICIPANT_STATUS.DISCONNECTED,
+    (participant) =>
+      participant.status !== PARTICIPANT_STATUS.DISCONNECTED &&
+      new Date(participant.last_seen_at).getTime() > activeSince,
   )
   const completedCounts = await listAnswerCounts(roomId)
   const answerScores = await listAnswerScores(roomId)
@@ -38,7 +41,7 @@ export async function getRoomView(roomId: string, currentParticipantId?: string)
         status: participant.status,
         connected:
           participant.status !== PARTICIPANT_STATUS.DISCONNECTED &&
-          Date.now() - new Date(participant.last_seen_at).getTime() < MULTIPLAYER_CONFIG.sessionFreshnessMs,
+          new Date(participant.last_seen_at).getTime() > activeSince,
       }))
       .filter(({ connected }) => connected),
     leaderboard,

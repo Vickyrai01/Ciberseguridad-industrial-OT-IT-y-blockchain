@@ -24,6 +24,7 @@ import {
   markParticipantDisconnected,
   openQuestion,
   submitAnswer,
+  touchParticipant,
   updateRoomStatus,
   advanceRoomQuestion,
 } from '../repositories/roomRepository.ts'
@@ -54,6 +55,7 @@ async function authorizeRoomAccess(body: Record<string, unknown>, roomId: string
     const participant = await findParticipantByTokenHash(await hashToken(participantToken))
     if (participant.room_id !== roomId)
       throw new AppError(ERROR_CODE.PARTICIPANT_NOT_AUTHORIZED, HTTP_STATUS.UNAUTHORIZED)
+    await touchParticipant(participant.id)
     return participant.id
   }
 
@@ -129,6 +131,7 @@ async function resumeParticipant(body: Record<string, unknown>) {
   const participantToken = requiredString(body, 'participantToken')
   const participant = await findParticipantByTokenHash(await hashToken(participantToken))
   const room = await findRoomById(participant.room_id, true)
+  await touchParticipant(participant.id)
   const participantStatus =
     room.status === ROOM_STATUS.WAITING
       ? PARTICIPANT_STATUS.WAITING
