@@ -31,8 +31,10 @@ export default {
         'ot-score': 'var(--score)',
         'ot-console-bg': 'var(--console-bg)',
         'ot-console-line': 'var(--console-line)',
-        'ot-zone': '#7a9ba0',
-        'ot-zone-muted': '#506e75',
+        'ot-zone': 'var(--zone)',
+        'ot-zone-muted': 'var(--zone-muted)',
+        'ot-meta': 'var(--text-meta)',
+        'ot-progress-track': 'var(--progress-track)',
       },
       fontFamily: {
         display: ['var(--font-body)'],

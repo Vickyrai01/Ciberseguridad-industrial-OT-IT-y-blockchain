@@ -68,6 +68,7 @@ const es = {
     unavailable: 'MULTIJUGADOR NO CONFIGURADO',
     configureHint: 'El modo individual sigue disponible. Configurá Supabase para habilitar las salas.',
     roomCode: 'CÓDIGO DE SALA',
+    roomCodePlaceholder: 'Ej. OT-7K42',
     nickname: 'NICKNAME',
     nicknamePlaceholder: 'Ej. OT-Analyst',
     join: 'UNIRSE A PARTIDA',

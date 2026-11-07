@@ -27,6 +27,10 @@
   --console-bg: #0a1a20;
   --console-line: #3b7d82;
   --scrollbar-thumb: #294f58;
+  --zone: #7a9ba0;
+  --zone-muted: #506e75;
+  --text-meta: #69838a;
+  --progress-track: #203841;
   --font-body: 'Space Grotesk', sans-serif;
   --font-mono: 'DM Mono', monospace;
 }

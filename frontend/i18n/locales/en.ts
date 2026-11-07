@@ -70,6 +70,7 @@ const en = {
     unavailable: 'MULTIPLAYER NOT CONFIGURED',
     configureHint: 'Individual mode remains available. Configure Supabase to enable rooms.',
     roomCode: 'ROOM CODE',
+    roomCodePlaceholder: 'e.g. OT-7K42',
     nickname: 'NICKNAME',
     nicknamePlaceholder: 'e.g. OT-Analyst',
     join: 'JOIN MATCH',

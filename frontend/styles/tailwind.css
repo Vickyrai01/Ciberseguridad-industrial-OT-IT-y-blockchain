@@ -43,7 +43,7 @@
   }
 
   .progress-track-layout {
-    @apply mb-2 h-[3px] w-[44%] bg-[#203841];
+    @apply mb-2 h-[3px] w-[44%] bg-ot-progress-track;
   }
 
   .progress-fill-layout {

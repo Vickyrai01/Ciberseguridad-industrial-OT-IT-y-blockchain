@@ -33,7 +33,7 @@ export function MultiplayerEntry({ error, loading, onBack, onJoin }: Multiplayer
             value={code}
             maxLength={MULTIPLAYER_CONFIG.roomCodeMaxLength}
             onChange={(event) => setCode(event.target.value.toUpperCase())}
-            placeholder="OT-7K42"
+            placeholder={t('multiplayer.roomCodePlaceholder')}
           />
         </label>
         <label className="multiplayer-form-label-layout">
